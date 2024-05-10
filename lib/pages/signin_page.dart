@@ -101,9 +101,6 @@ class _SignInPageState extends State<SignInPage> {
               .authService
               .signIn(email!, password!);
 
-          print(message);
-          print(showSignInErrorMessage);
-
           setState(() {
             if (message != null && message.isNotEmpty) {
               showSignInErrorMessage = true;
