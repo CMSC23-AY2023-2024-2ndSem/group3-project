@@ -1,10 +1,10 @@
-// from the donor home page, the user can click an organization and go to this page, it will be a form that will be filled out by the user to "donate"
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/organization_provider.dart';
-import '../widgets/DonationItemCategoryCheckBox .dart';
+import '../widgets/DonationItemCategoryCheckBox.dart';
+import '../widgets/DateTimePicker.dart';
+import '../widgets/AddressInput.dart';
 
 class DonatePage extends StatefulWidget {
   final String organizationName;
@@ -18,8 +18,12 @@ class DonatePage extends StatefulWidget {
 class _DonatePageState extends State<DonatePage> {
   final _formKey = GlobalKey<FormState>();
   Map<String, bool> donationCategories = {};
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
   bool pickupOrDropOff = true;
-  int weight = 0;
+  String weight = "";
+  List<String> addresses = [];
+  String contactNumber = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,11 +40,15 @@ class _DonatePageState extends State<DonatePage> {
               child: CircularProgressIndicator(),
             );
           }
-          return Form(
-            key: _formKey,
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: <Widget>[
+          return Scaffold(
+            body: SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.all(30),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                 DonationItemCategoryCheckBox(
                   onChanged: (Map<String, bool> categories) {
                     setState(() {
@@ -48,13 +56,44 @@ class _DonatePageState extends State<DonatePage> {
                     });
                   },
                 ),
+                const SizedBox(height: 20),
                 Row(children: [
                     pickupOrDropOffSwitch,
                   weightInputField,
                 ],),
-                submitButton
-                
+                const SizedBox(height: 20),
+                DateTimePicker(
+                  onChanged: (DateTime, TimeOfDay) {
+                    setState(() {
+                      selectedDate = DateTime;
+                      selectedTime = TimeOfDay;
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+                if (pickupOrDropOff)
+                  MultipleAddressInput(
+                    onChanged: (List<String> addresses) {
+                      setState(() {
+                        this.addresses = addresses;
+                      });
+                    },
+                  ),
+                const SizedBox(height: 20),
+                if(pickupOrDropOff)
+                    Row(children: [
+                      contactNumberField,
+                    ],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                  submitButton,
+                  cancelButton,
+                ],),
               ],
+                  ),
+                ),
+              ),
             ),
           );
         },
@@ -67,16 +106,27 @@ class _DonatePageState extends State<DonatePage> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             print(donationCategories);
+            print(pickupOrDropOff);
+            print(weight);
+            print(selectedDate);
+            print(selectedTime);
+            print(addresses);
+            print(contactNumber);
           }
         },
         child: const Text("Submit"),
       );
+  
+  Widget get cancelButton => ElevatedButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: const Text("Cancel"),
+      );
 
-
-  // make widget for Select if the items are for pickup or drop-off (switch class) and Weight of items to donate in kg/lbs (num input)
   Widget get pickupOrDropOffSwitch => Row(
         children: [
-          Text("Pickup or Drop-off"),
+          const Text("Pickup or Drop-off"),
           Switch(
             value: pickupOrDropOff,
             onChanged: (value) {
@@ -95,6 +145,8 @@ class _DonatePageState extends State<DonatePage> {
             label: Text("Weight of items (kg)"),
             hintText: "Weight in kg",
           ),
+          
+          onSaved: (value) => setState(() => weight = value!),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter the weight of the items";
@@ -104,6 +156,26 @@ class _DonatePageState extends State<DonatePage> {
           },
         ),
       );
+
+    Widget get contactNumberField => Expanded(
+        child: TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            label: Text("Contact Number"),
+            hintText: "Enter your contact number",
+          ),
+          onSaved: (value) => setState(() => contactNumber = value!),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter your contact number";
+            }
+
+            return null;
+          },
+        ),
+      );
+    
+  
   
   // Widget get heading => const Padding(
   //       padding: EdgeInsets.only(bottom: 30),

@@ -94,6 +94,15 @@ class _DonorHomePageState extends State<DonorHomePage> {
         
         ),
         ListTile(
+          title: const Text('Home Page'),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DonorHomePage()));
+          },
+        ),
+        ListTile(
           title: const Text('Details'),
           onTap: () {
             Navigator.push(
