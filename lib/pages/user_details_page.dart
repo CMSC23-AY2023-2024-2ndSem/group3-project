@@ -9,7 +9,7 @@ import '../providers/auth_provider.dart';
 
 
 class UserDetailsPage extends StatefulWidget {
-  const UserDetailsPage({Key? key}) : super(key: key);
+  const UserDetailsPage({super.key});
 
   @override
   _UserDetailsPageState createState() => _UserDetailsPageState();

@@ -7,6 +7,8 @@ import 'providers/donor_provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/organization_provider.dart';
 import 'providers/user_provider.dart';
+import 'providers/donation_provider.dart';
+
 import 'pages/donate_page.dart';
 
 Future<void> main() async {
@@ -22,6 +24,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: ((context) => UserProvider())),
         ChangeNotifierProvider(create: ((context) => OrganizationProvider())),
         ChangeNotifierProvider(create: ((context) => DonorProvider())),
+        ChangeNotifierProvider(create: ((context) => DonationProvider())),
       ],
       child: MyApp(),
     ),
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
         return null;
       },
       
-      theme: ThemeData.dark(), // Set the theme to dark theme
+      theme: ThemeData.dark(), 
     );
   }
 }

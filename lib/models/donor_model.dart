@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 class Donor {
   final String name;
   final String username;
@@ -8,6 +7,7 @@ class Donor {
   final String address;
   final String contactNumber;
   final bool status;
+  final List<String> donations;
 
   Donor({
     required this.name,
@@ -16,6 +16,7 @@ class Donor {
     required this.address,
     required this.contactNumber,
     required this.status,
+    required this.donations,
   });
 
   factory Donor.fromJson(Map<String, dynamic> json) {
@@ -26,6 +27,7 @@ class Donor {
       address: json['address'],
       contactNumber: json['contactNumber'],
       status: json['status'],
+      donations: json['donations'],
     );
   }
 
@@ -42,6 +44,9 @@ class Donor {
       'address': donor.address,
       'contactNumber': donor.contactNumber,
       'status': donor.status,
+      'donations': donor.donations,
     };
   }
+
+  
 }

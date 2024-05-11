@@ -43,50 +43,51 @@ class _DateTimePickerState extends State<DateTimePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: InkWell(
-            onTap: () => _selectDate(context),
-            child: InputDecorator(
-              decoration: const InputDecoration(
-                labelText: 'Date',
-                hintText: 'Select Date',
-                border: OutlineInputBorder(),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
+    return Padding(padding: EdgeInsets.only(bottom: 30),
+      child:Row(children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => _selectDate(context),
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          labelText: 'Date',
+                          hintText: 'Select Date',
+                          border: OutlineInputBorder(),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
+                            ),
+                            const Icon(Icons.calendar_today),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  const Icon(Icons.calendar_today),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => _selectTime(context),
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          labelText: 'Time',
+                          hintText: 'Select Time',
+                          border: OutlineInputBorder(),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('${selectedTime.hour}:${selectedTime.minute}'),
+                            const Icon(Icons.access_time),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: InkWell(
-            onTap: () => _selectTime(context),
-            child: InputDecorator(
-              decoration: const InputDecoration(
-                labelText: 'Time',
-                hintText: 'Select Time',
-                border: OutlineInputBorder(),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('${selectedTime.hour}:${selectedTime.minute}'),
-                  const Icon(Icons.access_time),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
+              )
+      );
   }
 }
