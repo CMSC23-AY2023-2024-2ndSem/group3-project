@@ -34,8 +34,6 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
-
   Stream<QuerySnapshot> fetchUserDetailsByUsername(String username) {
     return firebaseService.getUserDetailsByUsername(username);
   }
@@ -45,9 +43,13 @@ class UserProvider with ChangeNotifier {
     fetchUsers();
   }
 
+  Future<void> addUsertoDB(Map<String, dynamic> user) async {
+    await firebaseService.addUsertoDB(user);
+    notifyListeners();
+  }
 
+    
 
-  
 
 
 }

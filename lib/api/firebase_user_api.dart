@@ -42,4 +42,16 @@ class FirebaseUserAPI {
   }
 }
 
+  Future<String> addUsertoDB(Map<String, dynamic> user) async {
+    try {
+      await db.collection("users").add(user);
+
+      return "Successfully added!";
+    } on FirebaseException catch (e) {
+      return "Error in ${e.code}: ${e.message}";
+    }
+  }
+
+
+
 }

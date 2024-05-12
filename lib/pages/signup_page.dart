@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week9_authentication/models/user_model.dart';
+import 'package:week9_authentication/providers/user_provider.dart';
 import '../providers/auth_provider.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -15,6 +17,8 @@ class _SignUpState extends State<SignUpPage> {
   String? lastName;
   String? email;
   String? password;
+  String? address;
+  String? contactNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,14 @@ class _SignUpState extends State<SignUpPage> {
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [heading, firstNameField, lastNameField, emailField, passwordField, submitButton],
+                children: [heading, 
+                          firstNameField, 
+                          lastNameField, 
+                          emailField, 
+                          passwordField, 
+                          addressField,
+                          contactNumberField,
+                          submitButton],
               ),
             )),
       ),
@@ -120,6 +131,47 @@ class _SignUpState extends State<SignUpPage> {
         ),
       );
 
+  Widget get addressField => Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            label: Text("Address"),
+            hintText: "Enter your address",
+          ),
+          onSaved: (value) => setState(() => address = value),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter your address";
+            }
+
+            return null;
+          },
+        ),
+      );
+
+  Widget get contactNumberField => Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: TextFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            label: Text("Contact No."),
+            hintText: "Enter your contact number",
+          ),
+          onSaved: (value) => setState(() => contactNumber = value),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter your contact number";
+            } else if (int.tryParse(value) == null){
+              return "Please enter numbers only";
+            }
+
+            return null;
+          },
+        ),
+      );
+     
+
   Widget get submitButton => ElevatedButton(
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
@@ -132,11 +184,26 @@ class _SignUpState extends State<SignUpPage> {
               ));
               return;
             }
-          await context
-              .read<UserAuthProvider>()
-              .authService
-              .signUp(firstName!, lastName!, email!, password!);
+          if (mounted) await context.read<UserAuthProvider>().authService.signUp(firstName!, lastName!, email!, password!);
 
+
+          if (mounted) {
+                    User user = User( type: "donor",
+                    username: email!,
+                    name: "$firstName $lastName",
+                    address: address!,
+                    contactNumber: contactNumber!,
+                    status: true,
+                    donations: []
+                    );
+                    await context
+                .read<UserProvider>()
+                .firebaseService
+                .addUsertoDB(user.toJson());
+            }
+
+           
+          
           // check if the widget hasn't been disposed of after an asynchronous action
           if (mounted) Navigator.pop(context);
         }

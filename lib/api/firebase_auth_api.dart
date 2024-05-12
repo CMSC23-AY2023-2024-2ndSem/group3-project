@@ -28,11 +28,11 @@ class FirebaseAuthApi {
     await userCredential.user!.updateDisplayName('$firstName $lastName');
 
     // TODO handle type(donor or organization) to firestore (don't know if this should be in this file)
-    await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
-      'email': email,
+    // await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+    //   'email': email,
       
 
-    });
+    // });
   } on FirebaseAuthException catch (e) {
     print('Firebase Error: ${e.code} : ${e.message}');
   } catch (e) {
