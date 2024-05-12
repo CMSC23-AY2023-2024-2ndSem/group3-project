@@ -194,7 +194,8 @@ class _SignUpState extends State<SignUpPage> {
                     address: address!,
                     contactNumber: contactNumber!,
                     status: true,
-                    donations: []
+                    donations: [],
+                    proofs: []
                     );
                     await context
                 .read<UserProvider>()
