@@ -18,8 +18,6 @@ class FirebaseDonationAPI {
     return db.collection("donations").snapshots();
   }
 
-
-  // NOT TESTED based on TODO app
   Future<String> updateStatus(String id, String value) async {
     try {
       await db.collection("donation").doc(id).update({"status": value});

@@ -1,46 +1,71 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  final String email;
-  final String firstName;
-  final String lastName;
+  final String type; // Admin, Donor, Organization
+  final String username;
+  final String? name;
+  final String? address;
+  final String? contactNumber;
+  final bool? status;
+  final List<String> donations; // donors and organizations only, not sure about type, also works with donors and organizations right? refId of a donation goes here?
+  final List<String>? proofs; // For organizations only, not sure about type
+  //final String? orgName; name of organization different from name of user or not???
 
   User({
-    required this.email,
-    required this.firstName,
-    required this.lastName,
+    required this.type,
+    required this.username,
+    this.name,
+    this.address,
+    this.contactNumber,
+    this.status,
+    this.donations = const [],
+    this.proofs,
+    // this.orgName,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      email: json['email'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
+      type: json['type'],
+      name: json['name'],
+      username: json['username'],
+      address: json['address'],
+      contactNumber: json['contactNumber'],
+      status: json['status'],
+      donations: List<String>.from(json['donations']),
+      proofs: List<String>.from(json['proofs']),
+      // orgName: json['orgName'],
     );
   }
 
-  Map<String, dynamic> toJson(User user) {
+  
+  Map<String, dynamic> toJson() {
     return {
-      'email': user.email,
-      'firstName': user.firstName,
-      'lastName': user.lastName,
+      'type': type,
+      'name': name,
+      'username': username,
+      'address': address,
+      'contactNumber': contactNumber,
+      'status': status,
+      'donations': donations,
+      'proofs': proofs,
+      // 'orgName': orgName,
     };
-  }
 
-  static User fromMap(Map<String, dynamic> data) {
-    return User(
-      email: data['email'],
-      firstName: data['firstName'],
-      lastName: data['lastName'],
-    );
-  }
+}
 
   static fromDocument(QueryDocumentSnapshot<Object?> doc) {
     return User(
-      email: doc['email'],
-      firstName: doc['firstName'],
-      lastName: doc['lastName'],
+      type: doc['type'],
+      username: doc['username'],
+      name: doc['name'],
+      address: doc['address'],
+      contactNumber: doc['contactNumber'],
+      status: doc['status'],
+      donations: List<String>.from(doc['donations']),
+      proofs: List<String>.from(doc['proofs']),
+      // orgName: doc['orgName'],
     );
   }
+
 
 }

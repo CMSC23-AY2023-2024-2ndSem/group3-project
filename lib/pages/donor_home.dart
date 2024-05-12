@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/organization_model.dart';
+import '../models/user_model.dart';
 import '../providers/auth_provider.dart';
-import '../providers/organization_provider.dart';
-import 'user_details_page.dart';
+import '../providers/user_provider.dart';
+import 'donor_details_page.dart';
 
 class DonorHomePage extends StatefulWidget {
   const DonorHomePage({super.key});
@@ -19,20 +19,21 @@ class _DonorHomePageState extends State<DonorHomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<OrganizationProvider>().fetchOrganizations();
+      context.read<UserProvider>().fetchOrganizations();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Stream<QuerySnapshot> organizationsStream = context.watch<OrganizationProvider>().organizations;
+    Stream<QuerySnapshot> userStream = context.watch<UserProvider>().users;
+
     return Scaffold(
       drawer: drawer,
       appBar: AppBar(
         title: const Text("Organizations Available"),
       ),
       body: StreamBuilder(
-        stream: organizationsStream,
+        stream: userStream,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -47,21 +48,26 @@ class _DonorHomePageState extends State<DonorHomePage> {
               child: Text("No Organizations Found"),
             );
           }
-
+          final users = snapshot.data!.docs.map((doc) => User.fromDocument(doc)).toList();
+          List<dynamic> organizations = users.where((user) => user.type == "organization").toList();
+          User currentUser = users.firstWhere((user) => user.username == context.read<UserAuthProvider>().user!.email);
+        
           return ListView.builder(
-            itemCount: snapshot.data?.docs.length,
+            itemCount: organizations.length,
             itemBuilder: (context, index) {
-              Organization organization = Organization.fromMap(snapshot.data?.docs[index].data() as Map<String, dynamic>);
+              User organization = organizations[index];
+              List<String> donorOrgInfo = [currentUser.username, organization.username, organization.name!];
               return ListTile(
-                title: Text(organization.name),
+                title: Text(organization.name!),
+                subtitle: Text("${organization.donations.length} donations received"),
                 trailing: IconButton(
                   icon: const Icon(Icons.handshake),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/donate', arguments: organization.name);
+                    Navigator.pushNamed(context, '/donate', arguments: donorOrgInfo);
                   },
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, '/donate', arguments: organization.name);
+                  Navigator.pushNamed(context, '/donate', arguments: donorOrgInfo);
                 },
               );
             },
@@ -94,12 +100,9 @@ class _DonorHomePageState extends State<DonorHomePage> {
         
         ),
         ListTile(
-          title: const Text('Home Page'),
+          title: const Text('Donate to Organizations'),
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const DonorHomePage()));
+            Navigator.pop(context);
           },
         ),
         ListTile(
@@ -108,7 +111,8 @@ class _DonorHomePageState extends State<DonorHomePage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const UserDetailsPage()));
+                    builder: (context) => const DonorDetailsPage()));
+                    // builder: (context) => const UserDetailsPage()));
           },
         ),
         ListTile(

@@ -19,7 +19,7 @@ class DonationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addDonation(Donation donation) async {
+  Future<void> addDonation(Donation donation) async {
     String response = await firebaseService.addDonation(donation);
     print(response);
     notifyListeners();

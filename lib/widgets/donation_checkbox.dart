@@ -5,15 +5,15 @@ class DonationItemCategoryCheckBox extends StatefulWidget {
   
   final Function(Map<String, bool>) onChanged;
 
-  DonationItemCategoryCheckBox({required this.onChanged});
+  const DonationItemCategoryCheckBox({super.key, required this.onChanged});
 
   @override
-  _DonationItemCategoryCheckBoxState createState() =>
-      _DonationItemCategoryCheckBoxState();
+  DonationItemCategoryCheckBoxState createState() =>
+      DonationItemCategoryCheckBoxState();
 
 }
 
-class _DonationItemCategoryCheckBoxState
+class DonationItemCategoryCheckBoxState
     extends State<DonationItemCategoryCheckBox> {
    Map<String, bool> categoryStates = {
     'Food': false,

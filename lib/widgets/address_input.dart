@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 class MultipleAddressInput extends StatefulWidget {
   final void Function(List<String>) onChanged;
 
-  MultipleAddressInput({required this.onChanged});
+  const MultipleAddressInput({super.key, required this.onChanged});
 
   @override
-  _MultipleAddressInputState createState() => _MultipleAddressInputState();
+  MultipleAddressInputState createState() => MultipleAddressInputState();
 }
 
-class _MultipleAddressInputState extends State<MultipleAddressInput> {
+class MultipleAddressInputState extends State<MultipleAddressInput> {
   List<String> addresses = [];
 
-  TextEditingController _addressController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   void _addAddress(String address) {
     setState(() {
       addresses.add(address);
-      _addressController.clear();
+      addressController.clear();
       widget.onChanged(addresses);
     });
   }
@@ -62,7 +62,7 @@ class _MultipleAddressInputState extends State<MultipleAddressInput> {
             ListTile(
               leading: const Icon(Icons.add),
               title: TextField(
-                controller: _addressController,
+                controller: addressController,
                 decoration: const InputDecoration(
                   labelText: 'Add Address',
                 ),
@@ -71,7 +71,7 @@ class _MultipleAddressInputState extends State<MultipleAddressInput> {
                 },
               ),
               onTap: () {
-                _addAddress(_addressController.text);
+                _addAddress(addressController.text);
               },
             ),
           ],

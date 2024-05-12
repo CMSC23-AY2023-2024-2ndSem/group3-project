@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class DateTimePicker extends StatefulWidget {
   final void Function(DateTime, TimeOfDay) onChanged;
 
-  DateTimePicker({required this.onChanged});
+  const DateTimePicker({super.key, required this.onChanged});
 
   @override
-  _DateTimePickerState createState() => _DateTimePickerState();
+  DateTimePickerState createState() => DateTimePickerState();
 }
 
-class _DateTimePickerState extends State<DateTimePicker> {
+class DateTimePickerState extends State<DateTimePicker> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
@@ -17,8 +17,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
     );
     if (pickedDate != null && pickedDate != selectedDate) {
       setState(() {
@@ -43,7 +43,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.only(bottom: 30),
+    return Padding(padding: const EdgeInsets.only(bottom: 30),
       child:Row(children: [
                   Expanded(
                     child: InkWell(

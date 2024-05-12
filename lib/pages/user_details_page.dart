@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-  import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:week9_authentication/models/user_model.dart';
+import '../models/user_model.dart';
 import '../providers/user_provider.dart';
-import '../providers/auth_provider.dart';
 
 
 
@@ -12,16 +10,13 @@ class UserDetailsPage extends StatefulWidget {
   const UserDetailsPage({super.key});
 
   @override
-  _UserDetailsPageState createState() => _UserDetailsPageState();
+  UserDetailsPageState createState() => UserDetailsPageState();
 }
 
 
-class _UserDetailsPageState extends State<UserDetailsPage> {
-
-  auth.User? user;
+class UserDetailsPageState extends State<UserDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    user = context.read<UserAuthProvider>().user as auth.User?;
     Stream<QuerySnapshot> userStream = context.watch<UserProvider>().users;
 
     return Scaffold(
@@ -33,17 +28,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final users = snapshot.data!.docs.map((doc) => User.fromDocument(doc)).toList();
-            final user = users.firstWhere((user) => user.email == user!.email);
+            final user = users.firstWhere((user) => user.name == user!.name);
             return Column(
               children: [
                 ListTile(
-                  title: Text("First Name: ${user.firstName}"),
-                ),
-                ListTile(
-                  title: Text("Last Name: ${user.lastName}"),
-                ),
-                ListTile(
-                  title: Text("Email: ${user.email}"),
+                  title: Text("Email: ${user.name}"),
                 ),
               ],
             );

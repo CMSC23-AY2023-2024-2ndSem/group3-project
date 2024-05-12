@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class Donation {
+  final String uid;
   final Map<String, bool> donationCategories;
   final DateTime date;
   final TimeOfDay time;
@@ -11,9 +12,12 @@ class Donation {
   final String? contactNumber;
   final String? qrData;
   final String? imageUrl;
-  final String? organization; 
+  final String donorUname;
+  final String organizationUname; 
+  final String status;
 
   Donation({
+    required this.uid,
     required this.donationCategories,
     required this.date,
     required this.time,
@@ -23,11 +27,15 @@ class Donation {
     this.contactNumber,
     this.qrData,
     this.imageUrl,
-    required this.organization,
+    required this.donorUname,
+    required this.organizationUname,
+    required this.status,
+
   });
 
   factory Donation.fromJson(Map<String, dynamic> json) {
     return Donation(
+      uid: json['uid'],
       donationCategories: (json['donationCategories'] as Map).cast<String, bool>(),
       date: DateTime.parse(json['date']),
       time: TimeOfDay(hour: json['time']['hour'], minute: json['time']['minute']),
@@ -37,12 +45,16 @@ class Donation {
       contactNumber: json['contactNumber'],
       qrData: json['qrData'],
       imageUrl: json['imageUrl'],
-      organization: json['organization'],
+      donorUname: json['donorUname'],
+      organizationUname: json['organizationUname'],
+      status: json['status'],
+
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'uid': uid,
       'donationCategories': donationCategories,
       'date': date.toIso8601String(),
       'time': {'hour': time.hour, 'minute': time.minute},
@@ -52,12 +64,15 @@ class Donation {
       'contactNumber': contactNumber,
       'qrData': qrData,
       'imageUrl': imageUrl,
-      'organization': organization,
+      'donorUname': donorUname,
+      'organizationUname': organizationUname,
+      'status': status,
     };
   }
 
   static Donation fromMap(Map<String, dynamic> data) {
     return Donation(
+      uid: data['uid'],
       donationCategories: (data['donationCategories'] as Map).cast<String, bool>(),
       date: DateTime.parse(data['date']),
       time: TimeOfDay(hour: data['time']['hour'], minute: data['time']['minute']),
@@ -67,7 +82,9 @@ class Donation {
       contactNumber: data['contactNumber'],
       qrData: data['qrData'],
       imageUrl: data['imageUrl'], 
-      organization: data['organization'],
+      donorUname: data['donorUname'],
+      organizationUname: data['organizationUname'],
+      status: data['status'],
     );
   }
 
