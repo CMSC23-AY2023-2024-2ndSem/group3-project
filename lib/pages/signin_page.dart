@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week9_authentication/pages/signupoption_page.dart';
 import '../providers/auth_provider.dart';
-
-import 'signup_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -123,7 +122,7 @@ class _SignInPageState extends State<SignInPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SignUpPage()));
+                          builder: (context) => const SignUpOptionPage()));
                 },
                 child: const Text("Sign Up"))
           ],
