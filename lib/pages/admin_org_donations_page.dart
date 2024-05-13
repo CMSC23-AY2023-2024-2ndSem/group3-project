@@ -59,12 +59,6 @@ class _AdminOrgDonationsPageState extends State<AdminOrgDonationsPage> {
                 ),
               );
             }
-            print(widget.donations);
-            final donations = widget.donations.map((donation) => FirebaseFirestore
-                                                                  .instance
-                                                                  .collection("donations")
-                                                                  .where("uid", isEqualTo: donation).get()).toList();
-            // final donationDoc = donations.map((doc){ });
             
             return ListView.builder(
                 itemCount: widget.donations.length,
