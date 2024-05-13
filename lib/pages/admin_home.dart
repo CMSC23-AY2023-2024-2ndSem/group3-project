@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
+import 'package:week9_authentication/pages/admin_donors_page.dart';
+import 'package:week9_authentication/pages/admin_organizations_page.dart';
 import 'package:week9_authentication/providers/auth_provider.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 
@@ -49,24 +51,27 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 );
               }
 
-              if(snapshot.data!.docs.isEmpty){
+              if (snapshot.data!.docs.isEmpty) {
                 return const Center(
                     child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 50.0),
-                          child: Text("Approval list is empty",
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                        ),
-                        Icon(Icons.hourglass_empty, size: 200, color: Color.fromARGB(50, 255, 255, 255))
-                      ],
-                    ));
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 50.0),
+                      child: Text("Approval list is empty",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                    ),
+                    Icon(Icons.hourglass_empty,
+                        size: 200, color: Color.fromARGB(50, 255, 255, 255))
+                  ],
+                ));
               }
 
               return ListView.builder(
                 itemCount: snapshot.data?.docs.length,
                 itemBuilder: (context, index) {
-                  User organization = User.fromJson(snapshot.data?.docs[index].data() as Map<String, dynamic>);
+                  User organization = User.fromJson(snapshot.data?.docs[index]
+                      .data() as Map<String, dynamic>);
                   String? userID = snapshot.data?.docs[index].reference.id;
                   return ListTile(
                     title: Text(organization.name!),
@@ -75,7 +80,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       onPressed: () {
                         print(userID);
                         context.read<UserProvider>().updateUserStatus(userID!);
-
                       },
                     ),
                   );
@@ -84,22 +88,23 @@ class _AdminHomePageState extends State<AdminHomePage> {
             }));
   }
 
-    Drawer get drawer => Drawer(
+  Drawer get drawer => Drawer(
           child: ListView(padding: EdgeInsets.zero, children: [
-        DrawerHeader(
-          decoration: const BoxDecoration(
-            color: Colors.blue,
+        const DrawerHeader(
+          decoration: BoxDecoration(
+            color: Colors.red,
           ),
           child: Column(
             children: [
-              const Icon(
-                Icons.account_circle,
+              Icon(
+                Icons.admin_panel_settings,
                 size: 100,
                 color: Colors.white,
               ),
               Text(
-                context.read<UserAuthProvider>().user!.email!,
-                style: const TextStyle(color: Colors.white),
+                "ADMIN",
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -111,13 +116,23 @@ class _AdminHomePageState extends State<AdminHomePage> {
           },
         ),
         ListTile(
-          title: const Text('Details'),
+          //View Organizations and Donations
+          title: const Text('Organizations'),
           onTap: () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => const DonorDetailsPage()));
-            // builder: (context) => const UserDetailsPage()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AdminOrganizationsPage()));
+          },
+        ),
+        ListTile(
+          //View Donor
+          title: const Text('Donors'),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AdminDonorsPage()));
           },
         ),
         ListTile(
