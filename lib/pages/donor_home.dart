@@ -14,8 +14,7 @@ class DonorHomePage extends StatefulWidget {
 }
 
 class _DonorHomePageState extends State<DonorHomePage> {
-
-     @override
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -28,54 +27,65 @@ class _DonorHomePageState extends State<DonorHomePage> {
     Stream<QuerySnapshot> userStream = context.watch<UserProvider>().users;
 
     return Scaffold(
-      drawer: drawer,
-      appBar: AppBar(
-        title: const Text("Organizations Available"),
-      ),
-      body: StreamBuilder(
-        stream: userStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("Error encountered! ${snapshot.error}"),
-            );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (!snapshot.hasData) {
-            return const Center(
-              child: Text("No Organizations Found"),
-            );
-          }
-          final users = snapshot.data!.docs.map((doc) => User.fromDocument(doc)).toList();
-          List<dynamic> organizations = users.where((user) => user.type == "organization").toList();
-          User currentUser = users.firstWhere((user) => user.username == context.read<UserAuthProvider>().user!.email);
-        
-          return ListView.builder(
-            itemCount: organizations.length,
-            itemBuilder: (context, index) {
-              User organization = organizations[index];
-              List<String> donorOrgInfo = [currentUser.username, organization.username, organization.name!];
-              return ListTile(
-                title: Text(organization.name!),
-                subtitle: Text("${organization.donations.length} donations received"),
-                trailing: IconButton(
-                  icon: const Icon(Icons.handshake),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/donate', arguments: donorOrgInfo);
-                  },
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, '/donate', arguments: donorOrgInfo);
+        drawer: drawer,
+        appBar: AppBar(
+          title: const Text("Organizations Available"),
+        ),
+        body: StreamBuilder(
+            stream: userStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text("Error encountered! ${snapshot.error}"),
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (!snapshot.hasData) {
+                return const Center(
+                  child: Text("No Organizations Found"),
+                );
+              }
+
+              final users = snapshot.data!.docs
+                  .map((doc) => User.fromDocument(doc))
+                  .toList();
+
+              List<dynamic> organizations =
+                  users.where((user) => user.type == "organization").toList();
+              User currentUser = users.firstWhere((user) {
+                return user.username ==
+                    context.read<UserAuthProvider>().user!.email;
+              }, orElse: () => User(type: "donor", username: ""));
+              return ListView.builder(
+                itemCount: organizations.length,
+                itemBuilder: (context, index) {
+                  User organization = organizations[index];
+                  List<String> donorOrgInfo = [
+                    currentUser.username,
+                    organization.username,
+                    organization.name!
+                  ];
+                  return ListTile(
+                    title: Text(organization.name!),
+                    subtitle: Text(
+                        "${organization.donations.length} donations received"),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.handshake),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/donate',
+                            arguments: donorOrgInfo);
+                      },
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/donate',
+                          arguments: donorOrgInfo);
+                    },
+                  );
                 },
               );
-            },
-          );
-        }
-
-          
-    ));
+            }));
   }
 
   Drawer get drawer => Drawer(
@@ -97,7 +107,6 @@ class _DonorHomePageState extends State<DonorHomePage> {
               ),
             ],
           ),
-        
         ),
         ListTile(
           title: const Text('Donate to Organizations'),
@@ -112,7 +121,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => const DonorDetailsPage()));
-                    // builder: (context) => const UserDetailsPage()));
+            // builder: (context) => const UserDetailsPage()));
           },
         ),
         ListTile(
