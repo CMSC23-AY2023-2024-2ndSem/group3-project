@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
+import 'package:week9_authentication/pages/admin_org_donations_page.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 
 class AdminOrganizationsPage extends StatefulWidget {
@@ -61,13 +62,13 @@ class _AdminOrganizationsPageState extends State<AdminOrganizationsPage> {
                   ],
                 ));
               }
-
+        
               return ListView.builder(
                 itemCount: snapshot.data?.docs.length,
                 itemBuilder: (context, index) {
                   User organization = User.fromJson(snapshot.data?.docs[index]
                       .data() as Map<String, dynamic>);
-                  String? userID = snapshot.data?.docs[index].reference.id;
+                  // String? userID = snapshot.data?.docs[index].reference.id;
                   return ListTile(
                     title: Text(
                       organization.name!,
@@ -77,6 +78,13 @@ class _AdminOrganizationsPageState extends State<AdminOrganizationsPage> {
                       Icons.groups_rounded,
                       size: 30,
                     ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AdminOrgDonationsPage(
+                                  donations: organization.donations)));
+                    },
                   );
                 },
               );
