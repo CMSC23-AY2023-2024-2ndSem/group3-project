@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
+import 'package:week9_authentication/pages/admin_donor_details_page.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 
 class AdminDonorsPage extends StatefulWidget {
@@ -66,13 +67,20 @@ class _AdminDonorsPageState extends State<AdminDonorsPage> {
                 itemBuilder: (context, index) {
                   User donor = User.fromJson(snapshot.data?.docs[index].data()
                       as Map<String, dynamic>);
-                  String? userID = snapshot.data?.docs[index].reference.id;
+                  // String? userID = snapshot.data?.docs[index].reference.id;
                   return ListTile(
                     title: Text(
                       donor.name!,
                       style: const TextStyle(fontSize: 20),
                     ),
                     leading: const Icon(Icons.person, size: 30,),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  AdminDonorDetailsPage(donor: donor)));
+                    },
                   );
                 },
               );
