@@ -7,6 +7,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week9_authentication/pages/admin_home.dart';
 import 'donor_home.dart';
 import '../providers/auth_provider.dart';
 import 'signin_page.dart';
@@ -45,7 +46,13 @@ class _HomePageState extends State<HomePage> {
           // if user is logged in, display the scaffold containing the streambuilder for the todos
 
           // TODO: check if user is a donor or organization
-          return const DonorHomePage();
+          
+          if (snapshot.data!.email == "admin@gmail.com"){
+            return const AdminHomePage();
+          }else{
+            return const DonorHomePage();
+          }
+          
         });
   }
 }
