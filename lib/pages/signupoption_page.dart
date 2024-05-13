@@ -28,8 +28,8 @@ class _SignUpOptionState extends State<SignUpOptionPage> {
   Widget get heading => const Padding(
         padding: EdgeInsets.only(bottom: 30),
         child: Text(
-          "Sign Up",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          "Sign up as...",
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
       );
 
@@ -42,7 +42,7 @@ class _SignUpOptionState extends State<SignUpOptionPage> {
                   MaterialPageRoute(builder: (context) => const SignUpPage()));
             },
             child: const Text(
-              "Sign up as Donor",
+              "Donor",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             )),
       );
@@ -51,13 +51,14 @@ class _SignUpOptionState extends State<SignUpOptionPage> {
         padding: const EdgeInsets.only(top: 15),
         child: ElevatedButton(
             onPressed: () {
+              Navigator.pop(context);
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const SignUpOrgPage()));
             },
             child: const Text(
-              "Sign up as Organization",
+              "Organization",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             )),
       );
