@@ -96,7 +96,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                               style: const TextStyle(fontSize: 20)),
                           leading: const Icon(Icons.app_registration_rounded),
                           trailing: IconButton(
-                            icon: const Icon(Icons.check_circle_rounded, size: 30),
+                            icon: const Icon(Icons.check_circle_rounded,
+                                size: 30),
                             onPressed: () {
                               print(userID);
                               context
@@ -104,6 +105,71 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                   .updateUserStatus(userID!);
                             },
                           ),
+                          onTap: () {
+                            print(organization.proofs);
+                            showDialog(
+                                context: context,
+                                builder: (context) => LayoutBuilder(
+                                      builder: (context, constraints) =>
+                                          AlertDialog(
+                                        scrollable: true,
+                                        title:
+                                            const Text("Proof/s of Legitimacy"),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SizedBox(
+                                              height:
+                                                  constraints.maxHeight * 0.2,
+                                              width: constraints.maxWidth * 0.9,
+                                              child: ListView.builder(
+                                                  itemCount: organization
+                                                      .proofs!.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return ListTile(
+                                                      leading: const Icon(Icons
+                                                          .folder_copy_rounded),
+                                                      title: Text(
+                                                          "Proof ${index + 1}",
+                                                          style: const TextStyle(
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .underline)),
+                                                      onTap: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (context) =>
+                                                                    AlertDialog(
+                                                                      content: SizedBox(
+                                                                          height:
+                                                                              250,
+                                                                          child: Image.network(
+                                                                              organization.proofs![index],
+                                                                              height: 200)),
+                                                                      actions: [
+                                                                        TextButton(
+                                                                            onPressed: () =>
+                                                                                Navigator.pop(context),
+                                                                            child: const Text("Back"))
+                                                                      ],
+                                                                    ));
+                                                      },
+                                                    );
+                                                  }),
+                                            ),
+                                          ],
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: const Text("Confirm"))
+                                        ],
+                                      ),
+                                    ));
+                          },
                         );
                       },
                     ),
