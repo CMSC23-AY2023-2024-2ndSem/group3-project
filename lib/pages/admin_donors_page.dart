@@ -29,7 +29,13 @@ class _AdminDonorsPageState extends State<AdminDonorsPage> {
         .snapshots();
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Donors")),
+        appBar: AppBar(
+          title: const Text(
+            "Donors",
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          backgroundColor: Colors.redAccent,
+        ),
         body: StreamBuilder(
             stream: userStream,
             builder: (context, snapshot) {
@@ -73,7 +79,10 @@ class _AdminDonorsPageState extends State<AdminDonorsPage> {
                       donor.name!,
                       style: const TextStyle(fontSize: 20),
                     ),
-                    leading: const Icon(Icons.person, size: 30,),
+                    leading: const Icon(
+                      Icons.person,
+                      size: 30,
+                    ),
                     onTap: () {
                       Navigator.push(
                           context,

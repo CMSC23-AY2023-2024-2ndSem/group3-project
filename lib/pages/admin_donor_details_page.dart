@@ -27,17 +27,14 @@ class AdminDonorDetailsPageState extends State<AdminDonorDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Donor Details"),
+        title: const Text("Donor Details",
+            style: TextStyle(fontWeight: FontWeight.w500)),
+        backgroundColor: Colors.redAccent,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: userStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            // final users = snapshot.data!.docs
-            //     .map((doc) => User.fromDocument(doc))
-            //     .toList();
-            // User donor = users.firstWhere(
-            //     (user) => user.name == user!.name && user.type == "donor");
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -46,8 +43,8 @@ class AdminDonorDetailsPageState extends State<AdminDonorDetailsPage> {
                 infoItem("Name", widget.donor.name!),
                 infoItem("Address", widget.donor.address!),
                 infoItem("Contact", widget.donor.contactNumber!),
-                infoItem(
-                    "Number of Donations", widget.donor.donations.length.toString()),
+                infoItem("Number of Donations",
+                    widget.donor.donations.length.toString()),
               ],
             );
           } else {

@@ -33,7 +33,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
     return Scaffold(
         drawer: drawer,
-        appBar: AppBar(title: const Text("Organization Approval")),
+        appBar: AppBar(
+          title: const Text(
+            "Organization Approval",
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          backgroundColor: Colors.redAccent,
+        ),
         body: StreamBuilder(
             stream: userStream,
             builder: (context, snapshot) {
@@ -70,11 +76,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
               return Column(
                 children: [
                   const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                    padding: EdgeInsets.only(top: 20),
                     child: Text(
                       "Pending Organization Sign Up",
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                     ),
                   ),
                   const Divider(

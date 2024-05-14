@@ -29,7 +29,13 @@ class _AdminOrgDonationsPageState extends State<AdminOrgDonationsPage> {
         context.read<DonationProvider>().donations;
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.orgName)),
+      appBar: AppBar(
+        title: Text(
+          widget.orgName,
+          style: const TextStyle(fontWeight: FontWeight.w500),
+        ),
+        backgroundColor: Colors.redAccent,
+      ),
       body: StreamBuilder(
           stream: donationsStream,
           builder: (context, snapshot) {
@@ -66,7 +72,7 @@ class _AdminOrgDonationsPageState extends State<AdminOrgDonationsPage> {
             return Column(
               children: [
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.0),
+                  padding: EdgeInsets.only(top: 20.0),
                   child: Text("Donations",
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),

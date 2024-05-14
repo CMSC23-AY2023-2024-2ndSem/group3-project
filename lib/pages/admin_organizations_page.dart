@@ -30,7 +30,13 @@ class _AdminOrganizationsPageState extends State<AdminOrganizationsPage> {
         .snapshots();
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Organizations")),
+        appBar: AppBar(
+          title: const Text(
+            "Organizations",
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          backgroundColor: Colors.redAccent,
+        ),
         body: StreamBuilder(
             stream: userStream,
             builder: (context, snapshot) {
@@ -62,7 +68,7 @@ class _AdminOrganizationsPageState extends State<AdminOrganizationsPage> {
                   ],
                 ));
               }
-        
+
               return ListView.builder(
                 itemCount: snapshot.data?.docs.length,
                 itemBuilder: (context, index) {
@@ -83,8 +89,9 @@ class _AdminOrganizationsPageState extends State<AdminOrganizationsPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => AdminOrgDonationsPage(
-                                  donations: organization.donations,
-                                  orgName: organization.name!,)));
+                                    donations: organization.donations,
+                                    orgName: organization.name!,
+                                  )));
                     },
                   );
                 },
