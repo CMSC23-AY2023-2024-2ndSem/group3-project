@@ -40,6 +40,10 @@ class UserProvider with ChangeNotifier {
     return firebaseService.getUserDetailsByUsername(username);
   }
 
+  Stream<QuerySnapshot> fetchDonationsByOrganizationUname(String orgUname) {
+    return firebaseService.getDonationsByOrganizationUname(orgUname);
+  }
+
   Future<void> addDonationToUser(String uuid, String username) async {
     await firebaseService.addDonationToUser(uuid, username);
     fetchUsers();

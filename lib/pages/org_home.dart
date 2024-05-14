@@ -2,16 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/donation_model.dart';
+import 'package:week9_authentication/providers/auth_provider.dart';
 import 'package:week9_authentication/providers/donation_provider.dart';
 
-class OrgHomePage extends StatefulWidget {
-  const OrgHomePage({super.key});
+class OrganizationHomePage extends StatefulWidget {
+  const OrganizationHomePage({super.key});
 
   @override
-  State<OrgHomePage> createState() => _OrgHomePageState();
+  State<OrganizationHomePage> createState() => _OrganizationHomePageState();
 }
 
-class _OrgHomePageState extends State<OrgHomePage> {
+class _OrganizationHomePageState extends State<OrganizationHomePage> {
   @override
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> donationsStream = context.watch<DonationProvider>().donations;
@@ -36,20 +37,20 @@ class _OrgHomePageState extends State<OrgHomePage> {
             );
           }
         
-        return ListView.builder(
-          itemCount: snapshot.data?.docs.length,
-          itemBuilder: (context, index) {
-            Donation donation = Donation.fromJson(
-              snapshot.data?.docs[index].data() as Map<String, dynamic>
-            );
-            return ListTile(
-              title: Text(donation.uid),
-              onTap:() {
-                
-              },
-            );
-          },
-        );
+          return ListView.builder(
+            itemCount: snapshot.data?.docs.length,
+            itemBuilder: (context, index) {
+              Donation donation = Donation.fromJson(
+                snapshot.data?.docs[index].data() as Map<String, dynamic>
+              );
+              return ListTile(
+                title: Text(donation.uid),
+                onTap:() {
+                  
+                },
+              );
+            },
+          );
 
         },
       ),
@@ -70,6 +71,10 @@ class _OrgHomePageState extends State<OrgHomePage> {
                 Icons.account_circle,
                 size: 100,
                 color: Colors.white,
+              ),
+              Text(
+                context.read<UserAuthProvider>().user!.email!,
+                style: const TextStyle(color: Colors.white),
               ),
             ],
           )
