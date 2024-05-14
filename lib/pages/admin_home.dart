@@ -67,23 +67,48 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ));
               }
 
-              return ListView.builder(
-                itemCount: snapshot.data?.docs.length,
-                itemBuilder: (context, index) {
-                  User organization = User.fromJson(snapshot.data?.docs[index]
-                      .data() as Map<String, dynamic>);
-                  String? userID = snapshot.data?.docs[index].reference.id;
-                  return ListTile(
-                    title: Text(organization.name!),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.check_circle),
-                      onPressed: () {
-                        print(userID);
-                        context.read<UserProvider>().updateUserStatus(userID!);
+              return Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                    child: Text(
+                      "Pending Organization Sign Up",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const Divider(
+                    endIndent: 15,
+                    indent: 15,
+                    thickness: 3,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: snapshot.data?.docs.length,
+                      itemBuilder: (context, index) {
+                        User organization = User.fromJson(
+                            snapshot.data?.docs[index].data()
+                                as Map<String, dynamic>);
+                        String? userID =
+                            snapshot.data?.docs[index].reference.id;
+                        return ListTile(
+                          title: Text(organization.name!,
+                              style: const TextStyle(fontSize: 20)),
+                          leading: const Icon(Icons.app_registration_rounded),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.check_circle_rounded, size: 30),
+                            onPressed: () {
+                              print(userID);
+                              context
+                                  .read<UserProvider>()
+                                  .updateUserStatus(userID!);
+                            },
+                          ),
+                        );
                       },
                     ),
-                  );
-                },
+                  ),
+                ],
               );
             }));
   }
@@ -92,13 +117,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
           child: ListView(padding: EdgeInsets.zero, children: [
         const DrawerHeader(
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: Colors.redAccent,
           ),
           child: Column(
             children: [
               Icon(
-                Icons.admin_panel_settings,
-                size: 100,
+                Icons.admin_panel_settings_rounded,
+                size: 110,
                 color: Colors.white,
               ),
               Text(
@@ -111,6 +136,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         ),
         ListTile(
           title: const Text('Organization Approval'),
+          leading: const Icon(Icons.checklist_rtl_rounded),
           onTap: () {
             Navigator.pop(context);
           },
@@ -118,6 +144,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         ListTile(
           //View Organizations and Donations
           title: const Text('Organizations'),
+          leading: const Icon(Icons.corporate_fare_rounded),
           onTap: () {
             Navigator.push(
                 context,
@@ -128,6 +155,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         ListTile(
           //View Donor
           title: const Text('Donors'),
+          leading: const Icon(Icons.group),
           onTap: () {
             Navigator.push(
                 context,
@@ -135,8 +163,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     builder: (context) => const AdminDonorsPage()));
           },
         ),
+        const Divider(thickness: 2),
         ListTile(
           title: const Text('Logout'),
+          leading: const Icon(Icons.logout_rounded),
           onTap: () {
             context.read<UserAuthProvider>().signOut();
             Navigator.pop(context);

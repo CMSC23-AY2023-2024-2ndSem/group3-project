@@ -83,7 +83,8 @@ class _AdminOrganizationsPageState extends State<AdminOrganizationsPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => AdminOrgDonationsPage(
-                                  donations: organization.donations)));
+                                  donations: organization.donations,
+                                  orgName: organization.name!,)));
                     },
                   );
                 },
