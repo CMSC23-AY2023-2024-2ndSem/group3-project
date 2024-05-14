@@ -29,7 +29,8 @@ class _DonorHomePageState extends State<DonorHomePage> {
     return Scaffold(
         drawer: drawer,
         appBar: AppBar(
-          title: const Text("Organizations Available"),
+          title: const Text("Organizations Available", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          backgroundColor: Colors.cyan, 
         ),
         body: StreamBuilder(
             stream: userStream,
@@ -68,11 +69,17 @@ class _DonorHomePageState extends State<DonorHomePage> {
                     organization.name!
                   ];
                   return ListTile(
-                    title: Text(organization.name!),
+                    title: Text(organization.name!,
+                    
+                      style: const TextStyle(fontSize: 20),),
+                    leading: const Icon(
+                      Icons.groups_rounded,
+                      size: 30,
+                       color: Colors.amber),
                     subtitle: Text(
                         "${organization.donations.length} donations received"),
                     trailing: IconButton(
-                      icon: const Icon(Icons.handshake),
+                        icon: const Icon(Icons.volunteer_activism_rounded, size: 30, color: Color.fromARGB(255, 187, 134, 252)),
                       onPressed: () {
                         Navigator.pushNamed(context, '/donate',
                             arguments: donorOrgInfo);
@@ -92,40 +99,43 @@ class _DonorHomePageState extends State<DonorHomePage> {
           child: ListView(padding: EdgeInsets.zero, children: [
         DrawerHeader(
           decoration: const BoxDecoration(
-            color: Colors.blue,
+            color: Colors.cyan,
           ),
           child: Column(
             children: [
               const Icon(
                 Icons.account_circle,
-                size: 100,
+                size: 110,
                 color: Colors.white,
               ),
               Text(
                 context.read<UserAuthProvider>().user!.email!,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ],
           ),
         ),
         ListTile(
           title: const Text('Donate to Organizations'),
+          leading: const Icon(Icons.favorite, color: Color.fromARGB(255, 187, 134, 252)),
           onTap: () {
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: const Text('Details'),
+          title: const Text('User Profile'),
+          leading: const Icon(Icons.account_box_rounded, color: Color.fromARGB(255, 187, 134, 252)),
           onTap: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const DonorDetailsPage()));
-            // builder: (context) => const UserDetailsPage()));
           },
         ),
+        const Divider(thickness: 2),
         ListTile(
           title: const Text('Logout'),
+          leading: const Icon(Icons.logout_rounded, color: Color.fromARGB(255, 187, 134, 252)),
           onTap: () {
             context.read<UserAuthProvider>().signOut();
             Navigator.pop(context);

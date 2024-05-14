@@ -14,7 +14,7 @@ class Donation {
   final String? imageUrl;
   final String donorUname;
   final String organizationUname; 
-  final String status;
+  late String status;
 
   Donation({
     required this.uid,

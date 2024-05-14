@@ -60,7 +60,7 @@ class DateTimePickerState extends State<DateTimePicker> {
                             Text(
                               '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
                             ),
-                            const Icon(Icons.calendar_today),
+                            const Icon(Icons.calendar_today , color: Color.fromARGB(255, 187, 134, 252)),
                           ],
                         ),
                       ),
@@ -80,7 +80,7 @@ class DateTimePickerState extends State<DateTimePicker> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('${selectedTime.hour}:${selectedTime.minute}'),
-                            const Icon(Icons.access_time),
+                            const Icon(Icons.access_time , color: Color.fromARGB(255, 187, 134, 252)),
                           ],
                         ),
                       ),
