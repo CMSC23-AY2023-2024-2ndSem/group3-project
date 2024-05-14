@@ -5,17 +5,16 @@ import 'package:week9_authentication/models/user_model.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 import '../providers/auth_provider.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignUpOrgPage extends StatefulWidget {
+  const SignUpOrgPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpState();
+  State<SignUpOrgPage> createState() => _SignUpOrgState();
 }
 
-class _SignUpState extends State<SignUpPage> {
+class _SignUpOrgState extends State<SignUpOrgPage> {
   final _formKey = GlobalKey<FormState>();
-  String? firstName;
-  String? lastName;
+  String? name;
   String? email;
   String? password;
   String? address;
@@ -34,8 +33,7 @@ class _SignUpState extends State<SignUpPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   heading,
-                  firstNameField,
-                  lastNameField,
+                  nameField,
                   emailField,
                   passwordField,
                   addressField,
@@ -56,38 +54,20 @@ class _SignUpState extends State<SignUpPage> {
         ),
       );
 
-  Widget get firstNameField => Padding(
+  Widget get nameField => Padding(
         padding: const EdgeInsets.only(bottom: 30),
         child: TextFormField(
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            label: Text("First Name"),
-            hintText: "Enter your first name",
+            label: Text("Organization Name"),
+            hintText: "Enter your organization name",
           ),
-          onSaved: (value) => setState(() => firstName = value),
+          onSaved: (value) => setState(() => name = value),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Please enter your first name";
+              return "Please enter your organization name";
             }
 
-            return null;
-          },
-        ),
-      );
-
-  Widget get lastNameField => Padding(
-        padding: const EdgeInsets.only(bottom: 30),
-        child: TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            label: Text("Last Name"),
-            hintText: "Enter your last name",
-          ),
-          onSaved: (value) => setState(() => lastName = value),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Please enter your last name";
-            }
             return null;
           },
         ),
@@ -174,54 +154,50 @@ class _SignUpState extends State<SignUpPage> {
         ),
       );
 
-  Widget get submitButton => Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
+  Widget get submitButton => ElevatedButton(
+      onPressed: () async {
+        if (_formKey.currentState!.validate()) {
+          _formKey.currentState!.save();
 
-                bool emailExists = await context
-                    .read<UserAuthProvider>()
-                    .authService
-                    .checkEmailExists(email!);
-                if (emailExists) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Email already exists"),
-                  ));
-                  return;
-                }
-                if (mounted) {
-                  await context
-                      .read<UserAuthProvider>()
-                      .authService
-                      .signUp(firstName!, lastName!, email!, password!);
-                }
+          bool emailExists = await context
+              .read<UserAuthProvider>()
+              .authService
+              .checkEmailExists(email!);
+          if (emailExists) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Email already exists"),
+            ));
+            return;
+          }
+          if (mounted) {
+            await context
+                .read<UserAuthProvider>()
+                .authService
+                .signUp(name!, "", email!, password!);
+          }
 
-                if (mounted) {
-                  User user = User(
-                      type: "donor",
-                      username: email!,
-                      name: "$firstName $lastName",
-                      address: address!,
-                      contactNumber: contactNumber!,
-                      status: true,
-                      donations: [],
-                      proofs: []);
-                  await context
-                      .read<UserProvider>()
-                      .firebaseService
-                      .addUsertoDB(user.toJson());
-                }
+          if (mounted) {
+            User user = User(
+                type: "organization",
+                username: email!,
+                name: name,
+                address: address!,
+                contactNumber: contactNumber!,
+                status: false,
+                donations: [],
+                proofs: []);
+            await context
+                .read<UserProvider>()
+                .firebaseService
+                .addUsertoDB(user.toJson());
+          }
 
-                // check if the widget hasn't been disposed of after an asynchronous action
-                if (mounted) {
-                  Navigator.pop(context);
-                  // Navigator.push(context, MaterialPageRoute(
-                  //     builder: (context) => const SignInPage()));
-                }
-              }
-            },
-            child: const Text("Continue")),
-      );
+          // check if the widget hasn't been disposed of after an asynchronous action
+          if (mounted) {
+            Navigator.pop(context);
+            
+          }
+        }
+      },
+      child: const Text("Continue"));
 }

@@ -1,21 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
-import '../models/user_model.dart' as User;
+import '../models/user_model.dart';
 import '../providers/user_provider.dart';
-import '../providers/auth_provider.dart';
 
-class DonorDetailsPage extends StatefulWidget {
-  const DonorDetailsPage({super.key});
+class AdminDonorDetailsPage extends StatefulWidget {
+  final User donor;
+  const AdminDonorDetailsPage({super.key, required this.donor});
 
   @override
-  DonorDetailsPageState createState() => DonorDetailsPageState();
+  AdminDonorDetailsPageState createState() => AdminDonorDetailsPageState();
 }
 
-class DonorDetailsPageState extends State<DonorDetailsPage> {
-
-     @override
+class AdminDonorDetailsPageState extends State<AdminDonorDetailsPage> {
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -23,11 +21,8 @@ class DonorDetailsPageState extends State<DonorDetailsPage> {
     });
   }
 
-  
-  auth.User? authUser;
   @override
   Widget build(BuildContext context) {
-    authUser = context.read<UserAuthProvider>().user;
     Stream<QuerySnapshot> userStream = context.watch<UserProvider>().users;
 
     return Scaffold(
@@ -38,18 +33,21 @@ class DonorDetailsPageState extends State<DonorDetailsPage> {
         stream: userStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final users = snapshot.data!.docs.map((doc) => User.User.fromDocument(doc)).toList();
-            User.User donor = users.firstWhere((user) => authUser?.email == user!.username && user.type == "donor");
+            // final users = snapshot.data!.docs
+            //     .map((doc) => User.fromDocument(doc))
+            //     .toList();
+            // User donor = users.firstWhere(
+            //     (user) => user.name == user!.name && user.type == "donor");
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                infoItem("Account Type", "Donor"),
-                infoItem("Username", donor.username),
-                infoItem("Name", donor.name!),
-                infoItem("Address", donor.address!),
-                infoItem("Contact", donor.contactNumber!),
-                infoItem("Number of Donations", donor.donations.length.toString()),
+                infoItem("Username", widget.donor.username),
+                infoItem("Name", widget.donor.name!),
+                infoItem("Address", widget.donor.address!),
+                infoItem("Contact", widget.donor.contactNumber!),
+                infoItem(
+                    "Number of Donations", widget.donor.donations.length.toString()),
               ],
             );
           } else {
@@ -87,6 +85,4 @@ class DonorDetailsPageState extends State<DonorDetailsPage> {
       ),
     );
   }
-
-
 }

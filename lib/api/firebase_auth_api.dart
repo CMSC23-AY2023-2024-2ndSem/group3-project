@@ -24,15 +24,22 @@ class FirebaseAuthApi {
       email: email,
       password: password,
     );
-
-    await userCredential.user!.updateDisplayName('$firstName $lastName');
-
+    if (lastName == ""){
+      print("ORG DETECTED");
+      //for organization since lastName is hardcoded to ""
+      await userCredential.user!.updateDisplayName(firstName);
+    }else{
+      //for donor
+      print("DONOR DETECTED");
+      await userCredential.user!.updateDisplayName('$firstName $lastName');
+    }
+    
     // TODO handle type(donor or organization) to firestore (don't know if this should be in this file)
-    await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
-      'email': email,
+    // await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+    //   'email': email,
       
 
-    });
+    // });
   } on FirebaseAuthException catch (e) {
     print('Firebase Error: ${e.code} : ${e.message}');
   } catch (e) {
