@@ -7,6 +7,7 @@ import 'providers/auth_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/donation_provider.dart';
 import 'pages/donate_page.dart';
+import 'pages/donate_qr_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
       '/': (context) => const HomePage(),
+      '/donate_qr': (context) => DonateQrPage(),
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == '/donate') {

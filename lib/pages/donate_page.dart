@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-// import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:uuid/uuid.dart';
@@ -58,14 +55,14 @@ class DonatePageState extends State<DonatePage> {
     }
   }
 
-  Future<void> _uploadPhotoToStorage() async {
+  Future<void> _uploadPhotoToStorage(String donorUname, String organizationUname) async {
     if (_imageFile == null) {
       return;
     }
 
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('donation_photos/${DateTime.now()}.jpg');
+        .child('donation_photos/${donorUname}-${organizationUname}-${DateTime.now()}.jpg');
     firebase_storage.UploadTask uploadTask =
         ref.putFile(File(_imageFile!.path));
 
@@ -77,13 +74,6 @@ class DonatePageState extends State<DonatePage> {
     await uploadTask.whenComplete(() => print('Photo uploaded'));
   }
 
-
-  // TODO: Make QR Code work
-  Future<void> generateQRCode() async {
-    setState(() {
-      qrData = "";
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,9 +158,7 @@ class DonatePageState extends State<DonatePage> {
                 }
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  if (_imageFile != null) {
-                    await _uploadPhotoToStorage();
-                  }
+                 
 
                   String uuid = const Uuid().v4();
                   Donation donation = Donation(
@@ -186,75 +174,89 @@ class DonatePageState extends State<DonatePage> {
                       organizationUname: widget.donorOrgInfo[1],
                       donorUname: widget.donorOrgInfo[0],
                       status: "Pending");
-
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
+                  
+                  if(pickupOrDropOff){
+                    showDialog(context: context, 
+                    builder: 
+                    (BuildContext context) {
                       return AlertDialog(
                         title: const Text("Confirm Donation"),
                         content: const Text("Are you sure you want to submit this donation?"),
                         actions: [
                           ElevatedButton(
                             onPressed: () async {
-                              if(!pickupOrDropOff){
-                                final result = await showDialog<String>(context: context, builder: 
-                                (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      textAlign: TextAlign.center,
-                                      "${widget.donorOrgInfo[2]} has to Scan QR Code",
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                    content: SizedBox( 
-                                        width: 275, 
-                                        height: 275, 
-                                        child: qrCode,
-                                      ),
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context, "Cancel");
-                                        },
-                                        child: const Text("Cancel"),
-                                      ),
-                                    ],
-                                  );
-                                });
-
-                                if (result == "Success") { // TODO: Not working as intended
-                                  print("QR Code Scanned");
-                                  donation.status = "Completed";
-                                  print("Dropoff Donation Completed");
-                                  context.read<DonationProvider>().addDonation(donation);
-                                  context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
-                                  context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[1]);
-                                } 
-                                else if (result == "Cancel"){
-                                  print(result);
-                                }
-                              }else{
-                                print("Pickup Donation Completed");
-                                context.read<DonationProvider>().addDonation(donation);
-                                context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
-                                context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[1]);
-                                Navigator.pop(context);
+                               if (_imageFile != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Uploading photo..."),
+                                  ),
+                                );
+                                await _uploadPhotoToStorage(widget.donorOrgInfo[0], widget.donorOrgInfo[1]);
                               }
-
+                              donation.status = "Scheduled for Pick-up";
+                              context.read<DonationProvider>().addDonation(donation);
+                              context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
+                              context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[1]);
                               Navigator.pop(context);
-                            
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Donation for pick-up submitted!"),
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
                             },
-                            child: const Text("Submit"),
+                            child: const Text("Yes"),
                           ),
                           ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text("Cancel"),
+                            child: const Text("No"),
+                          ),
+                        ],
+                    );}
+                    
+                    );
+                  }else{ 
+
+                    
+                    showDialog(context: context,
+                    builder: 
+                    (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Confirm Donation"),
+                        content: const Text("Are you sure you want to submit this donation?"),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              donation.status = "Pending";
+                              context.read<DonationProvider>().addDonation(donation);
+                              context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
+                              context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[1]);
+                               var donationInfo = [uuid, widget.donorOrgInfo[2]];
+                              Future.delayed(Duration(seconds: 1)
+                              , () => Navigator.pushNamed(context, '/donate_qr', arguments: donationInfo)
+                              
+                              );
+
+
+                            },
+                            child: const Text("Yes"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("No"),
                           ),
                         ],
                       );
-                    },
-                  );
+                    }
+                    );
+
+               
+                  }
                 }
               },
               child: const Text("Submit"),
@@ -422,20 +424,7 @@ class DonatePageState extends State<DonatePage> {
         ],
       ));
 
-  Widget get qrCode => Container(
-        padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: QrImageView(
-          data: qrData,
-          version: QrVersions.auto,
-          size: 200.0,
-          backgroundColor: Colors.white,
-        ),
-      );
+
 
   Widget get dateTimePickerW => DateTimePicker(
         onChanged: (dateTime, timeOfDay) {

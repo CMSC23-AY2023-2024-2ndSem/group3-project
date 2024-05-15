@@ -29,4 +29,10 @@ class DonationProvider with ChangeNotifier {
   Future<String> updateStatus(String id, String value) async {
     return await firebaseService.updateStatus(id, value);
   }
+
+   Stream<QuerySnapshot> fetchDonationDetailsByUid(String donationId) {
+    return firebaseService.getDonationDetailsByUid(donationId);
+
+  }
+
 }
