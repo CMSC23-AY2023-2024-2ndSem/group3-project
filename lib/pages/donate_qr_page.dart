@@ -17,23 +17,16 @@ class DonateQrPage extends StatelessWidget {
 
               (BuildContext context) {
                 return AlertDialog(
-                  title: const Text("Are you sure you want to cancel donation?"),
+                  title: const Text("Are you sure you want to go back?"),
                   actions: [
                     TextButton(
                       onPressed: () {
-                        context.read<DonationProvider>().updateStatus(donationId, "Canceled");
 
                         Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Donation has been canceled!"),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
                       },
                       child: const Text("Yes"),
                     ),
@@ -65,23 +58,14 @@ class DonateQrPage extends StatelessWidget {
 
               (BuildContext context) {
                 return AlertDialog(
-                  title: const Text("Are you sure you want to cancel donation?"),
+                  title: const Text("Are you sure you want to go back?"),
                   actions: [
                     TextButton(
                       onPressed: () {
-                        context.read<DonationProvider>().updateStatus(donationId, "Canceled");
-
                         Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Donation has been canceled!"),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
                       },
                       child: const Text("Yes"),
                     ),
@@ -120,7 +104,6 @@ class DonateQrPage extends StatelessWidget {
             return const Center(child: Text("No data found!"));
           }
           var donationData = snapshot.data!.data() as Map<String, dynamic>;
-          print(donationData);
           bool isScanned = false;
           if (donationData['status'] == "Completed"){
             isScanned = true;
@@ -130,7 +113,7 @@ class DonateQrPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-               Text(donorOrgUname, style: TextStyle(color: Colors.amber, fontSize: 20)), 
+               Text(donorOrgUname, style: const TextStyle(color: Colors.amber, fontSize: 20)), 
                const Text(" must scan qr code to complete!", style: TextStyle(fontSize: 20),),
                const SizedBox(height: 10),
                 Container(
@@ -149,7 +132,15 @@ class DonateQrPage extends StatelessWidget {
                   ),
                 const SizedBox(height: 20),
                 if(!isScanned)
-                ElevatedButton(onPressed: 
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  // ElevatedButton(onPressed: () {
+                  //   // download the qr code image
+                    
+                  // },),
+                  
+                  ElevatedButton(onPressed: 
                 () {  
                   showDialog(context: context, builder: 
                     (BuildContext context) {
@@ -185,7 +176,8 @@ class DonateQrPage extends StatelessWidget {
                     },
                   
                   );
-                }, child: const Text("Cancel")),
+                }, child: const Text("Cancel the Donation")),
+                ],),
                 const SizedBox(height: 20),
                 if (isScanned) ...[
                   const SizedBox(height: 20),

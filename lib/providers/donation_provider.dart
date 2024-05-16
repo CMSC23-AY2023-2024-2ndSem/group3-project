@@ -25,14 +25,14 @@ class DonationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // NOT TESTED based on TODO app
-  Future<String> updateStatus(String id, String value) async {
-    return await firebaseService.updateStatus(id, value);
+  Future<String> updateStatus(String uid, String newStatus) async {
+    return await firebaseService.updateStatus(uid, newStatus);
   }
 
    Stream<QuerySnapshot> fetchDonationDetailsByUid(String donationId) {
     return firebaseService.getDonationDetailsByUid(donationId);
 
   }
+
 
 }

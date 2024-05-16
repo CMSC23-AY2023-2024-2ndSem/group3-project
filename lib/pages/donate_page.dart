@@ -10,6 +10,7 @@ import '../widgets/donation_checkbox.dart';
 import '../widgets/datetime_picker.dart';
 import '../widgets/address_input.dart';
 import '../providers/donation_provider.dart';
+import '../providers/donationdrive_provider.dart';
 import '../models/donation_model.dart';
 
 class DonatePage extends StatefulWidget {
@@ -161,7 +162,7 @@ class DonatePageState extends State<DonatePage> {
                  
 
                   String uuid = const Uuid().v4();
-                  Donation donation = Donation(
+                    Donation donation = Donation(
                       uid: uuid,
                       donationCategories: donationCategories,
                       date: selectedDate,
@@ -173,7 +174,12 @@ class DonatePageState extends State<DonatePage> {
                       contactNumber: contactNumber, // not required
                       organizationUname: widget.donorOrgInfo[1],
                       donorUname: widget.donorOrgInfo[0],
+                      donationDriveName: "",
                       status: "Pending");
+                  
+                  if(widget.donorOrgInfo[3] != "direct"){
+                    donation.donationDriveName = widget.donorOrgInfo[3];
+                  }
                   
                   if(pickupOrDropOff){
                     showDialog(context: context, 
@@ -193,10 +199,15 @@ class DonatePageState extends State<DonatePage> {
                                 );
                                 await _uploadPhotoToStorage(widget.donorOrgInfo[0], widget.donorOrgInfo[1]);
                               }
-                              donation.status = "Scheduled for Pick-up";
                               context.read<DonationProvider>().addDonation(donation);
                               context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
                               context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[1]);
+
+                              if(widget.donorOrgInfo[3] != "direct")
+                              {
+                                context.read<DonationDriveProvider>().addDonationToDrive(uuid, widget.donorOrgInfo[3]);
+                              }
+
                               Navigator.pop(context);
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -234,6 +245,11 @@ class DonatePageState extends State<DonatePage> {
                               context.read<DonationProvider>().addDonation(donation);
                               context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
                               context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[1]);
+                                if(widget.donorOrgInfo[3] != "direct")
+                              {
+                                context.read<DonationDriveProvider>().addDonationToDrive(uuid, widget.donorOrgInfo[3]);
+                              }
+
                                var donationInfo = [uuid, widget.donorOrgInfo[2]];
                               Future.delayed(Duration(seconds: 1)
                               , () => Navigator.pushNamed(context, '/donate_qr', arguments: donationInfo)

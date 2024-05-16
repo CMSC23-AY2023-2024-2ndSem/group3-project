@@ -40,7 +40,6 @@ class UserProvider with ChangeNotifier {
 
   Future<void> addDonationToUser(String uuid, String username) async {
     await firebaseService.addDonationToUser(uuid, username);
-    fetchUsers();
   }
 
   Future<void> addUsertoDB(Map<String, dynamic> user) async {
