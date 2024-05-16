@@ -81,6 +81,7 @@ class _AdminDonorsPageState extends State<AdminDonorsPage> {
                     ),
                     leading: const Icon(
                       Icons.person,
+                      color: Colors.redAccent,
                       size: 30,
                     ),
                     onTap: () {

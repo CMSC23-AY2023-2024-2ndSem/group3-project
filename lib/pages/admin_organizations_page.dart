@@ -82,6 +82,7 @@ class _AdminOrganizationsPageState extends State<AdminOrganizationsPage> {
                     ),
                     leading: const Icon(
                       Icons.groups_rounded,
+                      color: Colors.redAccent,
                       size: 30,
                     ),
                     onTap: () {

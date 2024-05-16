@@ -100,10 +100,15 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         return ListTile(
                           title: Text(organization.name!,
                               style: const TextStyle(fontSize: 20)),
-                          leading: const Icon(Icons.app_registration_rounded),
+                          subtitle: const Divider(thickness: 2),
+                          leading: const Icon(
+                            Icons.app_registration_rounded,
+                            color: Colors.redAccent,
+                            size: 30,
+                          ),
                           trailing: IconButton(
                             icon: const Icon(Icons.check_circle_rounded,
-                                size: 30),
+                                color: Colors.greenAccent, size: 30),
                             onPressed: () {
                               print(userID);
                               context
@@ -118,6 +123,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                 builder: (context) => LayoutBuilder(
                                       builder: (context, constraints) =>
                                           AlertDialog(
+                                            backgroundColor: Colors.grey.shade900,
                                         scrollable: true,
                                         title:
                                             const Text("Proof/s of Legitimacy"),
@@ -148,6 +154,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                             builder:
                                                                 (context) =>
                                                                     AlertDialog(
+                                                                      backgroundColor: Colors
+                                                                          .grey
+                                                                          .shade900,
                                                                       content: SizedBox(
                                                                           height:
                                                                               250,
@@ -156,9 +165,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                                               height: 200)),
                                                                       actions: [
                                                                         TextButton(
-                                                                            onPressed: () =>
-                                                                                Navigator.pop(context),
-                                                                            child: const Text("Back"))
+                                                                          onPressed: () =>
+                                                                              Navigator.pop(context),
+                                                                          child:
+                                                                              const Text("Back",
+                                                                              style: TextStyle(color: Colors.redAccent)),
+                                                                        )
                                                                       ],
                                                                     ));
                                                       },
@@ -169,9 +181,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                         ),
                                         actions: [
                                           TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: const Text("Confirm"))
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text("Confirm",
+                                                style: TextStyle(
+                                                    color: Colors.redAccent)),
+                                          )
                                         ],
                                       ),
                                     ));
@@ -208,7 +223,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
         ),
         ListTile(
           title: const Text('Organization Approval'),
-          leading: const Icon(Icons.checklist_rtl_rounded),
+          leading: const Icon(
+            Icons.checklist_rtl_rounded,
+            color: Colors.redAccent,
+          ),
           onTap: () {
             Navigator.pop(context);
           },
@@ -216,7 +234,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
         ListTile(
           //View Organizations and Donations
           title: const Text('Organizations'),
-          leading: const Icon(Icons.corporate_fare_rounded),
+          leading: const Icon(
+            Icons.corporate_fare_rounded,
+            color: Colors.redAccent,
+          ),
           onTap: () {
             Navigator.push(
                 context,
@@ -227,7 +248,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
         ListTile(
           //View Donor
           title: const Text('Donors'),
-          leading: const Icon(Icons.group),
+          leading: const Icon(
+            Icons.group,
+            color: Colors.redAccent,
+          ),
           onTap: () {
             Navigator.push(
                 context,
@@ -238,7 +262,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
         const Divider(thickness: 2),
         ListTile(
           title: const Text('Logout'),
-          leading: const Icon(Icons.logout_rounded),
+          leading: const Icon(
+            Icons.logout_rounded,
+            color: Colors.redAccent,
+          ),
           onTap: () {
             context.read<UserAuthProvider>().signOut();
             Navigator.pop(context);
