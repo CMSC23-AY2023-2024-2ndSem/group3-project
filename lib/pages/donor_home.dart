@@ -54,7 +54,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
                   .toList();
 
               List<dynamic> organizations =
-                  users.where((user) => user.type == "organization").toList();
+                  users.where((user) => user.type == "organization" && user.status == true).toList();
               User currentUser = users.firstWhere((user) {
                 return user.username ==
                     context.read<UserAuthProvider>().user!.email;
