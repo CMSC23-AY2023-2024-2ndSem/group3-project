@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
+import 'package:week9_authentication/pages/signin_page.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 import '../providers/auth_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -22,6 +23,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
   String? password;
   String? address;
   String? contactNumber;
+  String? description;
   List<XFile> imageFile = [];
   List<String> imageFileUrl = [];
   List<String> imageUrl = [];
@@ -76,6 +78,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Container(
             margin: const EdgeInsets.all(30),
             child: Form(
@@ -89,6 +92,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
                   passwordField,
                   addressField,
                   contactNumberField,
+                  descriptionField,
                   uploadImageButton(context),
                   submitButton
                 ],
@@ -204,6 +208,25 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
             return null;
           },
         ),
+      );
+
+  Widget get descriptionField => Padding(
+        padding: const EdgeInsets.only(bottom: 30.0),
+        child: TextFormField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              label: Text("Organization description"),
+              hintText: "About you",
+            ),
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            onSaved: (value) => setState(() => description = value),
+            validator: (value) {
+              if (value!.length > 200) {
+                return "Please enter no more than 200 characters";
+              }
+              return null;
+            }),
       );
 
   Widget uploadImageButton(context) => Padding(
@@ -357,12 +380,16 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
                 contactNumber: contactNumber!,
                 status: false,
                 donations: [],
-                proofs: imageUrl);
+                proofs: imageUrl,
+                openForDonation: true,
+                orgDescription: description);
             await context
                 .read<UserProvider>()
                 .firebaseService
                 .addUsertoDB(user.toJson());
           }
+
+          // orgSignUpPrompt(context);
 
           // check if the widget hasn't been disposed of after an asynchronous action
           if (mounted) {
@@ -371,4 +398,28 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
         }
       },
       child: const Text("Continue"));
+
+  orgSignUpPrompt(context) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Upload options"),
+          content: const Text(
+              "Thank you for showing interest in helping the community! Please give us time to approve your registration."),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignInPage()));
+                    },
+                    child: const Text("I Understand")),
+              ],
+            )
+          ],
+        ),
+      );
 }

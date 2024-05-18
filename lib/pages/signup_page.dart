@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
+import 'package:week9_authentication/pages/signuporg_page.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 import '../providers/auth_provider.dart';
 
@@ -26,6 +27,7 @@ class _SignUpState extends State<SignUpPage> {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Container(
             margin: const EdgeInsets.all(30),
             child: Form(
@@ -40,7 +42,8 @@ class _SignUpState extends State<SignUpPage> {
                   passwordField,
                   addressField,
                   contactNumberField,
-                  submitButton
+                  submitButton,
+                  orgSignUp
                 ],
               ),
             )),
@@ -207,7 +210,9 @@ class _SignUpState extends State<SignUpPage> {
                       contactNumber: contactNumber!,
                       status: true,
                       donations: [],
-                      proofs: []);
+                      proofs: [],
+                      openForDonation: false,
+                      orgDescription: "");
                   await context
                       .read<UserProvider>()
                       .firebaseService
@@ -223,5 +228,28 @@ class _SignUpState extends State<SignUpPage> {
               }
             },
             child: const Text("Continue")),
+      );
+
+  Widget get orgSignUp => Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: SizedBox(
+          child: Column(
+            children: [
+              const Text("Want to manage donations? "),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpOrgPage()));
+                  },
+                  child: const Text(
+                    "Join as an Organization",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  )),
+            ],
+          ),
+        ),
       );
 }

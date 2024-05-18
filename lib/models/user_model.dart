@@ -9,6 +9,8 @@ class User {
   final bool? status;
   final List<String> donations; 
   final List<String>? proofs;
+  final String? orgDescription;
+  final bool? openForDonation;
 
   User({
     required this.type,
@@ -19,7 +21,8 @@ class User {
     this.status,
     this.donations = const [],
     this.proofs,
-    // this.orgName,
+    this.orgDescription,
+    this.openForDonation
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -32,6 +35,9 @@ class User {
       status: json['status'],
       donations: List<String>.from(json['donations']),
       proofs: List<String>.from(json['proofs']),
+      orgDescription: json['orgDescription'],
+      openForDonation: json['openForDonation']
+
     );
   }
 
@@ -46,6 +52,9 @@ class User {
       'status': status,
       'donations': donations,
       'proofs': proofs,
+      'orgDescription': orgDescription,
+      'openForDonation': openForDonation
+
     };
 
 }
@@ -60,6 +69,8 @@ class User {
       status: doc['status'],
       donations: List<String>.from(doc['donations']),
       proofs: List<String>.from(doc['proofs']),
+      orgDescription: doc['orgDescription'],
+      openForDonation: doc['openForDonation']      
     );
   }
 
