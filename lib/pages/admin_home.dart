@@ -99,22 +99,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             snapshot.data?.docs[index].reference.id;
                         return ListTile(
                           title: Text(organization.name!,
-                              style: const TextStyle(fontSize: 20)),
+                              style: const TextStyle(fontSize: 18)),
                           subtitle: const Divider(thickness: 2),
                           leading: const Icon(
                             Icons.app_registration_rounded,
                             color: Colors.redAccent,
                             size: 30,
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.check_circle_rounded,
-                                color: Colors.greenAccent, size: 30),
-                            onPressed: () {
-                              print(userID);
-                              context
-                                  .read<UserProvider>()
-                                  .updateUserStatus(userID!);
-                            },
                           ),
                           onTap: () {
                             print(organization.proofs);
@@ -123,7 +113,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                 builder: (context) => LayoutBuilder(
                                       builder: (context, constraints) =>
                                           AlertDialog(
-                                            backgroundColor: Colors.grey.shade900,
+                                        backgroundColor: Colors.grey.shade900,
                                         scrollable: true,
                                         title:
                                             const Text("Proof/s of Legitimacy"),
@@ -167,8 +157,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                                         TextButton(
                                                                           onPressed: () =>
                                                                               Navigator.pop(context),
-                                                                          child:
-                                                                              const Text("Back",
+                                                                          child: const Text(
+                                                                              "Back",
                                                                               style: TextStyle(color: Colors.redAccent)),
                                                                         )
                                                                       ],
@@ -181,12 +171,35 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                         ),
                                         actions: [
                                           TextButton(
+                                            child: const Text(
+                                              "Approve",
+                                              style: TextStyle(
+                                                  color: Colors.greenAccent),
+                                              textAlign: TextAlign.end,
+                                            ),
+                                            onPressed: () {
+                                              print(userID);
+                                              context
+                                                  .read<UserProvider>()
+                                                  .updateUserStatus(
+                                                      userID!, true);
+
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    "Organization approved!"),
+                                              ));
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          TextButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: const Text("Confirm",
+                                            child: const Text("Back",
                                                 style: TextStyle(
-                                                    color: Colors.redAccent)),
-                                          )
+                                                    color: Colors.redAccent),
+                                                textAlign: TextAlign.end),
+                                          ),
                                         ],
                                       ),
                                     ));

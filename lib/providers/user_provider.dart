@@ -47,8 +47,8 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateUserStatus(String id) async {
-    await firebaseService.updateUserStatus(id);
+  Future<void> updateUserStatus(String id, bool status) async {
+    await firebaseService.updateUserStatus(id, status);
     notifyListeners();
   }
 
