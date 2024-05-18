@@ -27,9 +27,10 @@ class AdminDonorDetailsPageState extends State<AdminDonorDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Donor Details",
-            style: TextStyle(fontWeight: FontWeight.w500)),
+        title: Text(widget.donor.name!,
+            style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white)),
         backgroundColor: Colors.redAccent,
+        centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: userStream,
@@ -38,6 +39,7 @@ class AdminDonorDetailsPageState extends State<AdminDonorDetailsPage> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                pageBar(),
                 const SizedBox(height: 20),
                 infoItem("Username", widget.donor.username),
                 infoItem("Name", widget.donor.name!),
@@ -66,7 +68,7 @@ class AdminDonorDetailsPageState extends State<AdminDonorDetailsPage> {
           Text(
             label,
             style: const TextStyle(
-              color: Colors.grey,
+              color: Colors.redAccent,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -78,6 +80,40 @@ class AdminDonorDetailsPageState extends State<AdminDonorDetailsPage> {
             ),
           ),
           const Divider(),
+        ],
+      ),
+    );
+  }
+
+  Widget pageBar() {
+    return Container(
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30)),
+          gradient: LinearGradient(
+              colors: [Colors.redAccent, Colors.pink],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter)),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+      child: const Column(
+        children: [
+          Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(30.0),
+                child: Text(
+                  "Donor Details",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

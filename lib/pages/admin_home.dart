@@ -36,9 +36,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
         appBar: AppBar(
           title: const Text(
             "Organization Approval",
-            style: TextStyle(fontWeight: FontWeight.w500),
+            style: TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
           ),
           backgroundColor: Colors.redAccent,
+          centerTitle: true,
         ),
         body: StreamBuilder(
             stream: userStream,
@@ -58,16 +59,17 @@ class _AdminHomePageState extends State<AdminHomePage> {
               }
 
               if (snapshot.data!.docs.isEmpty) {
-                return const Center(
+                return Center(
                     child: Column(
                   children: [
-                    Padding(
+                    pageBar(),
+                    const Padding(
                       padding: EdgeInsets.symmetric(vertical: 50.0),
                       child: Text("Approval list is empty",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                     ),
-                    Icon(Icons.hourglass_empty,
+                    const Icon(Icons.hourglass_empty,
                         size: 200, color: Color.fromARGB(50, 255, 255, 255))
                   ],
                 ));
@@ -75,19 +77,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
               return Column(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Text(
-                      "Pending Organization Sign Up",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  const Divider(
-                    endIndent: 15,
-                    indent: 15,
-                    thickness: 3,
-                  ),
+                  pageBar(),
                   Expanded(
                     child: ListView.builder(
                       itemCount: snapshot.data?.docs.length,
@@ -97,113 +87,145 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                 as Map<String, dynamic>);
                         String? userID =
                             snapshot.data?.docs[index].reference.id;
-                        return ListTile(
-                          title: Text(organization.name!,
-                              style: const TextStyle(fontSize: 18)),
-                          subtitle: const Divider(thickness: 2),
-                          leading: const Icon(
-                            Icons.app_registration_rounded,
-                            color: Colors.redAccent,
-                            size: 30,
-                          ),
-                          onTap: () {
-                            print(organization.proofs);
-                            showDialog(
-                                context: context,
-                                builder: (context) => LayoutBuilder(
-                                      builder: (context, constraints) =>
-                                          AlertDialog(
-                                        backgroundColor: Colors.grey.shade900,
-                                        scrollable: true,
-                                        title:
-                                            const Text("Proof/s of Legitimacy"),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            SizedBox(
-                                              height:
-                                                  constraints.maxHeight * 0.2,
-                                              width: constraints.maxWidth * 0.9,
-                                              child: ListView.builder(
-                                                  itemCount: organization
-                                                      .proofs!.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return ListTile(
-                                                      leading: const Icon(Icons
-                                                          .folder_copy_rounded),
-                                                      title: Text(
-                                                          "Proof ${index + 1}",
-                                                          style: const TextStyle(
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .underline)),
-                                                      onTap: () {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (context) =>
-                                                                    AlertDialog(
-                                                                      backgroundColor: Colors
-                                                                          .grey
-                                                                          .shade900,
-                                                                      content: SizedBox(
-                                                                          height:
-                                                                              250,
-                                                                          child: Image.network(
-                                                                              organization.proofs![index],
-                                                                              height: 200)),
-                                                                      actions: [
-                                                                        TextButton(
-                                                                          onPressed: () =>
-                                                                              Navigator.pop(context),
-                                                                          child: const Text(
-                                                                              "Back",
-                                                                              style: TextStyle(color: Colors.redAccent)),
-                                                                        )
-                                                                      ],
-                                                                    ));
-                                                      },
-                                                    );
-                                                  }),
-                                            ),
-                                          ],
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            child: const Text(
-                                              "Approve",
-                                              style: TextStyle(
-                                                  color: Colors.greenAccent),
-                                              textAlign: TextAlign.end,
-                                            ),
-                                            onPressed: () {
-                                              print(userID);
-                                              context
-                                                  .read<UserProvider>()
-                                                  .updateUserStatus(
-                                                      userID!, true);
+                        return Card(
+                          color: Colors.grey.shade900,
+                          margin: const EdgeInsets.all(8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              title: Text(organization.name!,
+                                  style: const TextStyle(fontSize: 18)),
+                              leading: const Icon(
+                                Icons.app_registration_rounded,
+                                color: Colors.redAccent,
+                                size: 30,
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(
+                                  Icons.more_vert_rounded,
+                                  size: 30,
+                                ),
+                                onPressed: () {
+                                  print(organization.proofs);
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => LayoutBuilder(
+                                            builder: (context, constraints) =>
+                                                AlertDialog(
+                                              backgroundColor:
+                                                  Colors.grey.shade900,
+                                              scrollable: true,
+                                              title: const Center(
+                                                child: Text(
+                                                  "Proof/s of Legitimacy",
+                                                  style:
+                                                      TextStyle(fontSize: 20),
+                                                ),
+                                              ),
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Divider(),
+                                                  SizedBox(
+                                                    height:
+                                                        constraints.maxHeight *
+                                                            0.2,
+                                                    width:
+                                                        constraints.maxWidth *
+                                                            0.9,
+                                                    child: ListView.builder(
+                                                        itemCount: organization
+                                                            .proofs!.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return ListTile(
+                                                            leading: const Icon(
+                                                                Icons
+                                                                    .folder_copy_rounded),
+                                                            title: Text(
+                                                                "Proof ${index + 1}",
+                                                                style: const TextStyle(
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .underline)),
+                                                            onTap: () {
+                                                              showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (context) =>
+                                                                          AlertDialog(
+                                                                            backgroundColor:
+                                                                                Colors.grey.shade900,
+                                                                            content:
+                                                                                SizedBox(height: 250, child: Image.network(organization.proofs![index], height: 200)),
+                                                                            actions: [
+                                                                              TextButton(
+                                                                                onPressed: () => Navigator.pop(context),
+                                                                                child: const Text("Back", style: TextStyle(color: Colors.redAccent)),
+                                                                              )
+                                                                            ],
+                                                                          ));
+                                                            },
+                                                          );
+                                                        }),
+                                                  ),
+                                                  const Divider(),
+                                                ],
+                                              ),
+                                              actions: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    TextButton(
+                                                      child: const Text(
+                                                        "Approve",
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .greenAccent),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                      onPressed: () {
+                                                        print(userID);
+                                                        context
+                                                            .read<
+                                                                UserProvider>()
+                                                            .updateUserStatus(
+                                                                userID!, true);
 
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    "Organization approved!"),
-                                              ));
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text("Back",
-                                                style: TextStyle(
-                                                    color: Colors.redAccent),
-                                                textAlign: TextAlign.end),
-                                          ),
-                                        ],
-                                      ),
-                                    ));
-                          },
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                const SnackBar(
+                                                          content: Text(
+                                                              "Organization approved!"),
+                                                        ));
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      child: const Text("Back",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .redAccent),
+                                                          textAlign:
+                                                              TextAlign.end),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ));
+                                },
+                              ),
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -211,6 +233,40 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ],
               );
             }));
+  }
+
+  Widget pageBar(){
+    return Container(
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30)),
+          gradient: LinearGradient(
+              colors: [Colors.redAccent, Colors.pink],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter)),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+      child: const Column(
+        children: [
+          Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(30.0),
+                child: Text(
+                  "Pending Organization Sign Up",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Drawer get drawer => Drawer(
@@ -252,6 +308,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             color: Colors.redAccent,
           ),
           onTap: () {
+            Navigator.pop(context);
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -266,6 +323,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             color: Colors.redAccent,
           ),
           onTap: () {
+            Navigator.pop(context);
             Navigator.push(
                 context,
                 MaterialPageRoute(
