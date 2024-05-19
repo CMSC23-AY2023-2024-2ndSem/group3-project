@@ -29,7 +29,14 @@ class _AdminDonorsPageState extends State<AdminDonorsPage> {
         .snapshots();
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Donors")),
+        appBar: AppBar(
+          title: const Text(
+            "Donors",
+            style: TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
+          ),
+          backgroundColor: Colors.redAccent,
+          centerTitle: true,
+        ),
         body: StreamBuilder(
             stream: userStream,
             builder: (context, snapshot) {
@@ -48,42 +55,96 @@ class _AdminDonorsPageState extends State<AdminDonorsPage> {
               }
 
               if (snapshot.data!.docs.isEmpty) {
-                return const Center(
+                return Center(
                     child: Column(
                   children: [
-                    Padding(
+                    pageBar(),
+                    const Padding(
                         padding: EdgeInsets.fromLTRB(0, 50, 0, 10),
                         child: Icon(Icons.person_off_rounded,
                             size: 200,
                             color: Color.fromARGB(50, 255, 255, 255))),
-                    Text("No Donors Found",
+                    const Text("No Donors Found",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                   ],
                 ));
               }
-              return ListView.builder(
-                itemCount: snapshot.data?.docs.length,
-                itemBuilder: (context, index) {
-                  User donor = User.fromJson(snapshot.data?.docs[index].data()
-                      as Map<String, dynamic>);
-                  // String? userID = snapshot.data?.docs[index].reference.id;
-                  return ListTile(
-                    title: Text(
-                      donor.name!,
-                      style: const TextStyle(fontSize: 20),
+
+              return Column(
+                children: [
+                  pageBar(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: snapshot.data?.docs.length,
+                      itemBuilder: (context, index) {
+                        User donor = User.fromJson(snapshot.data?.docs[index]
+                            .data() as Map<String, dynamic>);
+                        // String? userID = snapshot.data?.docs[index].reference.id;
+                        return Card(
+                            color: Colors.grey.shade900,
+                            margin: const EdgeInsets.all(8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                title: Text(
+                                  donor.name!,
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                                leading: const Icon(
+                                  Icons.person,
+                                  color: Colors.redAccent,
+                                  size: 30,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AdminDonorDetailsPage(
+                                                  donor: donor)));
+                                },
+                              ),
+                            ));
+                      },
                     ),
-                    leading: const Icon(Icons.person, size: 30,),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  AdminDonorDetailsPage(donor: donor)));
-                    },
-                  );
-                },
+                  ),
+                ],
               );
             }));
+  }
+
+  Widget pageBar() {
+    return Container(
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30)),
+          gradient: LinearGradient(
+              colors: [Colors.redAccent, Colors.pink],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter)),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+      child: const Column(
+        children: [
+          Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(30.0),
+                child: Text(
+                  "Donor Directory",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

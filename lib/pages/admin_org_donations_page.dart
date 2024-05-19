@@ -29,7 +29,14 @@ class _AdminOrgDonationsPageState extends State<AdminOrgDonationsPage> {
         context.read<DonationProvider>().donations;
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.orgName)),
+      appBar: AppBar(
+        title: Text(
+          widget.orgName,
+          style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
+        ),
+        backgroundColor: Colors.redAccent,
+        centerTitle: true,
+      ),
       body: StreamBuilder(
           stream: donationsStream,
           builder: (context, snapshot) {
@@ -48,15 +55,16 @@ class _AdminOrgDonationsPageState extends State<AdminOrgDonationsPage> {
             }
 
             if (widget.donations.isEmpty) {
-              return const Center(
+              return Center(
                 child: Column(
                   children: [
-                    Padding(
+                    pageBar(),
+                    const Padding(
                         padding: EdgeInsets.fromLTRB(0, 50, 0, 10),
                         child: Icon(Icons.no_backpack_rounded,
                             size: 200,
                             color: Color.fromARGB(50, 255, 255, 255))),
-                    Text("No Donations Yet",
+                    const Text("No Donations Yet",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                   ],
@@ -65,17 +73,7 @@ class _AdminOrgDonationsPageState extends State<AdminOrgDonationsPage> {
             }
             return Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.0),
-                  child: Text("Donations",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                ),
-                const Divider(
-                  endIndent: 15,
-                  indent: 15,
-                  thickness: 3,
-                ),
+                pageBar(),
                 Expanded(
                   child: ListView.builder(
                       itemCount: widget.donations.length,
@@ -107,20 +105,62 @@ class _AdminOrgDonationsPageState extends State<AdminOrgDonationsPage> {
                               Donation donation = Donation.fromJson(
                                   snapshot.data?.docs[index].data()
                                       as Map<String, dynamic>);
-                              return ListTile(
-                                title: Text("Donor: ${donation.donorUname}"),
-                                leading: const Icon(
-                                    Icons.perm_contact_cal_rounded,
-                                    size: 30),
-                                subtitle:
-                                    Text("Date: ${donation.date.toString()}"),
-                              );
+                              return Card(
+                                  color: Colors.grey.shade900,
+                                  margin: const EdgeInsets.all(8),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListTile(
+                                      title:
+                                          Text("Donor: ${donation.donorUname}"),
+                                      leading: const Icon(
+                                          Icons.perm_contact_cal_rounded,
+                                          color: Colors.redAccent,
+                                          size: 30),
+                                      subtitle: Text(
+                                          "Date: ${donation.date.toString()}"),
+                                    ),
+                                  ));
                             });
                       }),
                 ),
               ],
             );
           }),
+    );
+  }
+
+  Widget pageBar() {
+    return Container(
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30)),
+          gradient: LinearGradient(
+              colors: [Colors.redAccent, Colors.pink],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter)),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+      child: const Column(
+        children: [
+          Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(30.0),
+                child: Text(
+                  "Donations",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

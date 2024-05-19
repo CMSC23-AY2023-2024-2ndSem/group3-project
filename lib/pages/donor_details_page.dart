@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import '../models/user_model.dart' as User;
+import '../models/user_model.dart' as user;
 import '../providers/user_provider.dart';
 import '../providers/auth_provider.dart';
 
@@ -15,7 +15,7 @@ class DonorDetailsPage extends StatefulWidget {
 
 class DonorDetailsPageState extends State<DonorDetailsPage> {
 
-     @override
+       @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -23,7 +23,7 @@ class DonorDetailsPageState extends State<DonorDetailsPage> {
     });
   }
 
-  
+
   auth.User? authUser;
   @override
   Widget build(BuildContext context) {
@@ -32,14 +32,16 @@ class DonorDetailsPageState extends State<DonorDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Donor Details"),
+        title: const Text("Donor Details", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          backgroundColor: Colors.cyan, 
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: userStream,
         builder: (context, snapshot) {
+          print(snapshot.connectionState);
           if (snapshot.hasData) {
-            final users = snapshot.data!.docs.map((doc) => User.User.fromDocument(doc)).toList();
-            User.User donor = users.firstWhere((user) => authUser?.email == user!.username && user.type == "donor");
+            final users = snapshot.data!.docs.map((doc) => user.User.fromDocument(doc)).toList();
+            user.User donor = users.firstWhere((user) => authUser?.email == user!.username && user.type == "donor");
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

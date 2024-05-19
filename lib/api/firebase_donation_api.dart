@@ -25,13 +25,28 @@ class FirebaseDonationAPI {
         .snapshots();
   }
 
-  Future<String> updateStatus(String id, String value) async {
+
+  Future<String> updateStatus(String uid, String value) async {
     try {
-      await db.collection("donation").doc(id).update({"status": value});
+      await db.collection("donations").where("uid", isEqualTo: uid).get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          db.collection("donations").doc(doc.id).update({"status": value});
+        });
+      });
 
       return "Successfully updated!";
     } on FirebaseException catch (e) {
       return "Error in ${e.code}: ${e.message}";
     }
   }
+
+  Stream<QuerySnapshot> getDonationDetailsByUid(String donationId) {
+    try{
+      return db.collection("donations").where("uid", isEqualTo: donationId).snapshots();
+    } on FirebaseException catch (e) {
+      throw "Error in ${e.code}: ${e.message}";
+    }
+  }
+
+
 }

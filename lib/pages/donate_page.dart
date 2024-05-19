@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-// import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:uuid/uuid.dart';
@@ -12,6 +10,7 @@ import '../widgets/donation_checkbox.dart';
 import '../widgets/datetime_picker.dart';
 import '../widgets/address_input.dart';
 import '../providers/donation_provider.dart';
+import '../providers/donationdrive_provider.dart';
 import '../models/donation_model.dart';
 
 class DonatePage extends StatefulWidget {
@@ -57,14 +56,14 @@ class DonatePageState extends State<DonatePage> {
     }
   }
 
-  Future<void> _uploadPhotoToStorage() async {
+  Future<void> _uploadPhotoToStorage(String donorUname, String organizationUname) async {
     if (_imageFile == null) {
       return;
     }
 
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('donation_photos/${DateTime.now()}.jpg');
+        .child('donation_photos/${donorUname}-${organizationUname}-${DateTime.now()}.jpg');
     firebase_storage.UploadTask uploadTask =
         ref.putFile(File(_imageFile!.path));
 
@@ -76,17 +75,18 @@ class DonatePageState extends State<DonatePage> {
     await uploadTask.whenComplete(() => print('Photo uploaded'));
   }
 
-  Future<void> generateQRCode() async {
-    setState(() {
-      qrData = "";
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Donate to ${widget.donorOrgInfo[2]}"),
+          title: Row(
+            children: [
+              const Text("Donate to ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              Text(widget.donorOrgInfo[2], style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          backgroundColor: Colors.cyan,
         ),
         body: StreamBuilder<DocumentSnapshot>(
           stream: context
@@ -119,7 +119,7 @@ class DonatePageState extends State<DonatePage> {
                         pickupOrDropOffSwitch,
                         dateTimePickerW,
                         if (pickupOrDropOff) addressInput,
-                        (pickupOrDropOff) ? contactNumberField : qrCode,
+                        if (pickupOrDropOff) contactNumberField,
                         resolveButtons,
                       ],
                     ),
@@ -146,14 +146,23 @@ class DonatePageState extends State<DonatePage> {
                   );
                   return;
                 }
+
+                if(pickupOrDropOff){
+                  if(addresses.isEmpty){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Please enter at least one address"),
+                      ),
+                    );
+                    return;
+                  }
+                }
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  if (_imageFile != null) {
-                    await _uploadPhotoToStorage();
-                  }
+                 
 
                   String uuid = const Uuid().v4();
-                  Donation donation = Donation(
+                    Donation donation = Donation(
                       uid: uuid,
                       donationCategories: donationCategories,
                       date: selectedDate,
@@ -163,34 +172,136 @@ class DonatePageState extends State<DonatePage> {
                       pickupOrDropOff: pickupOrDropOff,
                       addresses: addresses, // not required
                       contactNumber: contactNumber, // not required
-                      qrData: qrData, // ????   not required
                       organizationUname: widget.donorOrgInfo[1],
                       donorUname: widget.donorOrgInfo[0],
+                      donationDriveName: "",
                       status: "Pending");
-                  context.read<DonationProvider>().addDonation(donation);
-
-                  context
-                      .read<UserProvider>()
-                      .addDonationToUser(uuid, widget.donorOrgInfo[0]);
-                  context
-                      .read<UserProvider>()
-                      .addDonationToUser(uuid, widget.donorOrgInfo[1]);
                   
+                  if(widget.donorOrgInfo[3] != "direct"){
+                    donation.donationDriveName = widget.donorOrgInfo[3];
+                  }
+                  
+                  if(pickupOrDropOff){
+                    showDialog(context: context, 
+                    builder: 
+                    (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Confirm Donation"),
+                        content: const Text("Are you sure you want to submit this donation?"),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () async {
+                               if (_imageFile != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Uploading photo..."),
+                                  ),
+                                );
+                                await _uploadPhotoToStorage(widget.donorOrgInfo[0], widget.donorOrgInfo[1]);
+                              }
+                              context.read<DonationProvider>().addDonation(donation);
+                              context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
+                              context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[1]);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Donation submitted!"),
-                    ),
-                  );
-                  Navigator.pop(context);
+                              if(widget.donorOrgInfo[3] != "direct")
+                              {
+                                context.read<DonationDriveProvider>().addDonationToDrive(uuid, widget.donorOrgInfo[3]);
+                              }
+
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Donation for pick-up submitted!"),
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+                            },
+                            child: const Text("Yes"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("No"),
+                          ),
+                        ],
+                    );}
+                    
+                    );
+                  }else{ 
+
+                    
+                    showDialog(context: context,
+                    builder: 
+                    (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Confirm Donation"),
+                        content: const Text("Are you sure you want to submit this donation?"),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              donation.status = "Pending";
+                              context.read<DonationProvider>().addDonation(donation);
+                              context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
+                              context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[1]);
+                                if(widget.donorOrgInfo[3] != "direct")
+                              {
+                                context.read<DonationDriveProvider>().addDonationToDrive(uuid, widget.donorOrgInfo[3]);
+                              }
+
+                               var donationInfo = [uuid, widget.donorOrgInfo[2]];
+                              Future.delayed(Duration(seconds: 1)
+                              , () => Navigator.pushNamed(context, '/donate_qr', arguments: donationInfo)
+                              
+                              );
+
+
+                            },
+                            child: const Text("Yes"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("No"),
+                          ),
+                        ],
+                      );
+                    }
+                    );
+
+               
+                  }
                 }
               },
               child: const Text("Submit"),
             ),
-            // TO DO: confirm dialog
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                showDialog(context: context, 
+                builder: 
+                (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Cancel Donation"),
+                    content: const Text("Are you sure you want to cancel this donation?"),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Yes"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("No"),
+                      ),
+                    ],
+                  );
+                });
               },
               child: const Text("Cancel"),
             )
@@ -204,10 +315,12 @@ class DonatePageState extends State<DonatePage> {
         children: [
           Expanded(
             child: TextFormField(
+              
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 label: Text("Weight of items (kg)"),
                 hintText: "Weight in kg",
+                icon: Icon(Icons.scale, color: Color.fromARGB(255, 187, 134, 252)),
               ),
               onSaved: (value) => setState(() => weight = value!),
               validator: (value) {
@@ -236,7 +349,7 @@ class DonatePageState extends State<DonatePage> {
           ),
           ElevatedButton(
             onPressed: _pickImageFromGallery,
-            child: const Text("Upload from Gallery"),
+            child: const Text("Choose from Gallery"),
           ),
         ],
       ));
@@ -313,6 +426,12 @@ class DonatePageState extends State<DonatePage> {
                 if (value == null || value.isEmpty) {
                   return "Please enter your contact number";
                 }
+                if (value.length != 11) {
+                  return "Number must be 11 digits long";
+                }
+                if (int.tryParse(value) == null) {
+                  return "Please enter a valid number";
+                }
 
                 return null;
               },
@@ -321,20 +440,7 @@ class DonatePageState extends State<DonatePage> {
         ],
       ));
 
-  Widget get qrCode => Container(
-        padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: QrImageView(
-          data: qrData,
-          version: QrVersions.auto,
-          size: 200.0,
-          backgroundColor: Colors.white,
-        ),
-      );
+
 
   Widget get dateTimePickerW => DateTimePicker(
         onChanged: (dateTime, timeOfDay) {

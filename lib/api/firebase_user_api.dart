@@ -52,9 +52,9 @@ class FirebaseUserAPI {
     }
   }
 
-  Future<String> updateUserStatus(String id)async{
+  Future<String> updateUserStatus(String id, bool status)async{
     try {
-      await db.collection("users").doc(id).update({"status": true});
+      await db.collection("users").doc(id).update({"status": status});
 
       return "User approved";
     } on FirebaseException catch (e) {

@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  final String type; // Admin, Donor, Organization
+  final String type;
   final String username;
   final String? name;
   final String? address;
   final String? contactNumber;
   final bool? status;
-  final List<String> donations; // donors and organizations only, not sure about type, also works with donors and organizations right? refId of a donation goes here?
-  final List<String>? proofs; // For organizations only, not sure about type
-  //final String? orgName; name of organization different from name of user or not???
+  final List<String> donations; 
+  final List<String>? proofs;
+  final String? orgDescription;
+  final bool? openForDonation;
 
   User({
     required this.type,
@@ -20,7 +21,8 @@ class User {
     this.status,
     this.donations = const [],
     this.proofs,
-    // this.orgName,
+    this.orgDescription,
+    this.openForDonation
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -33,7 +35,9 @@ class User {
       status: json['status'],
       donations: List<String>.from(json['donations']),
       proofs: List<String>.from(json['proofs']),
-      // orgName: json['orgName'],
+      orgDescription: json['orgDescription'],
+      openForDonation: json['openForDonation']
+
     );
   }
 
@@ -48,7 +52,9 @@ class User {
       'status': status,
       'donations': donations,
       'proofs': proofs,
-      // 'orgName': orgName,
+      'orgDescription': orgDescription,
+      'openForDonation': openForDonation
+
     };
 
 }
@@ -63,7 +69,8 @@ class User {
       status: doc['status'],
       donations: List<String>.from(doc['donations']),
       proofs: List<String>.from(doc['proofs']),
-      // orgName: doc['orgName'],
+      orgDescription: doc['orgDescription'],
+      openForDonation: doc['openForDonation']      
     );
   }
 

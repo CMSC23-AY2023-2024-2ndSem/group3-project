@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Donation {
@@ -14,7 +15,8 @@ class Donation {
   final String? imageUrl;
   final String donorUname;
   final String organizationUname; 
-  final String status;
+  late String donationDriveName;
+  late String status;
 
   Donation({
     required this.uid,
@@ -29,6 +31,7 @@ class Donation {
     this.imageUrl,
     required this.donorUname,
     required this.organizationUname,
+    required this.donationDriveName,
     required this.status,
 
   });
@@ -47,6 +50,7 @@ class Donation {
       imageUrl: json['imageUrl'],
       donorUname: json['donorUname'],
       organizationUname: json['organizationUname'],
+      donationDriveName: json['donationDriveName'],
       status: json['status'],
 
     );
@@ -66,6 +70,7 @@ class Donation {
       'imageUrl': imageUrl,
       'donorUname': donorUname,
       'organizationUname': organizationUname,
+      'donationDriveName': donationDriveName,
       'status': status,
     };
   }
@@ -84,6 +89,7 @@ class Donation {
       imageUrl: data['imageUrl'], 
       donorUname: data['donorUname'],
       organizationUname: data['organizationUname'],
+      donationDriveName: data['donationDriveName'],
       status: data['status'],
     );
   }
@@ -91,5 +97,25 @@ class Donation {
   static List<Donation> fromJsonArray(String jsonData) {
     final Iterable<dynamic> data = jsonDecode(jsonData);
     return data.map<Donation>((dynamic d) => Donation.fromJson(d)).toList();
+  }
+
+  static fromDocument(QueryDocumentSnapshot<Object?> doc) {
+    return Donation(
+      uid: doc['uid'],
+      donationCategories: (doc['donationCategories'] as Map).cast<String, bool>(),
+      date: DateTime.parse(doc['date']),
+      time: TimeOfDay(hour: doc['time']['hour'], minute: doc['time']['minute']),
+      pickupOrDropOff: doc['pickupOrDropOff'],
+      weight: doc['weight'],
+      addresses: List<String>.from(doc['addresses']),
+      contactNumber: doc['contactNumber'],
+      qrData: doc['qrData'],
+      imageUrl: doc['imageUrl'],
+      donorUname: doc['donorUname'],
+      organizationUname: doc['organizationUname'],
+      donationDriveName: doc['donationDriveName'],
+      status: doc['status'],
+    );
+    
   }
 }

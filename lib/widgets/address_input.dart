@@ -15,6 +15,11 @@ class MultipleAddressInputState extends State<MultipleAddressInput> {
   TextEditingController addressController = TextEditingController();
 
   void _addAddress(String address) {
+
+    if (address.isEmpty) {
+      return;
+    }
+
     setState(() {
       addresses.add(address);
       addressController.clear();
@@ -42,7 +47,7 @@ class MultipleAddressInputState extends State<MultipleAddressInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Address (for pickup):',
+          'Address:',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
