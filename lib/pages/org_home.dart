@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/donation_model.dart';
+import 'package:week9_authentication/models/user_model.dart';
 import 'package:week9_authentication/providers/auth_provider.dart';
 import 'package:week9_authentication/providers/donation_provider.dart';
 
@@ -19,7 +20,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
     
     return Scaffold(
       drawer: drawer,
-      appBar: AppBar(title: Text("Donations"),),
+      appBar: AppBar(title: const Text("Donations"),),
       body: StreamBuilder(
         stream: donationsStream,
         builder: (context, snapshot) {
@@ -36,17 +37,35 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
               child: Text("No Donations Found"),
             );
           }
+          
+          final users = snapshot.data!.docs.map((doc) => User.fromDocument(doc)).toList();
+
+          User currentUser = users.firstWhere((user) {
+            return user.username == context.read<UserAuthProvider>().user!.email;
+          }, orElse: () => User(type: "organization", username: ""));
+          
+          List<Donation> donations = snapshot.data!.docs.map((doc) {
+            Donation donation = Donation.fromJson(doc.data() as Map<String, dynamic>);
+            if (donation.organizationUname == currentUser.username) {
+              return donation;
+            }
+            return null;
+          }).whereType<Donation>().toList();
         
           return ListView.builder(
-            itemCount: snapshot.data?.docs.length,
+            itemCount: donations.length,
             itemBuilder: (context, index) {
-              Donation donation = Donation.fromJson(
-                snapshot.data?.docs[index].data() as Map<String, dynamic>
-              );
+              Donation donation = donations[index];
               return ListTile(
-                title: Text(donation.uid),
+                title: Text("Donation from ${donation.donorUname}"),
+                trailing: IconButton(
+                  icon: const Icon(Icons.arrow_right),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/donation-details');
+                  },
+                ),
                 onTap:() {
-                  
+                  Navigator.pushNamed(context, '/donation-details');
                 },
               );
             },

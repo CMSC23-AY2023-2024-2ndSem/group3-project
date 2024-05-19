@@ -19,6 +19,11 @@ class DonationProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> fetchDonationsByOrganizationUname(String orgUname) async {
+    _donationsStream = firebaseService.getDonationsByOrganizationUname(orgUname);
+    notifyListeners();
+  }
+
   Future<void> addDonation(Donation donation) async {
     String response = await firebaseService.addDonation(donation);
     print(response);

@@ -18,6 +18,13 @@ class FirebaseDonationAPI {
     return db.collection("donations").snapshots();
   }
 
+  Stream<QuerySnapshot> getDonationsByOrganizationUname(String orgUname) {
+    return FirebaseFirestore.instance
+        .collection('donations')
+        .where('organizationUname', isEqualTo: orgUname)
+        .snapshots();
+  }
+
   Future<String> updateStatus(String id, String value) async {
     try {
       await db.collection("donation").doc(id).update({"status": value});

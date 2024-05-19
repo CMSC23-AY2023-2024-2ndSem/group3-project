@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/pages/admin_home.dart';
+import 'package:week9_authentication/pages/org_home.dart';
 import 'donor_home.dart';
 import '../providers/auth_provider.dart';
 import 'signin_page.dart';
@@ -50,7 +51,8 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.data!.email == "admin@gmail.com"){
             return const AdminHomePage();
           }else{
-            return const DonorHomePage();
+            // return const DonorHomePage();
+            return const OrganizationHomePage();
           }
           
         });

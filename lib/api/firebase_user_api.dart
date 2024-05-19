@@ -25,13 +25,6 @@ class FirebaseUserAPI {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> getDonationsByOrganizationUname(String orgUname) {
-    return FirebaseFirestore.instance
-        .collection('donations')
-        .where('organizationUname', isEqualTo: orgUname)
-        .snapshots();
-  }
-
   Future<String> addDonationToUser(String uuid, String username) async {
   try {
     final userDocRef = db.collection("users").where("username", isEqualTo: username).limit(1);
