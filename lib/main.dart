@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:week9_authentication/pages/donation_details_page.dart';
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'providers/auth_provider.dart';
@@ -46,10 +45,6 @@ class MyApp extends StatelessWidget {
         if (settings.name == '/donate') {
           return MaterialPageRoute(
             builder: (context) => DonatePage(donorOrgInfo: settings.arguments as List<String>),
-          );
-        } else if (settings.name == '/donation-details') {
-          return MaterialPageRoute(
-            builder: (context) => DonationDetailsPage(),
           );
         }
         return null;
