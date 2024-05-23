@@ -115,19 +115,11 @@ class _AdminDonorsPageState extends State<AdminDonorsPage> {
   }
 
   Widget pageBar() {
-    return Container(
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30)),
-          gradient: LinearGradient(
-              colors: [Colors.redAccent, Colors.pink],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter)),
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+      color: Colors.grey.shade900,
       child: const Column(
         children: [
-          Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -136,7 +128,7 @@ class _AdminDonorsPageState extends State<AdminDonorsPage> {
                 child: Text(
                   "Donor Directory",
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.w500,
                       color: Colors.white),
                 ),
