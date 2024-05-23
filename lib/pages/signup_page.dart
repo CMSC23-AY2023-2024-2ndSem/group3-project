@@ -162,7 +162,7 @@ class _SignUpState extends State<SignUpPage> {
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             label: Text("Contact No."),
-            hintText: "Enter your contact number",
+            hintText: "09XXXXXXXXX",
           ),
           onSaved: (value) => setState(() => contactNumber = value),
           validator: (value) {
@@ -170,7 +170,9 @@ class _SignUpState extends State<SignUpPage> {
               return "Please enter your contact number";
             } else if (int.tryParse(value) == null) {
               return "Please enter numbers only";
-            }
+            } else if (value.length != 11 || value.substring(0,2) != "09"){
+              return "Please enter valid contact number";
+            } 
 
             return null;
           },
