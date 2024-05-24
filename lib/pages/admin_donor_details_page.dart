@@ -43,7 +43,7 @@ class AdminDonorDetailsPageState extends State<AdminDonorDetailsPage> {
                 const SizedBox(height: 20),
                 infoItem("Username", widget.donor.username),
                 infoItem("Name", widget.donor.name!),
-                infoItem("Address", widget.donor.address!),
+                infoItem("Address", widget.donor.address![0]),
                 infoItem("Contact", widget.donor.contactNumber!),
                 infoItem("Number of Donations",
                     widget.donor.donations.length.toString()),

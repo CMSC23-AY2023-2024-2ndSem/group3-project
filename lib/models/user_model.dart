@@ -4,7 +4,7 @@ class User {
   final String type;
   final String username;
   final String? name;
-  final String? address;
+  final List<String>? address;
   final String? contactNumber;
   final bool? status;
   final List<String> donations; 
@@ -30,7 +30,7 @@ class User {
       type: json['type'],
       name: json['name'],
       username: json['username'],
-      address: json['address'],
+      address: List<String>.from(json['address']),
       contactNumber: json['contactNumber'],
       status: json['status'],
       donations: List<String>.from(json['donations']),
@@ -64,7 +64,7 @@ class User {
       type: doc['type'],
       username: doc['username'],
       name: doc['name'],
-      address: doc['address'],
+      address: List<String>.from(doc['address']),
       contactNumber: doc['contactNumber'],
       status: doc['status'],
       donations: List<String>.from(doc['donations']),
