@@ -1,31 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../pages/org_donation_drives_page.dart';
-import '../models/user_model.dart';
-import '../models/donation_model.dart';
-import '../providers/auth_provider.dart';
-import '../providers/donation_provider.dart';
+import 'package:week9_authentication/models/donationdrive_model.dart';
+import 'package:week9_authentication/models/user_model.dart';
+import 'package:week9_authentication/pages/org_details_page.dart';
+import 'package:week9_authentication/pages/org_home.dart';
+import 'package:week9_authentication/providers/auth_provider.dart';
+import '../providers/donationdrive_provider.dart';
 import '../providers/user_provider.dart';
-import 'donation_details_page.dart';
-import 'org_details_page.dart';
 
-class OrganizationHomePage extends StatefulWidget {
-  const OrganizationHomePage({super.key});
+class OrganizationDonationDrivesPage extends StatefulWidget {
+  const OrganizationDonationDrivesPage({super.key});
 
   @override
-  State<OrganizationHomePage> createState() => _OrganizationHomePageState();
+  State<OrganizationDonationDrivesPage> createState() => _OrganizationDonationDrivesPageState();
 }
 
-class _OrganizationHomePageState extends State<OrganizationHomePage> {
+class _OrganizationDonationDrivesPageState extends State<OrganizationDonationDrivesPage> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<UserProvider>().fetchUsers();
-      context.read<DonationProvider>().fetchDonations();
+      context.read<DonationDriveProvider>().fetchDonationDrives();
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
     return Scaffold(
       drawer: drawer,
       appBar: AppBar(
-        title: const Text("Donations",
+        title: const Text("Donation Drives",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.orangeAccent,
       ),
@@ -63,7 +63,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                 context.read<UserAuthProvider>().user!.email;
           }, orElse: () => User(type: "organization", username: ""));
 
-          if (currentUser.donations.isEmpty) {
+          if (currentUser.donationDrives.isEmpty) {
               return const Center(
                 child: Column(
                   children: [
@@ -72,7 +72,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                         child: Icon(Icons.no_backpack_rounded,
                             size: 200,
                             color: Color.fromARGB(50, 255, 255, 255))),
-                    Text("No Donations Yet",
+                    Text("No Donation Drives Yet",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                   ],
@@ -81,15 +81,15 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
             }
 
           return ListView.builder(
-            itemCount: currentUser.donations.length,
+            itemCount: currentUser.donationDrives.length,
             itemBuilder: (context, index) {
-              Stream<QuerySnapshot> orgDonationsStream = FirebaseFirestore
+              Stream<QuerySnapshot> orgDonationDriveStream = FirebaseFirestore
                   .instance
-                  .collection("donations")
+                  .collection("donationdrives")
                   .where("organizationUname", isEqualTo: currentUser.username)
                   .snapshots();
               return StreamBuilder(
-                  stream: orgDonationsStream,
+                  stream: orgDonationDriveStream,
                   builder: (context, snapshots) {
                     if (snapshots.hasError) {
                       return Center(
@@ -102,30 +102,16 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                       );
                     } else if (!snapshots.hasData) {
                       return const Center(
-                        child: Text("No Donations Found"),
+                        child: Text("No Donation Drives Found"),
                       );
                     }
 
-                    final donations = snapshots.data!.docs
-                        .map((doc) => Donation.fromDocument(doc))
+                    final donationDrives = snapshots.data!.docs
+                        .map((doc) => DonationDrive.fromDocument(doc))
                         .toList();
 
 
-                    Donation donation = donations[index];
-
-
-                    List<String> donationInfo = [
-                      donation.donorUname,
-                      donation.organizationUname,
-                      donation.donationDriveName,
-                      donation.donationCategories.toString(),
-                      donation.pickupOrDropOff.toString(),
-                      donation.weight,
-                      donation.date.toString(),
-                      donation.addresses.toString(),
-                      donation.contactNumber.toString(),
-                      donation.status,
-                    ];
+                    DonationDrive donationDrive = donationDrives[index];
                     
                     return Card(
                         color: Colors.grey.shade900,
@@ -133,12 +119,11 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
-                            title: Text("Donor: ${donation.donorUname}"),
-                            leading: const Icon(Icons.perm_contact_cal_rounded,
+                            title: Text("Donation Drive: ${donationDrive.name}"),
+                            leading: const Icon(Icons.favorite,
                                 color: Colors.orangeAccent, size: 30),
-                            subtitle: Text("Date: ${donation.date}"),
                             onTap:() {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donationInfo: donationInfo),));
+                              // Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donationInfo: donationInfo),));
                             },
                           ),
                         ));

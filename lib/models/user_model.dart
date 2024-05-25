@@ -7,7 +7,8 @@ class User {
   final String? address;
   final String? contactNumber;
   final bool? status;
-  final List<String> donations; 
+  final List<String> donations;
+  final List<String> donationDrives; 
   final List<String>? proofs;
   final String? orgDescription;
   final bool? openForDonation;
@@ -20,6 +21,7 @@ class User {
     this.contactNumber,
     this.status,
     this.donations = const [],
+    this.donationDrives = const [],
     this.proofs,
     this.orgDescription,
     this.openForDonation
@@ -34,6 +36,7 @@ class User {
       contactNumber: json['contactNumber'],
       status: json['status'],
       donations: List<String>.from(json['donations']),
+      donationDrives: List<String>.from(json['donationDrives']),
       proofs: List<String>.from(json['proofs']),
       orgDescription: json['orgDescription'],
       openForDonation: json['openForDonation']
@@ -51,6 +54,7 @@ class User {
       'contactNumber': contactNumber,
       'status': status,
       'donations': donations,
+      'donationDrives': donationDrives,
       'proofs': proofs,
       'orgDescription': orgDescription,
       'openForDonation': openForDonation
@@ -68,6 +72,7 @@ class User {
       contactNumber: doc['contactNumber'],
       status: doc['status'],
       donations: List<String>.from(doc['donations']),
+      donationDrives: List<String>.from(doc['donationDrives']),
       proofs: List<String>.from(doc['proofs']),
       orgDescription: doc['orgDescription'],
       openForDonation: doc['openForDonation']      
