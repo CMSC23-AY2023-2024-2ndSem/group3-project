@@ -49,7 +49,7 @@ class DonorDetailsPageState extends State<DonorDetailsPage> {
                 infoItem("Account Type", "Donor"),
                 infoItem("Username", donor.username),
                 infoItem("Name", donor.name!),
-                infoItem("Address", donor.address!),
+                infoItem("Address", donor.address![0]),
                 infoItem("Contact", donor.contactNumber!),
                 infoItem("Number of Donations", donor.donations.length.toString()),
               ],

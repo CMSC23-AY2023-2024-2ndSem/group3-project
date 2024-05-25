@@ -19,7 +19,7 @@ class _SignUpState extends State<SignUpPage> {
   String? lastName;
   String? email;
   String? password;
-  String? address;
+  List<String> addresses=[];
   String? contactNumber;
 
   @override
@@ -145,7 +145,7 @@ class _SignUpState extends State<SignUpPage> {
             label: Text("Address"),
             hintText: "Enter your address",
           ),
-          onSaved: (value) => setState(() => address = value),
+          onSaved: (value) => setState(() => addresses.add(value!)),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter your address";
@@ -162,7 +162,7 @@ class _SignUpState extends State<SignUpPage> {
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             label: Text("Contact No."),
-            hintText: "Enter your contact number",
+            hintText: "09XXXXXXXXX",
           ),
           onSaved: (value) => setState(() => contactNumber = value),
           validator: (value) {
@@ -170,7 +170,9 @@ class _SignUpState extends State<SignUpPage> {
               return "Please enter your contact number";
             } else if (int.tryParse(value) == null) {
               return "Please enter numbers only";
-            }
+            } else if (value.length != 11 || value.substring(0,2) != "09"){
+              return "Please enter valid contact number";
+            } 
 
             return null;
           },
@@ -206,7 +208,7 @@ class _SignUpState extends State<SignUpPage> {
                       type: "donor",
                       username: email!,
                       name: "$firstName $lastName",
-                      address: address!,
+                      address: addresses,
                       contactNumber: contactNumber!,
                       status: true,
                       donations: [],

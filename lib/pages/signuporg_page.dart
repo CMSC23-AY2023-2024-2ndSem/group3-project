@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
 import 'package:week9_authentication/pages/signin_page.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
+import 'package:week9_authentication/widgets/address_input.dart';
 import '../providers/auth_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -21,7 +22,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
   String? name;
   String? email;
   String? password;
-  String? address;
+  List<String> addresses = [];
   String? contactNumber;
   String? description;
   List<XFile> imageFile = [];
@@ -170,23 +171,12 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
         ),
       );
 
-  Widget get addressField => Padding(
-        padding: const EdgeInsets.only(bottom: 30),
-        child: TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            label: Text("Address"),
-            hintText: "Enter your address",
-          ),
-          onSaved: (value) => setState(() => address = value),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Please enter your address";
-            }
-
-            return null;
-          },
-        ),
+  Widget get addressField => MultipleAddressInput(
+        onChanged: (List<String> addresses) {
+          setState(() {
+            this.addresses = addresses;
+          });
+        },
       );
 
   Widget get contactNumberField => Padding(
@@ -376,7 +366,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
                 type: "organization",
                 username: email!,
                 name: name,
-                address: address!,
+                address: addresses,
                 contactNumber: contactNumber!,
                 status: false,
                 donations: [],

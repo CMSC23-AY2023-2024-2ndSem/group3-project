@@ -235,20 +235,43 @@ class _AdminHomePageState extends State<AdminHomePage> {
             }));
   }
 
-  Widget pageBar(){
-    return Container(
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30)),
-          gradient: LinearGradient(
-              colors: [Colors.redAccent, Colors.pink],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter)),
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+  // Widget pageBar() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //       borderRadius: const BorderRadius.only(
+  //           bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
+  //       color: Colors.grey.shade900,
+  //     ),
+  //     margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+  //     child: const Column(
+  //       children: [
+         
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Padding(
+  //               padding: EdgeInsets.all(30.0),
+  //               child: Text(
+  //                 "Pending Organization Sign Up",
+  //                 style: TextStyle(
+  //                     fontSize: 18,
+  //                     fontWeight: FontWeight.w500,
+  //                     color: Colors.white),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  Widget pageBar() {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(8,16,8,8),
+      color: Colors.grey.shade900,
       child: const Column(
         children: [
-          Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -257,7 +280,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 child: Text(
                   "Pending Organization Sign Up",
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.w500,
                       color: Colors.white),
                 ),
