@@ -4,14 +4,17 @@
   Description: Sample todo app with Firebase 
 */
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/pages/admin_home.dart';
 import 'package:week9_authentication/pages/org_home.dart';
+import '../providers/user_provider.dart';
 import 'donor_home.dart';
 import '../providers/auth_provider.dart';
 import 'signin_page.dart';
+import 'package:week9_authentication/models/user_model.dart' as user;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,10 +26,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    Stream<User?> userStream = context.watch<UserAuthProvider>().userStream;
+    Stream<auth.User?> authUserStream =
+        context.watch<UserAuthProvider>().userStream;
+    Stream<QuerySnapshot> userStream = context.read<UserProvider>().users;
 
     return StreamBuilder(
-        stream: userStream,
+        stream: authUserStream,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Scaffold(
@@ -44,17 +49,43 @@ class _HomePageState extends State<HomePage> {
             return const SignInPage();
           }
 
-          // if user is logged in, display the scaffold containing the streambuilder for the todos
+          final userEmail = snapshot.data!.email;
 
-          // TODO: check if user is a donor or organization
-          
-          if (snapshot.data!.email == "admin@gmail.com"){
-            return const AdminHomePage();
-          }else{
-            // return const DonorHomePage();
-            return const OrganizationHomePage();
-          }
-          
+          return StreamBuilder(
+              stream: userStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Scaffold(
+                    body: Center(
+                      child: Text("Error encountered! ${snapshot.error}"),
+                    ),
+                  );
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return const Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else {
+                  final users = snapshot.data!.docs
+                      .map((doc) => user.User.fromDocument(doc))
+                      .toList();
+                  user.User currentUser =
+                      users.firstWhere((user) { return user.username == userEmail;
+                      }, orElse: () => user.User(type: "donor", username: ""));
+
+                  if (currentUser.type == "donor") {
+                    return const DonorHomePage();
+                  } else if (currentUser.type == "organization") {
+                    return const OrganizationHomePage();
+                  } else if (currentUser.type == "admin") {
+                    return const AdminHomePage();
+                  } else {
+                    return const SignInPage();
+                  }
+                }
+              });
         });
   }
 }

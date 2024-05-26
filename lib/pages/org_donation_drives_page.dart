@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/donationdrive_model.dart';
 import 'package:week9_authentication/models/user_model.dart';
+import 'package:week9_authentication/pages/org_add_donation_drive_page.dart';
 import 'package:week9_authentication/pages/org_details_page.dart';
 import 'package:week9_authentication/pages/org_home.dart';
 import 'package:week9_authentication/providers/auth_provider.dart';
@@ -64,17 +65,23 @@ class _OrganizationDonationDrivesPageState extends State<OrganizationDonationDri
           }, orElse: () => User(type: "organization", username: ""));
 
           if (currentUser.donationDrives.isEmpty) {
-              return const Center(
+              return Center(
                 child: Column(
                   children: [
-                    Padding(
+                    const Padding(
                         padding: EdgeInsets.fromLTRB(0, 50, 0, 10),
                         child: Icon(Icons.no_backpack_rounded,
                             size: 200,
                             color: Color.fromARGB(50, 255, 255, 255))),
-                    Text("No Donation Drives Yet",
+                    const Text("No Donation Drives Yet",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
+                    FloatingActionButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const AddDonationDrivePage(),));
+                      },
+                      child: const Icon(Icons.add),
+                    )
                   ],
                 ),
               );

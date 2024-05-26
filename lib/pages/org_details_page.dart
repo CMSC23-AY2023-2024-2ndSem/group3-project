@@ -58,7 +58,7 @@ class _OrganizationDetailsPageState extends State<OrganizationDetailsPage> {
                 infoItem("Account Type", "Organization"),
                 infoItem("Username", organization.username),
                 infoItem("Organization Name", organization.name!),
-                infoItem("Address", organization.address!),
+                // infoItem("Address", organization.address! as String),
                 infoItem("Contact", organization.contactNumber!),
                 infoItem("Status for Donations", organizationStatus),
               ],
