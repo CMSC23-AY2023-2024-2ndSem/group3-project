@@ -445,32 +445,43 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    height: constraints.maxHeight * 0.2,
-                    width: constraints.maxWidth * 0.9,
-                    child: ListView.builder(
-                        itemCount: imageFileUrl.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            leading: const Icon(Icons.folder_copy_rounded),
-                            title: Text(imageFileUrl[index],
-                                style: const TextStyle(
-                                    decoration: TextDecoration.underline)),
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                          content: SizedBox(
-                                        height: 250,
-                                        child: Image.file(
-                                          File(imageFile[index].path),
-                                          height: 200,
-                                        ),
-                                      )));
-                            },
-                          );
-                        }),
-                  ),
+                  if (imageFile.isNotEmpty)
+                    SizedBox(
+                      height: constraints.maxHeight * 0.2,
+                      width: constraints.maxWidth * 0.9,
+                      child: ListView.builder(
+                          itemCount: imageFileUrl.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: const Icon(Icons.folder_copy_rounded),
+                              title: Text(imageFileUrl[index],
+                                  style: const TextStyle(
+                                      decoration: TextDecoration.underline)),
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                            content: SizedBox(
+                                          height: 250,
+                                          child: Image.file(
+                                            File(imageFile[index].path),
+                                            height: 200,
+                                          ),
+                                        )));
+                              },
+                            );
+                          }),
+                    ),
+                  if (imageFile.isEmpty)
+                    SizedBox(
+                        height: constraints.maxHeight * 0.2,
+                        width: constraints.maxWidth * 0.9,
+                        child: const Center(
+                          child: Text(
+                            "No photos uploaded yet.",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )),
                 ],
               ),
               actions: [
@@ -495,9 +506,6 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
             if (_formKey.currentState!.validate() && imageFile.isNotEmpty) {
               _formKey.currentState!.save();
 
-              await _uploadPhotoToStorage();
-              print(imageUrl);
-
               bool emailExists = await context
                   .read<UserAuthProvider>()
                   .authService
@@ -509,33 +517,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
                 return;
               }
               if (mounted) {
-                await context
-                    .read<UserAuthProvider>()
-                    .authService
-                    .signUp(name!, "", email!, password!);
-              }
-
-              if (mounted) {
-                User user = User(
-                    type: "organization",
-                    username: email!,
-                    name: name,
-                    address: addresses,
-                    contactNumber: contactNumber!,
-                    status: false,
-                    donations: [],
-                    proofs: imageUrl,
-                    openForDonation: true,
-                    orgDescription: description);
-                await context
-                    .read<UserProvider>()
-                    .firebaseService
-                    .addUsertoDB(user.toJson());
-              }
-
-              // check if the widget hasn't been disposed of after an asynchronous action
-              if (mounted) {
-                Navigator.pop(context);
+                orgSignUpPrompt(context);
               }
             }
           },
@@ -548,21 +530,49 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Upload options"),
-          content: const Text(
-              "Thank you for showing interest in helping the community! Please give us time to approve your registration."),
+          backgroundColor: Colors.grey.shade900,
+          title: const Text("Registration Status"),
+          content: Text(
+              "Thank you for showing interest in supporting us, $name! Please give us time to approve your registration."),
           actions: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+                    onPressed: () async {
+                      if (mounted) {
+                        await _uploadPhotoToStorage();
+
+                        await context
+                            .read<UserAuthProvider>()
+                            .authService
+                            .signUp(name!, "", email!, password!);
+
+                        User user = User(
+                            type: "organization",
+                            username: email!,
+                            name: name,
+                            address: addresses,
+                            contactNumber: contactNumber!,
+                            status: false,
+                            donations: [],
+                            proofs: imageUrl,
+                            openForDonation: true,
+                            orgDescription: description);
+
+                        await context
+                            .read<UserProvider>()
+                            .firebaseService
+                            .addUsertoDB(user.toJson());
+
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }
                     },
-                    child: const Text("I Understand")),
+                    child: const Text(
+                      "I Understand",
+                      style: TextStyle(color: Colors.purpleAccent),
+                    )),
               ],
             )
           ],
