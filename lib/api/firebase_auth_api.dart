@@ -66,7 +66,7 @@ class FirebaseAuthApi {
   }
 
   Future<bool> checkEmailExists(String email) async {
-    QuerySnapshot result = await db.collection('users').where('email', isEqualTo: email.toLowerCase()).get();
+    QuerySnapshot result = await db.collection('users').where('username', isEqualTo: email.toLowerCase()).get();
     return result.docs.isNotEmpty;
   }
 }
