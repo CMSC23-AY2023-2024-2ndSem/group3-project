@@ -4,9 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
-import 'package:week9_authentication/pages/signin_page.dart';
+import 'package:week9_authentication/pages/home_page.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
-import 'package:week9_authentication/widgets/address_input.dart';
+import 'package:week9_authentication/widgets/muladdress_signup_input.dart';
 import '../providers/auth_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -77,25 +77,48 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Container(
-            margin: const EdgeInsets.all(30),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+              Colors.purple.shade400,
+              Colors.purple.shade500,
+              Colors.purple.shade600,
+              Colors.purple.shade700,
+            ])),
             child: Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  appIcon,
                   heading,
-                  nameField,
-                  emailField,
-                  passwordField,
-                  addressField,
-                  contactNumberField,
-                  descriptionField,
-                  uploadImageButton(context),
-                  submitButton
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40))),
+                    child: Column(
+                      children: [
+                        nameField,
+                        emailField,
+                        passwordField,
+                        addressField,
+                        contactNumberField,
+                        descriptionField,
+                        uploadImageButton(context),
+                        submitButton,
+                      ],
+                    ),
+                  )
                 ],
               ),
             )),
@@ -103,19 +126,49 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
     );
   }
 
+  Widget get appIcon => const Padding(
+      padding: EdgeInsets.only(top: 60),
+      child: Icon(
+        Icons.handshake_rounded,
+        color: Colors.white,
+        size: 60,
+      ));
+
   Widget get heading => const Padding(
-        padding: EdgeInsets.only(bottom: 30),
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
         child: Text(
-          "Sign Up",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          "Sign Up as Organization",
+          style: TextStyle(
+              fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white),
         ),
       );
 
   Widget get nameField => Padding(
-        padding: const EdgeInsets.only(bottom: 30),
+        padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+            filled: true,
+            isDense: true,
+            contentPadding: EdgeInsets.all(18),
+            fillColor: Color.fromRGBO(50, 50, 50, 1),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Color.fromRGBO(50, 50, 50, 1),
+                    style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.purple, style: BorderStyle.solid, width: 2),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.redAccent, style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Colors.purple, style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
             label: Text("Organization Name"),
             hintText: "Enter your organization name",
           ),
@@ -131,10 +184,31 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
       );
 
   Widget get emailField => Padding(
-        padding: const EdgeInsets.only(bottom: 30),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
-              border: OutlineInputBorder(),
+              filled: true,
+              isDense: true,
+              contentPadding: EdgeInsets.all(18),
+              fillColor: Color.fromRGBO(50, 50, 50, 1),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Color.fromRGBO(50, 50, 50, 1),
+                      style: BorderStyle.solid),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.purple, style: BorderStyle.solid, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.redAccent, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.purple, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
               label: Text("Email"),
               hintText: "Enter a valid email"),
           onSaved: (value) => setState(() => email = value),
@@ -152,10 +226,31 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
       );
 
   Widget get passwordField => Padding(
-        padding: const EdgeInsets.only(bottom: 30),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
-              border: OutlineInputBorder(),
+              filled: true,
+              isDense: true,
+              contentPadding: EdgeInsets.all(18),
+              fillColor: Color.fromRGBO(50, 50, 50, 1),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Color.fromRGBO(50, 50, 50, 1),
+                      style: BorderStyle.solid),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.purple, style: BorderStyle.solid, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.redAccent, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.purple, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
               label: Text("Password"),
               hintText: "At least 8 characters"),
           obscureText: true,
@@ -171,7 +266,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
         ),
       );
 
-  Widget get addressField => MultipleAddressInput(
+  Widget get addressField => MultipleAddressSignUpInput(
         onChanged: (List<String> addresses) {
           setState(() {
             this.addresses = addresses;
@@ -180,10 +275,31 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
       );
 
   Widget get contactNumberField => Padding(
-        padding: const EdgeInsets.only(bottom: 30),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+            filled: true,
+            isDense: true,
+            contentPadding: EdgeInsets.all(18),
+            fillColor: Color.fromRGBO(50, 50, 50, 1),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Color.fromRGBO(50, 50, 50, 1),
+                    style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.purple, style: BorderStyle.solid, width: 2),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.redAccent, style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Colors.purple, style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
             label: Text("Contact No."),
             hintText: "Enter your contact number",
           ),
@@ -201,10 +317,31 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
       );
 
   Widget get descriptionField => Padding(
-        padding: const EdgeInsets.only(bottom: 30.0),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: const InputDecoration(
-              border: OutlineInputBorder(),
+              filled: true,
+              isDense: true,
+              contentPadding: EdgeInsets.all(18),
+              fillColor: Color.fromRGBO(50, 50, 50, 1),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Color.fromRGBO(50, 50, 50, 1),
+                      style: BorderStyle.solid),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.purple, style: BorderStyle.solid, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.redAccent, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.purple, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
               label: Text("Organization description"),
               hintText: "About you",
             ),
@@ -220,7 +357,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
       );
 
   Widget uploadImageButton(context) => Padding(
-        padding: const EdgeInsets.only(bottom: 30.0),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -228,13 +365,16 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
               children: [
                 if (!(imageFileUrl.isEmpty && submitClicked) ||
                     imageFileUrl.isNotEmpty && !submitClicked)
-                  ElevatedButton(
+                  FilledButton(
+                      style: FilledButton.styleFrom(
+                          backgroundColor: const Color.fromRGBO(50, 50, 50, 1)),
                       onPressed: () {
                         uploadImagePopUp(context);
                       },
-                      child: const Text("Upload Proof/s of Legitimacy")),
+                      child: const Text("Upload Proof/s of Legitimacy",
+                          style: TextStyle(color: Colors.purpleAccent))),
                 if (imageFileUrl.isEmpty && submitClicked)
-                  ElevatedButton(
+                  FilledButton(
                       style: const ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll(
                               Color.fromARGB(255, 180, 139, 138))),
@@ -252,12 +392,17 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
                           color: Color.fromARGB(255, 180, 139, 138)))
               ],
             ),
-            ElevatedButton(
+            FilledButton(
+                style: FilledButton.styleFrom(
+                    backgroundColor: const Color.fromRGBO(50, 50, 50, 1)),
                 onPressed: () {
                   //  uploadImagePopUp(context);
                   uploadImageContainer(context);
                 },
-                child: const Icon(Icons.image_outlined))
+                child: const Icon(
+                  Icons.image_outlined,
+                  color: Colors.purpleAccent,
+                ))
           ],
         ),
       );
@@ -265,6 +410,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
   uploadImagePopUp(context) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          backgroundColor: Colors.grey.shade900,
           title: const Text("Upload options"),
           actions: [
             Row(
@@ -274,13 +420,15 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
                       _takePhoto();
                       Navigator.pop(context);
                     },
-                    child: const Text("Take a photo")),
+                    child: const Text("Take a photo",
+                        style: TextStyle(color: Colors.purpleAccent))),
                 TextButton(
                     onPressed: () {
                       _pickImageFromGallery();
                       Navigator.pop(context);
                     },
-                    child: const Text("Choose from gallery")),
+                    child: const Text("Choose from gallery",
+                        style: TextStyle(color: Colors.purpleAccent))),
               ],
             )
           ],
@@ -292,6 +440,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
       builder: (context) => LayoutBuilder(
             builder: (context, constraints) => AlertDialog(
               scrollable: true,
+              backgroundColor: Colors.grey.shade900,
               title: const Text("Proof/s of Legitimacy"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -327,69 +476,76 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
               actions: [
                 TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text("Confirm"))
+                    child: const Text("Confirm",
+                        style: TextStyle(color: Colors.purpleAccent)))
               ],
             ),
           ));
 
-  Widget get submitButton => ElevatedButton(
-      onPressed: () async {
-        setState(() {
-          submitClicked = true;
-        });
+  Widget get submitButton => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: FilledButton(
+          style: FilledButton.styleFrom(
+              minimumSize: const Size(300, 55), backgroundColor: Colors.purple),
+          onPressed: () async {
+            setState(() {
+              submitClicked = true;
+            });
 
-        if (_formKey.currentState!.validate() && imageFile.isNotEmpty) {
-          _formKey.currentState!.save();
+            if (_formKey.currentState!.validate() && imageFile.isNotEmpty) {
+              _formKey.currentState!.save();
 
-          await _uploadPhotoToStorage();
-          print(imageUrl);
+              await _uploadPhotoToStorage();
+              print(imageUrl);
 
-          bool emailExists = await context
-              .read<UserAuthProvider>()
-              .authService
-              .checkEmailExists(email!);
-          if (emailExists) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Email already exists"),
-            ));
-            return;
-          }
-          if (mounted) {
-            await context
-                .read<UserAuthProvider>()
-                .authService
-                .signUp(name!, "", email!, password!);
-          }
+              bool emailExists = await context
+                  .read<UserAuthProvider>()
+                  .authService
+                  .checkEmailExists(email!);
+              if (emailExists) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Email already exists"),
+                ));
+                return;
+              }
+              if (mounted) {
+                await context
+                    .read<UserAuthProvider>()
+                    .authService
+                    .signUp(name!, "", email!, password!);
+              }
 
-          if (mounted) {
-            User user = User(
-                type: "organization",
-                username: email!,
-                name: name,
-                address: addresses,
-                contactNumber: contactNumber!,
-                status: false,
-                donations: [],
-                proofs: imageUrl,
-                openForDonation: true,
-                orgDescription: description);
-            await context
-                .read<UserProvider>()
-                .firebaseService
-                .addUsertoDB(user.toJson());
-          }
+              if (mounted) {
+                User user = User(
+                    type: "organization",
+                    username: email!,
+                    name: name,
+                    address: addresses,
+                    contactNumber: contactNumber!,
+                    status: false,
+                    donations: [],
+                    proofs: imageUrl,
+                    openForDonation: true,
+                    orgDescription: description);
+                await context
+                    .read<UserProvider>()
+                    .firebaseService
+                    .addUsertoDB(user.toJson());
+              }
 
-          // orgSignUpPrompt(context);
-
-          // check if the widget hasn't been disposed of after an asynchronous action
-          if (mounted) {
-            Navigator.pop(context);
-          }
-        }
-      },
-      child: const Text("Continue"));
+              // check if the widget hasn't been disposed of after an asynchronous action
+              if (mounted) {
+                Navigator.pop(context);
+              }
+            }
+          },
+          child: const Text(
+            "Continue",
+            style: TextStyle(fontSize: 18, color: Colors.white),
+          )));
 
   orgSignUpPrompt(context) => showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
           title: const Text("Upload options"),
@@ -404,7 +560,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const SignInPage()));
+                              builder: (context) => const HomePage()));
                     },
                     child: const Text("I Understand")),
               ],

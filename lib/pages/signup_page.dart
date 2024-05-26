@@ -87,14 +87,14 @@ class _SignUpState extends State<SignUpPage> {
   Widget get heading => const Padding(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
         child: Text(
-          "Sign Up",
+          "Sign Up as Donor",
           style: TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white),
         ),
       );
 
   Widget get firstNameField => Padding(
-        padding: const EdgeInsets.fromLTRB(30, 30, 30, 15),
+        padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
