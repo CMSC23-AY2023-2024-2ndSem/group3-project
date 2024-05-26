@@ -72,7 +72,9 @@ class _HomePageState extends State<HomePage> {
                       .map((doc) => user.User.fromDocument(doc))
                       .toList();
                   user.User currentUser =
-                      users.firstWhere((user) => user.username == userEmail);
+                      users.firstWhere((user) { return user.username == userEmail;
+                      }, orElse: () => user.User(type: "donor", username: ""));
+
                   if (currentUser.type == "donor") {
                     return const DonorHomePage();
                   } else if (currentUser.type == "organization") {
