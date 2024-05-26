@@ -100,6 +100,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget get emailField => Padding(
         padding: const EdgeInsets.only(top: 40),
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
               filled: true,
               isDense: true,
@@ -137,6 +138,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget get passwordField => Padding(
         padding: const EdgeInsets.only(top: 10),
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
               filled: true,
               isDense: true,
