@@ -48,10 +48,18 @@ class MultipleAddressSignUpInputState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Address:',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          if (addresses.isEmpty)
+            const Text(
+              'Address:',
+              style:
+                  TextStyle(fontWeight: FontWeight.w500, color: Colors.white70),
+            ),
+          if (addresses.isNotEmpty)
+            const Text(
+              'Address:',
+              style: TextStyle(
+                  fontWeight: FontWeight.w500, color: Colors.purpleAccent),
+            ),
           const SizedBox(height: 8),
           Column(
             children: [
@@ -71,6 +79,7 @@ class MultipleAddressSignUpInputState
                 title: TextField(
                   controller: addressController,
                   decoration: const InputDecoration(
+                    floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.purple,

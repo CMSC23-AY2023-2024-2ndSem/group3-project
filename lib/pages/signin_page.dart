@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/pages/signup_page.dart';
 import '../providers/auth_provider.dart';
@@ -47,38 +48,47 @@ class _SignInPageState extends State<SignInPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Card(
-              shape: RoundedRectangleBorder(
+            Container(
+              margin: EdgeInsets.zero,
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                    Color.fromARGB(200, 255, 255, 255),
+                    Color.fromARGB(230, 255, 255, 255),
+                    Colors.white,
+                  ]),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(20))),
-              margin: EdgeInsets.zero,
-              color: Colors.purple,
-              child: Text(
-                " El",
+              child: const Text(
+                " EL",
                 style: TextStyle(
                     height: 1.3,
                     letterSpacing: 1,
                     fontSize: 50,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                    color: Colors.purple),
               ),
             ),
-            Card(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20))),
-              margin: EdgeInsets.zero,
-              color: Colors.white,
-              child: Text("Gives ",
+            Container(
+                margin: EdgeInsets.zero,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Colors.purple.shade700,
+                      Colors.purple.shade500,
+                      Colors.purple.shade300
+                    ]),
+                    borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20))),
+                child: const Text(
+                  "Gives ",
                   style: TextStyle(
                       height: 1.3,
                       letterSpacing: 1,
                       fontSize: 50,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).canvasColor)),
-            )
+                      color: Colors.white),
+                ))
           ],
         ),
       );
@@ -102,6 +112,7 @@ class _SignInPageState extends State<SignInPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+              floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
               filled: true,
               isDense: true,
               contentPadding: EdgeInsets.all(18),
@@ -140,6 +151,7 @@ class _SignInPageState extends State<SignInPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+              floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
               filled: true,
               isDense: true,
               contentPadding: EdgeInsets.all(18),
@@ -183,32 +195,33 @@ class _SignInPageState extends State<SignInPage> {
       );
 
   Widget get submitButton => Padding(
-    padding: const EdgeInsets.only(top: 40),
-    child: FilledButton(
-        style: FilledButton.styleFrom(
-            minimumSize: const Size(300, 55), backgroundColor: Colors.purple),
-        onPressed: () async {
-          if (_formKey.currentState!.validate()) {
-            _formKey.currentState!.save();
-            String? message = await context
-                .read<UserAuthProvider>()
-                .authService
-                .signIn(email!, password!);
-    
-            setState(() {
-              if (message != null && message.isNotEmpty) {
-                showSignInErrorMessage = true;
-              } else {
-                showSignInErrorMessage = false;
+        padding: const EdgeInsets.only(top: 40),
+        child: FilledButton(
+            style: FilledButton.styleFrom(
+                minimumSize: const Size(300, 55),
+                backgroundColor: Colors.purple),
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                String? message = await context
+                    .read<UserAuthProvider>()
+                    .authService
+                    .signIn(email!, password!);
+
+                setState(() {
+                  if (message != null && message.isNotEmpty) {
+                    showSignInErrorMessage = true;
+                  } else {
+                    showSignInErrorMessage = false;
+                  }
+                });
               }
-            });
-          }
-        },
-        child: const Text(
-          "Login",
-          style: TextStyle(fontSize: 18, color: Colors.white),
-        )),
-  );
+            },
+            child: const Text(
+              "Login",
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            )),
+      );
 
   Widget get signUpButton => Padding(
         padding: const EdgeInsets.only(top: 20),

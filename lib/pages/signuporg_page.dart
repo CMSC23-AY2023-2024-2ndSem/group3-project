@@ -148,6 +148,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+            floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
             filled: true,
             isDense: true,
             contentPadding: EdgeInsets.all(18),
@@ -188,6 +189,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+            floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
               filled: true,
               isDense: true,
               contentPadding: EdgeInsets.all(18),
@@ -230,6 +232,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+            floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
               filled: true,
               isDense: true,
               contentPadding: EdgeInsets.all(18),
@@ -279,6 +282,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+            floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
             filled: true,
             isDense: true,
             contentPadding: EdgeInsets.all(18),
@@ -321,6 +325,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
         child: TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: const InputDecoration(
+              floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
               filled: true,
               isDense: true,
               contentPadding: EdgeInsets.all(18),

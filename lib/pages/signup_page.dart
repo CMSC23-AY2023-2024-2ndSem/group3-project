@@ -35,13 +35,12 @@ class _SignUpState extends State<SignUpPage> {
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Container(
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [
-                      Colors.purple.shade400,
-                      Colors.purple.shade500,
-                      Colors.purple.shade600,
-                      Colors.purple.shade700,
-                    ])),
+                gradient: LinearGradient(colors: [
+              Colors.purple.shade400,
+              Colors.purple.shade500,
+              Colors.purple.shade600,
+              Colors.purple.shade700,
+            ])),
             // margin: const EdgeInsets.all(30),
             child: Form(
               key: _formKey,
@@ -98,6 +97,7 @@ class _SignUpState extends State<SignUpPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+            floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
             filled: true,
             isDense: true,
             contentPadding: EdgeInsets.all(18),
@@ -126,7 +126,7 @@ class _SignUpState extends State<SignUpPage> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter your first name";
-            } 
+            }
 
             return null;
           },
@@ -138,6 +138,7 @@ class _SignUpState extends State<SignUpPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+            floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
             filled: true,
             isDense: true,
             contentPadding: EdgeInsets.all(18),
@@ -177,6 +178,7 @@ class _SignUpState extends State<SignUpPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+              floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
               filled: true,
               isDense: true,
               contentPadding: EdgeInsets.all(18),
@@ -219,6 +221,7 @@ class _SignUpState extends State<SignUpPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+              floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
               filled: true,
               isDense: true,
               contentPadding: EdgeInsets.all(18),
@@ -260,6 +263,7 @@ class _SignUpState extends State<SignUpPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+            floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
             filled: true,
             isDense: true,
             contentPadding: EdgeInsets.all(18),
@@ -300,6 +304,7 @@ class _SignUpState extends State<SignUpPage> {
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: const InputDecoration(
+            floatingLabelStyle: TextStyle(color: Colors.purpleAccent),
             filled: true,
             isDense: true,
             contentPadding: EdgeInsets.all(18),
