@@ -27,6 +27,7 @@ class _SignUpState extends State<SignUpPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         elevation: 0,

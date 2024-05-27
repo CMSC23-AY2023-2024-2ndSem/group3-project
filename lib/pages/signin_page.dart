@@ -52,8 +52,8 @@ class _SignInPageState extends State<SignInPage> {
               margin: EdgeInsets.zero,
               decoration: const BoxDecoration(
                   gradient: LinearGradient(colors: [
-                    Color.fromARGB(200, 255, 255, 255),
-                    Color.fromARGB(230, 255, 255, 255),
+                    Color.fromARGB(150, 255, 255, 255),
+                    Color.fromARGB(210, 255, 255, 255),
                     Colors.white,
                   ]),
                   borderRadius: BorderRadius.only(

@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
-import 'package:week9_authentication/pages/home_page.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 import 'package:week9_authentication/widgets/muladdress_signup_input.dart';
 import '../providers/auth_provider.dart';
@@ -79,6 +78,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         elevation: 0,
@@ -479,7 +479,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
                     ),
                   if (imageFile.isEmpty)
                     SizedBox(
-                        height: constraints.maxHeight * 0.2,
+                        height: constraints.maxHeight * 0.1,
                         width: constraints.maxWidth * 0.9,
                         child: const Center(
                           child: Text(
