@@ -14,10 +14,12 @@ class OrganizationDonationDrivesPage extends StatefulWidget {
   const OrganizationDonationDrivesPage({super.key});
 
   @override
-  State<OrganizationDonationDrivesPage> createState() => _OrganizationDonationDrivesPageState();
+  State<OrganizationDonationDrivesPage> createState() =>
+      _OrganizationDonationDrivesPageState();
 }
 
-class _OrganizationDonationDrivesPageState extends State<OrganizationDonationDrivesPage> {
+class _OrganizationDonationDrivesPageState
+    extends State<OrganizationDonationDrivesPage> {
   @override
   void initState() {
     super.initState();
@@ -27,11 +29,9 @@ class _OrganizationDonationDrivesPageState extends State<OrganizationDonationDri
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    Stream<QuerySnapshot> userStream =
-        context.read<UserProvider>().users;
+    Stream<QuerySnapshot> userStream = context.read<UserProvider>().users;
 
     return Scaffold(
       drawer: drawer,
@@ -65,27 +65,46 @@ class _OrganizationDonationDrivesPageState extends State<OrganizationDonationDri
           }, orElse: () => User(type: "organization", username: ""));
 
           if (currentUser.donationDrives.isEmpty) {
-              return Center(
-                child: Column(
-                  children: [
-                    const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 50, 0, 10),
-                        child: Icon(Icons.no_backpack_rounded,
-                            size: 200,
-                            color: Color.fromARGB(50, 255, 255, 255))),
-                    const Text("No Donation Drives Yet",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                    FloatingActionButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const AddDonationDrivePage(),));
-                      },
-                      child: const Icon(Icons.add),
-                    )
-                  ],
-                ),
-              );
-            }
+            return Center(
+              child: Column(
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 50, 0, 10),
+                      child: Icon(Icons.no_backpack_rounded,
+                          size: 200, color: Color.fromARGB(50, 255, 255, 255))),
+                  const Text("No Donation Drives Yet",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Card(
+                      color: Colors.grey.shade900,
+                      margin: const EdgeInsets.all(8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: const Text("Add a Donation Drive/Charity"),
+                          leading: const Icon(Icons.add,
+                              color: Colors.orangeAccent, size: 30),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AddDonationDrivePage(),
+                                ));
+                          },
+                        ),
+                      ))
+                  // FloatingActionButton(
+                  //   onPressed: () {
+                  //     Navigator.push(context, MaterialPageRoute(builder: (context) => const AddDonationDrivePage(),));
+                  //   },
+                  //   backgroundColor: Colors.orangeAccent,
+                  //   child: const Icon(Icons.add),
+                  // )
+                ],
+              ),
+            );
+          }
 
           return ListView.builder(
             itemCount: currentUser.donationDrives.length,
@@ -117,23 +136,44 @@ class _OrganizationDonationDrivesPageState extends State<OrganizationDonationDri
                         .map((doc) => DonationDrive.fromDocument(doc))
                         .toList();
 
-
                     DonationDrive donationDrive = donationDrives[index];
-                    
-                    return Card(
-                        color: Colors.grey.shade900,
-                        margin: const EdgeInsets.all(8),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            title: Text("Donation Drive: ${donationDrive.name}"),
-                            leading: const Icon(Icons.favorite,
-                                color: Colors.orangeAccent, size: 30),
-                            onTap:() {
-                              // Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donationInfo: donationInfo),));
-                            },
-                          ),
-                        ));
+
+                    return Column(children: [
+                      Card(
+                          color: Colors.grey.shade900,
+                          margin: const EdgeInsets.all(8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              title:
+                                  Text("Donation Drive: ${donationDrive.name}"),
+                              leading: const Icon(Icons.favorite,
+                                  color: Colors.orangeAccent, size: 30),
+                              onTap: () {
+                                // Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donationInfo: donationInfo),));
+                              },
+                            ),
+                          )),
+                      Card(
+                      color: Colors.grey.shade900,
+                      margin: const EdgeInsets.all(8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: const Text("Add a Donation Drive/Charity"),
+                          leading: const Icon(Icons.add,
+                              color: Colors.orangeAccent, size: 30),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AddDonationDrivePage(),
+                                ));
+                          },
+                        ),
+                      ))
+                    ]);
                   });
             },
           );
@@ -180,7 +220,8 @@ class _OrganizationDonationDrivesPageState extends State<OrganizationDonationDri
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const OrganizationDonationDrivesPage(),
+                      builder: (context) =>
+                          const OrganizationDonationDrivesPage(),
                     ));
               },
             ),
