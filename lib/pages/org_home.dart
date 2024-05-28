@@ -113,12 +113,19 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
 
                     Donation donation = donations[index];
 
+                    List<String> categories = [];
+                    donation.donationCategories.forEach((key, value) {
+                      if (value == true) {
+                        categories.add(key);
+                      }
+                    });
+                    String stringCategories = categories.join(', ');
 
                     List<String> donationInfo = [
                       donation.donorUname,
                       donation.organizationUname,
                       donation.donationDriveName,
-                      donation.donationCategories.toString(),
+                      stringCategories,
                       donation.pickupOrDropOff.toString(),
                       donation.weight,
                       donation.date.toString(),
