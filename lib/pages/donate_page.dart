@@ -31,7 +31,6 @@ class DonatePageState extends State<DonatePage> {
   String weight = "";
   List<String> addresses = [];
   String contactNumber = "";
-  String qrData = "";
   XFile? _imageFile;
   String imageUrl = "";
 
@@ -174,11 +173,11 @@ class DonatePageState extends State<DonatePage> {
                       contactNumber: contactNumber, // not required
                       organizationUname: widget.donorOrgInfo[1],
                       donorUname: widget.donorOrgInfo[0],
-                      donationDriveName: "",
+                      donationDriveUid: "",
                       status: "Pending");
                   
                   if(widget.donorOrgInfo[3] != "direct"){
-                    donation.donationDriveName = widget.donorOrgInfo[3];
+                    donation.donationDriveUid = widget.donorOrgInfo[3];
                   }
                   
                   if(pickupOrDropOff){

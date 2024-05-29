@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DonationDrive {
+  final String uid;
   final String name;
   final String description;
   final String organizationUname;
@@ -8,6 +9,7 @@ class DonationDrive {
   final bool isOpen; 
 
   DonationDrive({
+    required this.uid,
     required this.name,
     required this.description,
     required this.organizationUname,
@@ -17,6 +19,7 @@ class DonationDrive {
 
   factory DonationDrive.fromJson(Map<String, dynamic> json) {
     return DonationDrive(
+      uid: json['uid'],
       name: json['name'],
       description: json['description'],
       organizationUname: json['organizationUname'],
@@ -27,6 +30,7 @@ class DonationDrive {
 
   Map<String, dynamic> toJson() {
     return {
+      'uid': uid,
       'name': name,
       'description': description,
       'organizationUname': organizationUname,
@@ -36,6 +40,7 @@ class DonationDrive {
 
   static fromDocument(QueryDocumentSnapshot<Object?> doc) {
     return DonationDrive(
+      uid: doc['uid'],
       name: doc['name'],
       description: doc['description'],
       organizationUname: doc['organizationUname'],

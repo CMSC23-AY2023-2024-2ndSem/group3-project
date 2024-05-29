@@ -1,14 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// import 'package:week9_authentication/pages/home_page.dart';
 import '../pages/org_donation_drives_page.dart';
 import '../models/user_model.dart';
 import '../models/donation_model.dart';
 import '../providers/auth_provider.dart';
 import '../providers/donation_provider.dart';
+// import '../providers/donationdrive_provider.dart';
 import '../providers/user_provider.dart';
 import 'donation_details_page.dart';
 import 'org_details_page.dart';
+import 'org_home_edit_modal.dart';
+import 'org_home_link_modal.dart';
+import 'qr_scanner_page.dart';
+
 
 class OrganizationHomePage extends StatefulWidget {
   const OrganizationHomePage({super.key});
@@ -18,19 +25,38 @@ class OrganizationHomePage extends StatefulWidget {
 }
 
 class _OrganizationHomePageState extends State<OrganizationHomePage> {
+  Map<String, String> drivesUidNameMap = {};
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<UserProvider>().fetchUsers();
       context.read<DonationProvider>().fetchDonations();
+      _fetchDonationDrives();
     });
   }
+
+  Future<void> _fetchDonationDrives() async {
+    FirebaseFirestore.instance
+            .collection("donationdrives")
+            .get()
+            .then((querySnapshot) {
+            querySnapshot.docs.forEach((doc) {
+            String uid = doc.data()['uid'];
+            String name = doc.data()['name'];
+            setState(() {
+              drivesUidNameMap[uid] = name;
+            });
+            });
+          });
+  }
+  
+  
 
   @override
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> userStream =
-        context.read<UserProvider>().users;
+        context.watch<UserProvider>().users;
 
     return Scaffold(
       drawer: drawer,
@@ -38,6 +64,17 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
         title: const Text("Donations",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.orangeAccent,
+         actions: [
+    IconButton(
+      icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => QrScannerPage()),
+        );
+      },
+    ),
+  ],
       ),
       body: StreamBuilder(
         stream: userStream,
@@ -79,14 +116,17 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                 ),
               );
             }
+          
+
 
           return ListView.builder(
             itemCount: currentUser.donations.length,
             itemBuilder: (context, index) {
-              Stream<QuerySnapshot> orgDonationsStream = FirebaseFirestore
+                Stream<QuerySnapshot> orgDonationsStream = FirebaseFirestore
                   .instance
                   .collection("donations")
                   .where("organizationUname", isEqualTo: currentUser.username)
+                  .orderBy("date", descending: true)
                   .snapshots();
               return StreamBuilder(
                   stream: orgDonationsStream,
@@ -112,27 +152,33 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
 
 
                     Donation donation = donations[index];
+                
 
-                    List<String> categories = [];
-                    donation.donationCategories.forEach((key, value) {
-                      if (value == true) {
-                        categories.add(key);
-                      }
-                    });
-                    String stringCategories = categories.join(', ');
+                    var donationCategories = donation.donationCategories.entries
+                        .where((element) => element.value == true)
+                        .map((e) => e.key)
+                        .toList();
+
+                    var date = donation.date.toString().split(" ")[0];
+                    var time = donation.date.toString().split(" ")[1].split(".")[0];
+                    var dateTime = "$date $time";
+                    var donorName = donation.donorUname.split("@")[0];
+
+                    String driveName = drivesUidNameMap[donation.donationDriveUid] ?? "Unassigned";
 
                     List<String> donationInfo = [
                       donation.donorUname,
                       donation.organizationUname,
-                      donation.donationDriveName,
-                      stringCategories,
+                      driveName,
+                      donationCategories.join(", "),
                       donation.pickupOrDropOff.toString(),
                       donation.weight,
-                      donation.date.toString(),
-                      donation.addresses.toString(),
+                      dateTime,
+                      donation.addresses!.join(" "),
                       donation.contactNumber.toString(),
                       donation.status,
                     ];
+
                     
                     return Card(
                         color: Colors.grey.shade900,
@@ -140,10 +186,43 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
-                            title: Text("Donor: ${donation.donorUname}"),
-                            leading: const Icon(Icons.perm_contact_cal_rounded,
+                            title: Text("From: ${donorName}"),
+                            leading: const Icon(Icons.wallet_giftcard,
                                 color: Colors.orangeAccent, size: 30),
-                            subtitle: Text("Date: ${donation.date}"),
+                            subtitle: Text("${dateTime}"),
+                            trailing: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                              IconButton(
+                                icon: Icon(Icons.link, 
+                                color: const Color.fromARGB(255, 187, 134, 252)),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) => LinkModal(
+                                      donationUid: donation.uid,
+                                      donationDrives: drivesUidNameMap,
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.edit,
+                                color: Color.fromARGB(255, 187, 134, 252)),
+                                onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => EditModal(
+                                  donationUid: donation.uid,
+                                  donationStatus: donation.status,
+                                  ),
+                                );
+                                },
+                              ),
+                              
+                              ],
+                            ),
                             onTap:() {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donationInfo: donationInfo),));
                             },
@@ -182,16 +261,18 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
             ListTile(
               title: const Text('Donation'),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const OrganizationHomePage(),
-                    ));
+               Navigator.pop(context);
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const OrganizationHomePage(),
+                //     ));
               },
             ),
             ListTile(
               title: const Text('Donation Drives'),
               onTap: () {
+                Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -202,6 +283,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
             ListTile(
               title: const Text('Profile'),
               onTap: () {
+                Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(

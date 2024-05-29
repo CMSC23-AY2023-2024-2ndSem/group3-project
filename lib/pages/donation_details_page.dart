@@ -47,19 +47,41 @@ class _DonationDetailsPageState extends State<DonationDetailsPage> {
             deliveryType = "Drop off";
           }
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              infoItem('Donor Username', widget.donationInfo[0]),
-              infoItem('Donation Category', widget.donationInfo[3]),
-              infoItem('Type of Delivery', deliveryType),
-              infoItem('Weight (Kg)', widget.donationInfo[5]),
-              infoItem('Date', widget.donationInfo[6]),
-              // infoItem('Address', widget.donationInfo[7]),
-              infoItem('Contact Number', widget.donationInfo[8]),
-              infoItem('Status', widget.donationInfo[9]),
-            ],
-          );
+          if(deliveryType == "Drop off") {
+            return SingleChildScrollView(
+              child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                infoItem('Donor Username', widget.donationInfo[0]),
+                infoItem('Donation Drive:', widget.donationInfo[2]),
+                infoItem('Donation Category', widget.donationInfo[3]),
+                infoItem('Type of Delivery', deliveryType),
+                infoItem('Weight (Kg)', widget.donationInfo[5]),
+                infoItem('Date', widget.donationInfo[6]),
+                // infoItem('Address', widget.donationInfo[7]),
+                // infoItem('Contact Number', widget.donationInfo[8]),
+                infoItem('Status', widget.donationInfo[9]),
+              ],
+            )
+            );
+          } else{
+            return SingleChildScrollView(
+              child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                infoItem('Donor Username', widget.donationInfo[0]),
+                infoItem('Donation Drive:', widget.donationInfo[2]),
+                infoItem('Donation Category', widget.donationInfo[3]),
+                infoItem('Type of Delivery', deliveryType),
+                infoItem('Weight (Kg)', widget.donationInfo[5]),
+                infoItem('Date', widget.donationInfo[6]),
+                infoItem('Address', widget.donationInfo[7]),
+                infoItem('Contact Number', widget.donationInfo[8]),
+                infoItem('Status', widget.donationInfo[9]),
+              ],
+            )
+            );
+          }
         },
       ),
     );
