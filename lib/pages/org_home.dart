@@ -25,14 +25,33 @@ class OrganizationHomePage extends StatefulWidget {
 }
 
 class _OrganizationHomePageState extends State<OrganizationHomePage> {
+  Map<String, String> drivesUidNameMap = {};
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<UserProvider>().fetchUsers();
       context.read<DonationProvider>().fetchDonations();
+      _fetchDonationDrives();
     });
   }
+
+  Future<void> _fetchDonationDrives() async {
+    FirebaseFirestore.instance
+            .collection("donationdrives")
+            .get()
+            .then((querySnapshot) {
+            querySnapshot.docs.forEach((doc) {
+            String uid = doc.data()['uid'];
+            String name = doc.data()['name'];
+            setState(() {
+              drivesUidNameMap[uid] = name;
+            });
+            });
+          });
+  }
+  
+  
 
   @override
   Widget build(BuildContext context) {
@@ -80,24 +99,6 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
             return user.username ==
                 context.read<UserAuthProvider>().user!.email;
           }, orElse: () => User(type: "organization", username: ""));
-
-          Map<String, String> drivesUidNameMap = {};
-
-          
-
-          FirebaseFirestore.instance
-            .collection("donationdrives")
-            .get()
-            .then((querySnapshot) {
-            querySnapshot.docs.forEach((doc) {
-            String uid = doc.data()['uid'];
-            String name = doc.data()['name'];
-            drivesUidNameMap[uid] = name;
-            });
-            
-          });
-
-      
 
           if (currentUser.donations.isEmpty) {
               return const Center(
@@ -195,8 +196,8 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                               children: [
                               IconButton(
                                 icon: Icon(Icons.link, 
-                                color: drivesUidNameMap.isEmpty ? Colors.grey : const Color.fromARGB(255, 187, 134, 252)),
-                                onPressed: drivesUidNameMap.isEmpty ? null : () {
+                                color: const Color.fromARGB(255, 187, 134, 252)),
+                                onPressed: () {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) => LinkModal(
@@ -219,6 +220,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                                 );
                                 },
                               ),
+                              
                               ],
                             ),
                             onTap:() {
