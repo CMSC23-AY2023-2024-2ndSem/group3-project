@@ -4,9 +4,9 @@ import '../models/donationdrive_model.dart';
 class FirebaseDonationDriveAPI {
   static final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<String> addDonationDrives(DonationDrive DonationDrive) async {
+  Future<String> addDonationDrives(DonationDrive donationDrive) async {
     try {
-      await db.collection("donationdrives").add(DonationDrive.toJson());
+      await db.collection("donationdrives").add(donationDrive.toJson());
 
       return "Successfully added!";
     } on FirebaseException catch (e) {

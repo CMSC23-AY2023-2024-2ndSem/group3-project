@@ -1,3 +1,5 @@
+import 'package:week9_authentication/models/donationdrive_model.dart';
+
 import '../api/firebase_donationdrive_api.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +17,12 @@ class DonationDriveProvider with ChangeNotifier {
 
   Future<void> fetchDonationDrives() async {
     _donationdrivesStream = firebaseService.getAllDonationDrives();
+    notifyListeners();
+  }
+
+  Future<void> addDonationDrives(DonationDrive donationDrive) async {
+    String response = await firebaseService.addDonationDrives(donationDrive);
+    print(response);
     notifyListeners();
   }
 

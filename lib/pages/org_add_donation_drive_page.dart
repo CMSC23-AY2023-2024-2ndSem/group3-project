@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import 'package:week9_authentication/models/donationdrive_model.dart';
+import 'package:week9_authentication/pages/org_donation_drives_page.dart';
+import 'package:week9_authentication/providers/donationdrive_provider.dart';
 
 class AddDonationDrivePage extends StatefulWidget {
   const AddDonationDrivePage({super.key});
@@ -10,9 +14,10 @@ class AddDonationDrivePage extends StatefulWidget {
 
 class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
   final _formKey = GlobalKey<FormState>();
-  String? name;
-  String? description;
-  bool submitClicked = false;
+  String name = "";
+  String description = "";
+  String organizationUname = "";
+  bool addClicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [heading, nameField, descriptionField, submitButton],
+                children: [heading, nameField, descriptionField, organizationField, addButton],
               ),
             )),
       ),
@@ -48,8 +53,12 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
             border: OutlineInputBorder(),
             label: Text("Donation Drive/Charity Name"),
             hintText: "Enter Donation Drive/Charity name",
+            floatingLabelStyle: TextStyle(color: Colors.orangeAccent),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.orangeAccent)
+            )
           ),
-          onSaved: (value) => setState(() => name = value),
+          onSaved: (value) => setState(() => name = value!),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter Donation Drive/Charity name";
@@ -67,10 +76,14 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
               border: OutlineInputBorder(),
               label: Text("Donation Drive/Charity description"),
               hintText: "About Donation Drive/Charity",
+              floatingLabelStyle: TextStyle(color: Colors.orangeAccent),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.orangeAccent)
+              )
             ),
             keyboardType: TextInputType.multiline,
             maxLines: null,
-            onSaved: (value) => setState(() => description = value),
+            onSaved: (value) => setState(() => description = value!),
             validator: (value) {
               if (value!.length > 200) {
                 return "Please enter no more than 200 characters";
@@ -79,8 +92,78 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
             }),
       );
 
+    Widget get organizationField => Padding(
+        padding: const EdgeInsets.only(bottom: 30.0),
+        child: TextFormField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              label: Text("Organization"),
+              hintText: "Enter an Organization Username",
+              floatingLabelStyle: TextStyle(color: Colors.orangeAccent),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.orangeAccent)
+              )
+            ),
+            onSaved: (value) => setState(() => organizationUname = value!),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter an Organization Username";
+              }
+              return null;
+            }),
+      );
 
-  Widget get submitButton => ElevatedButton(
-    onPressed: () {}, child: const Text("submit"),
+
+  Widget get addButton => ElevatedButton(
+    onPressed: () {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+
+        String uuid = const Uuid().v4();
+        DonationDrive donationDrive = DonationDrive(
+          uid: uuid, 
+          name: name, 
+          description: description, 
+          organizationUname: organizationUname, 
+          donations: [], 
+          isOpen: false,
+        );
+        
+        showDialog(
+          context: context, 
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Confirm New Donation Drive"),
+              content: const Text("Are sure you want to add this donation drive?"),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<DonationDriveProvider>().addDonationDrives(donationDrive);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const OrganizationDonationDrivesPage()));
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.orangeAccent,
+                  ),
+                  child: const Text("Confirm"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.orangeAccent,
+                  ),
+                  child: const Text("Cancel"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }, 
+    style: ElevatedButton.styleFrom(
+      foregroundColor: Colors.orangeAccent,
+    ),
+    child: const Text("add"),
   );
 }
