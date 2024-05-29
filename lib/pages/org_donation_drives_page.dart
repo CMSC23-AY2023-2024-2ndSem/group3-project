@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/donationdrive_model.dart';
 import 'package:week9_authentication/models/user_model.dart';
 import 'package:week9_authentication/pages/org_add_donation_drive_page.dart';
-import 'package:week9_authentication/pages/org_details_page.dart';
-import 'package:week9_authentication/pages/org_home.dart';
+// import 'package:week9_authentication/pages/org_details_page.dart';
+// import 'package:week9_authentication/pages/org_home.dart';
 import 'package:week9_authentication/providers/auth_provider.dart';
 import '../providers/donationdrive_provider.dart';
 import '../providers/user_provider.dart';
@@ -31,10 +31,10 @@ class _OrganizationDonationDrivesPageState extends State<OrganizationDonationDri
   @override
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> userStream =
-        context.read<UserProvider>().users;
+        context.watch<UserProvider>().users;
 
     return Scaffold(
-      drawer: drawer,
+      // drawer: drawer,
       appBar: AppBar(
         title: const Text("Donation Drives",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -140,72 +140,78 @@ class _OrganizationDonationDrivesPageState extends State<OrganizationDonationDri
         },
       ),
     );
+
+  }
+  
+    
+//   Drawer get drawer => Drawer(
+//         child: ListView(
+//           padding: EdgeInsets.zero,
+//           children: [
+//             DrawerHeader(
+//                 decoration: const BoxDecoration(
+//                   color: Colors.orangeAccent,
+//                 ),
+//                 child: Column(
+//                   children: [
+//                     const Icon(
+//                       Icons.account_circle,
+//                       size: 110,
+//                       color: Colors.white,
+//                     ),
+//                     Text(
+//                       context.read<UserAuthProvider>().user!.email!,
+//                       style: const TextStyle(
+//                           color: Colors.white, fontWeight: FontWeight.bold),
+//                     ),
+//                   ],
+//                 )),
+//             ListTile(
+//               title: const Text('Donation'),
+//               onTap: () {
+//                 Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => const OrganizationHomePage(),
+//                     ));
+//               },
+//             ),
+//             ListTile(
+//               title: const Text('Donation Drives'),
+//               onTap: () {
+//                 Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => const OrganizationDonationDrivesPage(),
+//                     ));
+//               },
+//             ),
+//             ListTile(
+//               title: const Text('Profile'),
+//               onTap: () {
+//                 Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => const OrganizationDetailsPage(),
+//                     ));
+//               },
+//             ),
+//             const Divider(thickness: 2),
+//             ListTile(
+//               title: const Text('Logout'),
+//               leading: const Icon(
+//                 Icons.logout_rounded,
+//               ),
+//               onTap: () {
+//                 context.read<UserAuthProvider>().signOut();
+//                 Navigator.pop(context);
+//               },
+//             ),
+//           ],
+//         ),
+//       );
+// 
+  
   }
 
-  Drawer get drawer => Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-                decoration: const BoxDecoration(
-                  color: Colors.orangeAccent,
-                ),
-                child: Column(
-                  children: [
-                    const Icon(
-                      Icons.account_circle,
-                      size: 110,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      context.read<UserAuthProvider>().user!.email!,
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                )),
-            ListTile(
-              title: const Text('Donation'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const OrganizationHomePage(),
-                    ));
-              },
-            ),
-            ListTile(
-              title: const Text('Donation Drives'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const OrganizationDonationDrivesPage(),
-                    ));
-              },
-            ),
-            ListTile(
-              title: const Text('Profile'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const OrganizationDetailsPage(),
-                    ));
-              },
-            ),
-            const Divider(thickness: 2),
-            ListTile(
-              title: const Text('Logout'),
-              leading: const Icon(
-                Icons.logout_rounded,
-              ),
-              onTap: () {
-                context.read<UserAuthProvider>().signOut();
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      );
-}
+

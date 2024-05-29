@@ -62,6 +62,20 @@ class FirebaseUserAPI {
     } 
   }
   
+  Future<String> updateDonationStatus(String username, bool status) async {
+     try {
+      await db.collection("users").where("username", isEqualTo: username).get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          db.collection("users").doc(doc.id).update({"openForDonation": status});
+        });
+      });
+
+      return "Successfully updated!";
+    } on FirebaseException catch (e) {
+      return "Error in ${e.code}: ${e.message}";
+    }
+  
+  }
 
 
 

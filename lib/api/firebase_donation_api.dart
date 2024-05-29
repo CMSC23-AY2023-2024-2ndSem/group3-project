@@ -40,6 +40,61 @@ class FirebaseDonationAPI {
     }
   }
 
+  Future<String> updateStatusToConfirm(String uid) async {
+    try {
+      bool updated = false;
+      await db.collection("donations").where("uid", isEqualTo: uid).get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          querySnapshot.docs.forEach((doc) {
+            if (doc.data()["status"] == "Pending") {
+              db.collection("donations").doc(doc.id).update({"status": "Confirmed"});
+              updated = true;
+            }
+            
+          });
+        });
+      });
+      if (updated){
+        return "Successfully updated!"; 
+      }
+      return "Update Failed";
+    } on FirebaseException catch (e) {
+      return "Error in ${e.code}: ${e.message}";
+    }
+  }
+
+  Future<String> linkDonation(String uid, String donationDriveUid) async {
+    try {
+      bool updated = false;
+      print(uid);
+      await db.collection("donations").where("uid", isEqualTo: uid).get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          querySnapshot.docs.forEach((doc) {
+              db.collection("donations").doc(doc.id).update({"donationDriveUid": donationDriveUid});
+          });
+        });
+      });
+
+      await db.collection("donationdrives").where("uid", isEqualTo: donationDriveUid).get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          querySnapshot.docs.forEach((doc) {
+              if (!doc.data()["donations"].contains(uid)) {
+                db.collection("donationdrives").doc(doc.id).update({"donations": FieldValue.arrayUnion([uid])});
+                 updated = true;
+              }
+            });
+          });
+        });
+
+      if (updated){
+        return "Successfully updated!"; 
+      }
+      return "Update Failed";
+    } on FirebaseException catch (e) {
+      return "Error in ${e.code}: ${e.message}";
+    }
+  }
+
   Stream<QuerySnapshot> getDonationDetailsByUid(String donationId) {
     try{
       return db.collection("donations").where("uid", isEqualTo: donationId).snapshots();

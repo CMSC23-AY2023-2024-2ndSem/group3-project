@@ -11,11 +11,10 @@ class Donation {
   final String weight;
   final List<String>? addresses;
   final String? contactNumber;
-  final String? qrData;
   final String? imageUrl;
   final String donorUname;
   final String organizationUname; 
-  late String donationDriveName;
+  late String donationDriveUid;
   late String status;
 
   Donation({
@@ -27,11 +26,10 @@ class Donation {
     required this.weight,
     this.addresses,
     this.contactNumber,
-    this.qrData,
     this.imageUrl,
     required this.donorUname,
     required this.organizationUname,
-    required this.donationDriveName,
+    required this.donationDriveUid,
     required this.status,
 
   });
@@ -46,11 +44,10 @@ class Donation {
       weight: json['weight'],
       addresses: List<String>.from(json['addresses']),
       contactNumber: json['contactNumber'],
-      qrData: json['qrData'],
       imageUrl: json['imageUrl'],
       donorUname: json['donorUname'],
       organizationUname: json['organizationUname'],
-      donationDriveName: json['donationDriveName'],
+      donationDriveUid: json['donationDriveUid'],
       status: json['status'],
 
     );
@@ -66,11 +63,10 @@ class Donation {
       'weight': weight,
       'addresses': addresses,
       'contactNumber': contactNumber,
-      'qrData': qrData,
       'imageUrl': imageUrl,
       'donorUname': donorUname,
       'organizationUname': organizationUname,
-      'donationDriveName': donationDriveName,
+      'donationDriveUid': donationDriveUid,
       'status': status,
     };
   }
@@ -85,11 +81,10 @@ class Donation {
       weight: data['weight'],
       addresses: List<String>.from(data['addresses']),
       contactNumber: data['contactNumber'],
-      qrData: data['qrData'],
       imageUrl: data['imageUrl'], 
       donorUname: data['donorUname'],
       organizationUname: data['organizationUname'],
-      donationDriveName: data['donationDriveName'],
+      donationDriveUid: data['donationDriveUid'],
       status: data['status'],
     );
   }
@@ -109,11 +104,10 @@ class Donation {
       weight: doc['weight'],
       addresses: List<String>.from(doc['addresses']),
       contactNumber: doc['contactNumber'],
-      qrData: doc['qrData'],
       imageUrl: doc['imageUrl'],
       donorUname: doc['donorUname'],
       organizationUname: doc['organizationUname'],
-      donationDriveName: doc['donationDriveName'],
+      donationDriveUid: doc['donationDriveUid'],
       status: doc['status'],
     );
     

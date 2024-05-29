@@ -56,7 +56,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
           }
 
           final users = snapshot.data!.docs.map((doc) => User.fromDocument(doc)).toList();
-          List organizations = users.where((user) => user.type == "organization" && user.status == true).toList();
+          List organizations = users.where((user) => user.type == "organization" && user.status == true && user.openForDonation == true).toList();
           User currentUser = users.firstWhere((user) {
             return user.username == context.read<UserAuthProvider>().user!.email;
           }, orElse: () => User(type: "donor", username: ""));
@@ -110,7 +110,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
                               size: 30,
                               color: Colors.amber,
                             ),
-                            subtitle: Text("${organization.donations.length} donations received"),
+                            subtitle: Text("${organization.orgDescription}"),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.volunteer_activism_rounded,
@@ -132,8 +132,8 @@ class _DonorHomePageState extends State<DonorHomePage> {
                               ];
                             return ListTile(
                               title: Text(drive.name),
-                              subtitle: Text("About: ${drive.description}"),
-                              leading: Icon(Icons.favorite_border),
+                              subtitle: Text("${drive.description}"),
+                                leading: Icon(Icons.favorite_border, color: Color.fromARGB(255, 187, 134, 252)),
                               trailing: IconButton(
                               icon: const Icon(
                                 Icons.volunteer_activism_rounded,
@@ -141,7 +141,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
                                 color: Color.fromARGB(255, 187, 134, 252),
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(context, '/donate', arguments: driveInfo);
+                            Navigator.pushNamed(context, '/donate', arguments: driveInfo);
                               },
                             ),
                               onTap: () {
@@ -195,6 +195,8 @@ class _DonorHomePageState extends State<DonorHomePage> {
           title: const Text('Pending Donations'),
           leading: const Icon(Icons.pending, color: Color.fromARGB(255, 187, 134, 252)),
           onTap: () {
+            
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const DonorPending()),
@@ -205,6 +207,8 @@ class _DonorHomePageState extends State<DonorHomePage> {
           title: const Text('User Profile'),
           leading: const Icon(Icons.account_box_rounded, color: Color.fromARGB(255, 187, 134, 252)),
           onTap: () {
+            
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const DonorDetailsPage()),

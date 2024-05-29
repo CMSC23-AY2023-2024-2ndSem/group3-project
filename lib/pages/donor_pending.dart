@@ -52,8 +52,6 @@ class _DonorPendingState extends State<DonorPending> {
               return const Center(child: Text("No pending donations found."));
             }
 
-            print(donations);
-
             return ListView.builder(
               itemCount: donations.length,
               itemBuilder: (context, index) {
@@ -89,9 +87,6 @@ class _DonorPendingState extends State<DonorPending> {
                       );
                     },
                   ),
-                  onTap: () {
-                    // TODO: DONATION DETAILS ???
-                  },
                 );
               },
             );
