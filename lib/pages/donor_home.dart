@@ -104,10 +104,8 @@ class _DonorHomePageState extends State<DonorHomePage> {
                     "direct"
                   ];
 
-                  List orgDonationDrives = donationDrives
-                      .where((drive) =>
-                          drive.organizationUname == organization.username)
-                      .toList();
+                  List orgDonationDrives = donationDrives.where((drive) => drive.organizationUname == organization.username).toList();
+                  
 
                   return Card(
                     margin: const EdgeInsets.all(8.0),
@@ -143,32 +141,40 @@ class _DonorHomePageState extends State<DonorHomePage> {
                               ? const SizedBox(height: 0)
                               : const Divider(),
                           ...orgDonationDrives.map((drive) {
-                            List<String> driveInfo = [
-                              currentUser.username,
-                              organization.username,
-                              drive.name,
-                              drive.name
-                            ];
+                               List<String> driveInfo = [
+                                currentUser.username,
+                                organization.username,
+                                drive.name,
+                                drive.uid
+                              ];
                             return ListTile(
                               title: Text(drive.name),
                               subtitle: Text("${drive.description}"),
-                              leading: const Icon(Icons.favorite_border,
-                                  color: Color.fromARGB(255, 187, 134, 252)),
-                              trailing: IconButton(
+                                leading: const Icon(Icons.favorite_border, color: Color.fromARGB(255, 187, 134, 252)),
+                              trailing: drive.isOpen ? IconButton(
                                 icon: const Icon(
                                   Icons.volunteer_activism_rounded,
                                   size: 30,
                                   color: Color.fromARGB(255, 187, 134, 252),
                                 ),
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/donate',
-                                      arguments: driveInfo);
+                                  Navigator.pushNamed(context, '/donate', arguments: driveInfo);
                                 },
+                              ) : const IconButton(
+                                icon: Icon(
+                                  Icons.volunteer_activism_rounded,
+                                  size: 30,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: null, 
                               ),
                               onTap: () {
-                                Navigator.pushNamed(context, '/donate',
-                                    arguments: driveInfo);
-                              },
+                          if(drive.isOpen){
+                            Navigator.pushNamed(context, '/donate', arguments: driveInfo);
+                          }else{
+
+                          }
+                        },
                             );
                           }),
                         ],
