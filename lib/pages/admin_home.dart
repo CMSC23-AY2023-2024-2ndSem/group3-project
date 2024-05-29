@@ -245,7 +245,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   //     margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
   //     child: const Column(
   //       children: [
-         
+
   //         Row(
   //           mainAxisAlignment: MainAxisAlignment.center,
   //           children: [
@@ -268,7 +268,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   Widget pageBar() {
     return Card(
-      margin: const EdgeInsets.fromLTRB(8,16,8,8),
+      margin: const EdgeInsets.fromLTRB(8, 16, 8, 8),
       color: Colors.grey.shade900,
       child: const Column(
         children: [
@@ -294,11 +294,15 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   Drawer get drawer => Drawer(
           child: ListView(padding: EdgeInsets.zero, children: [
-        const DrawerHeader(
+        DrawerHeader(
           decoration: BoxDecoration(
-            color: Colors.redAccent,
-          ),
-          child: Column(
+              gradient: LinearGradient(colors: [
+            Colors.red.shade600,
+            Colors.red.shade500,
+            Colors.red.shade400,
+            Colors.red.shade300,
+          ])),
+          child: const Column(
             children: [
               Icon(
                 Icons.admin_panel_settings_rounded,

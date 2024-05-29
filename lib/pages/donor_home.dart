@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'donor_pending.dart';
 import '../models/user_model.dart';
@@ -30,13 +31,15 @@ class _DonorHomePageState extends State<DonorHomePage> {
   @override
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> userStream = context.watch<UserProvider>().users;
-    Stream<QuerySnapshot> donationDrivesStream = context.watch<DonationDriveProvider>().donationdrivess;
+    Stream<QuerySnapshot> donationDrivesStream =
+        context.watch<DonationDriveProvider>().donationdrivess;
 
     return Scaffold(
       drawer: drawer,
       appBar: AppBar(
-        title: const Text("Organizations Available", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.cyan, 
+        title: const Text("Organizations Available",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.cyan,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: userStream,
@@ -55,10 +58,17 @@ class _DonorHomePageState extends State<DonorHomePage> {
             );
           }
 
-          final users = snapshot.data!.docs.map((doc) => User.fromDocument(doc)).toList();
-          List organizations = users.where((user) => user.type == "organization" && user.status == true && user.openForDonation == true).toList();
+          final users =
+              snapshot.data!.docs.map((doc) => User.fromDocument(doc)).toList();
+          List organizations = users
+              .where((user) =>
+                  user.type == "organization" &&
+                  user.status == true &&
+                  user.openForDonation == true)
+              .toList();
           User currentUser = users.firstWhere((user) {
-            return user.username == context.read<UserAuthProvider>().user!.email;
+            return user.username ==
+                context.read<UserAuthProvider>().user!.email;
           }, orElse: () => User(type: "donor", username: ""));
 
           return StreamBuilder<QuerySnapshot>(
@@ -68,7 +78,8 @@ class _DonorHomePageState extends State<DonorHomePage> {
                 return Center(
                   child: Text("Error encountered! ${drivesSnapshot.error}"),
                 );
-              } else if (drivesSnapshot.connectionState == ConnectionState.waiting) {
+              } else if (drivesSnapshot.connectionState ==
+                  ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
@@ -78,7 +89,9 @@ class _DonorHomePageState extends State<DonorHomePage> {
                 );
               }
 
-              final donationDrives = drivesSnapshot.data!.docs.map((doc) => DonationDrive.fromDocument(doc)).toList();
+              final donationDrives = drivesSnapshot.data!.docs
+                  .map((doc) => DonationDrive.fromDocument(doc))
+                  .toList();
 
               return ListView.builder(
                 itemCount: organizations.length,
@@ -91,7 +104,10 @@ class _DonorHomePageState extends State<DonorHomePage> {
                     "direct"
                   ];
 
-                  List orgDonationDrives = donationDrives.where((drive) => drive.organizationUname == organization.username).toList();
+                  List orgDonationDrives = donationDrives
+                      .where((drive) =>
+                          drive.organizationUname == organization.username)
+                      .toList();
 
                   return Card(
                     margin: const EdgeInsets.all(8.0),
@@ -118,37 +134,43 @@ class _DonorHomePageState extends State<DonorHomePage> {
                                 color: Color.fromARGB(255, 187, 134, 252),
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(context, '/donate', arguments: donorOrgInfo);
+                                Navigator.pushNamed(context, '/donate',
+                                    arguments: donorOrgInfo);
                               },
                             ),
                           ),
-                          (orgDonationDrives.isEmpty) ? const SizedBox(height:0) : const Divider() ,
+                          (orgDonationDrives.isEmpty)
+                              ? const SizedBox(height: 0)
+                              : const Divider(),
                           ...orgDonationDrives.map((drive) {
-                               List<String> driveInfo = [
-                                currentUser.username,
-                                organization.username,
-                                drive.name,
-                                drive.name
-                              ];
+                            List<String> driveInfo = [
+                              currentUser.username,
+                              organization.username,
+                              drive.name,
+                              drive.name
+                            ];
                             return ListTile(
                               title: Text(drive.name),
                               subtitle: Text("${drive.description}"),
-                                leading: Icon(Icons.favorite_border, color: Color.fromARGB(255, 187, 134, 252)),
+                              leading: const Icon(Icons.favorite_border,
+                                  color: Color.fromARGB(255, 187, 134, 252)),
                               trailing: IconButton(
-                              icon: const Icon(
-                                Icons.volunteer_activism_rounded,
-                                size: 30,
-                                color: Color.fromARGB(255, 187, 134, 252),
+                                icon: const Icon(
+                                  Icons.volunteer_activism_rounded,
+                                  size: 30,
+                                  color: Color.fromARGB(255, 187, 134, 252),
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/donate',
+                                      arguments: driveInfo);
+                                },
                               ),
-                              onPressed: () {
-                            Navigator.pushNamed(context, '/donate', arguments: driveInfo);
-                              },
-                            ),
                               onTap: () {
-                          Navigator.pushNamed(context, '/donate', arguments: driveInfo);
-                        },
+                                Navigator.pushNamed(context, '/donate',
+                                    arguments: driveInfo);
+                              },
                             );
-                          }).toList(),
+                          }),
                         ],
                       ),
                     ),
@@ -163,68 +185,76 @@ class _DonorHomePageState extends State<DonorHomePage> {
   }
 
   Drawer get drawer => Drawer(
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: [
-        DrawerHeader(
-          decoration: const BoxDecoration(
-            color: Colors.cyan,
-          ),
-          child: Column(
-            children: [
-              const Icon(
-                Icons.account_circle,
-                size: 110,
-                color: Colors.white,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Colors.cyan.shade200,
+                Colors.cyan.shade300,
+                Colors.cyan.shade400,
+                Colors.cyan.shade500,
+              ])),
+              child: Column(
+                children: [
+                  const Icon(
+                    Icons.account_circle,
+                    size: 110,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    context.read<UserAuthProvider>().user!.email!,
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-              Text(
-                context.read<UserAuthProvider>().user!.email!,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+            ),
+            ListTile(
+              title: const Text('Donate to Organizations'),
+              leading: const Icon(Icons.favorite,
+                  color: Color.fromARGB(255, 187, 134, 252)),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Pending Donations'),
+              leading: const Icon(Icons.pending,
+                  color: Color.fromARGB(255, 187, 134, 252)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DonorPending()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('User Profile'),
+              leading: const Icon(Icons.account_box_rounded,
+                  color: Color.fromARGB(255, 187, 134, 252)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DonorDetailsPage()),
+                );
+              },
+            ),
+            const Divider(thickness: 2),
+            ListTile(
+              title: const Text('Logout'),
+              leading: const Icon(Icons.logout_rounded,
+                  color: Color.fromARGB(255, 187, 134, 252)),
+              onTap: () {
+                context.read<UserAuthProvider>().signOut();
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
-        ListTile(
-          title: const Text('Donate to Organizations'),
-          leading: const Icon(Icons.favorite, color: Color.fromARGB(255, 187, 134, 252)),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          title: const Text('Pending Donations'),
-          leading: const Icon(Icons.pending, color: Color.fromARGB(255, 187, 134, 252)),
-          onTap: () {
-            
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const DonorPending()),
-            );
-          },
-        ),
-        ListTile(
-          title: const Text('User Profile'),
-          leading: const Icon(Icons.account_box_rounded, color: Color.fromARGB(255, 187, 134, 252)),
-          onTap: () {
-            
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const DonorDetailsPage()),
-            );
-          },
-        ),
-        const Divider(thickness: 2),
-        ListTile(
-          title: const Text('Logout'),
-          leading: const Icon(Icons.logout_rounded, color: Color.fromARGB(255, 187, 134, 252)),
-          onTap: () {
-            context.read<UserAuthProvider>().signOut();
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    ),
-  );
+      );
 }
