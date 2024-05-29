@@ -63,8 +63,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
           List organizations = users
               .where((user) =>
                   user.type == "organization" &&
-                  user.status == true &&
-                  user.openForDonation == true)
+                  user.status == true)
               .toList();
           User currentUser = users.firstWhere((user) {
             return user.username ==
@@ -105,7 +104,6 @@ class _DonorHomePageState extends State<DonorHomePage> {
                   ];
 
                   List orgDonationDrives = donationDrives.where((drive) => drive.organizationUname == organization.username).toList();
-                  
 
                   return Card(
                     margin: const EdgeInsets.all(8.0),
@@ -125,17 +123,33 @@ class _DonorHomePageState extends State<DonorHomePage> {
                               color: Colors.amber,
                             ),
                             subtitle: Text("${organization.orgDescription}"),
-                            trailing: IconButton(
+                            trailing: organization.openForDonation! ? IconButton(
                               icon: const Icon(
-                                Icons.volunteer_activism_rounded,
-                                size: 30,
-                                color: Color.fromARGB(255, 187, 134, 252),
+                              Icons.volunteer_activism_rounded,
+                              size: 30,
+                              color: Color.fromARGB(255, 187, 134, 252),
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(context, '/donate',
-                                    arguments: donorOrgInfo);
+                              Navigator.pushNamed(context, '/donate',
+                                arguments: donorOrgInfo);
                               },
+                            ) : const IconButton(
+                              icon: Icon(
+                              Icons.volunteer_activism_rounded,
+                              size: 30,
+                              color: Colors.grey,
+                              ),
+                              onPressed: null,
                             ),
+                            onTap: () {
+                                if(organization.openForDonation!){
+                                  Navigator.pushNamed(context, '/donate',
+                                    arguments: donorOrgInfo);
+                                }else{
+
+                                }
+                              },
+
                           ),
                           (orgDonationDrives.isEmpty)
                               ? const SizedBox(height: 0)
