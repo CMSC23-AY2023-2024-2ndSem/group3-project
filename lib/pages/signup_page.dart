@@ -127,6 +127,8 @@ class _SignUpState extends State<SignUpPage> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter your first name";
+            } else if (!RegExp(r"^[a-zA-Z\s\'-]+$").hasMatch(value)){
+              return "Please enter a valid name format";
             }
 
             return null;
@@ -168,6 +170,8 @@ class _SignUpState extends State<SignUpPage> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter your last name";
+            } else if (!RegExp(r"^[a-zA-Z\s\'-]+$").hasMatch(value)) {
+              return "Please enter a valid name format";
             }
             return null;
           },

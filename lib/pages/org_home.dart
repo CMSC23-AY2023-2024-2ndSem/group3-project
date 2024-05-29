@@ -177,6 +177,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                       donation.addresses!.join(" "),
                       donation.contactNumber.toString(),
                       donation.status,
+                      donation.imageUrl!,
                     ];
 
                     
