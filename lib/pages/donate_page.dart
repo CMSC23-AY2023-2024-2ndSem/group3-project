@@ -66,12 +66,14 @@ class DonatePageState extends State<DonatePage> {
     firebase_storage.UploadTask uploadTask =
         ref.putFile(File(_imageFile!.path));
 
-    uploadTask.whenComplete(() async {
+    var url = uploadTask.whenComplete(() async {
       imageUrl = await ref.getDownloadURL();
-      print('Image URL: $imageUrl');
     });
 
-    await uploadTask.whenComplete(() => print('Photo uploaded'));
+    await url.whenComplete(() => setState(() {
+        imageUrl = imageUrl;
+        print("Photo Uploaded");
+      }));
   }
 
 
@@ -167,7 +169,7 @@ class DonatePageState extends State<DonatePage> {
                       date: selectedDate,
                       time: selectedTime,
                       weight: weight,
-                      imageUrl: imageUrl, // not required
+                      imageUrl: imageUrl, 
                       pickupOrDropOff: pickupOrDropOff,
                       addresses: addresses, // not required
                       contactNumber: contactNumber, // not required
@@ -197,6 +199,7 @@ class DonatePageState extends State<DonatePage> {
                                   ),
                                 );
                                 await _uploadPhotoToStorage(widget.donorOrgInfo[0], widget.donorOrgInfo[1]);
+                                donation.imageUrl = imageUrl;
                               }
                               context.read<DonationProvider>().addDonation(donation);
                               context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
@@ -204,7 +207,7 @@ class DonatePageState extends State<DonatePage> {
 
                               if(widget.donorOrgInfo[3] != "direct")
                               {
-                                context.read<DonationDriveProvider>().addDonationToDrive(uuid, widget.donorOrgInfo[3]);
+                                context.read<DonationDriveProvider>().addDonationToDrive(uuid, widget.donorOrgInfo[2]);
                               }
 
                               Navigator.pop(context);
@@ -228,6 +231,7 @@ class DonatePageState extends State<DonatePage> {
                     );}
                     
                     );
+                  
                   }else{ 
                     // drop off
                     showDialog(context: context,
@@ -238,21 +242,32 @@ class DonatePageState extends State<DonatePage> {
                         content: const Text("Are you sure you want to submit this donation?"),
                         actions: [
                           ElevatedButton(
-                            onPressed: () {
-                              donation.status = "Pending";
+                            onPressed: () async {
+                              if (_imageFile != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Uploading photo..."),
+                                  ),
+                                );
+                                await _uploadPhotoToStorage(widget.donorOrgInfo[0], widget.donorOrgInfo[1]);
+                                donation.imageUrl = imageUrl;
+                                print(donation.imageUrl);
+                                print(donation.imageUrl);
+                                print(donation.imageUrl);
+                                print(donation.imageUrl);
+                              }
                               context.read<DonationProvider>().addDonation(donation);
                               context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[0]);
                               context.read<UserProvider>().addDonationToUser(uuid, widget.donorOrgInfo[1]);
                                 if(widget.donorOrgInfo[3] != "direct")
                               {
-                                context.read<DonationDriveProvider>().addDonationToDrive(uuid, widget.donorOrgInfo[3]);
+                                context.read<DonationDriveProvider>().addDonationToDrive(uuid, widget.donorOrgInfo[2]);
                               }
                                var donationInfo = [uuid, widget.donorOrgInfo[2]];
-                              Future.delayed(Duration(seconds: 1)
+                              Future.delayed(Duration(seconds: 2)
                               , () => Navigator.pushNamed(context, '/donate_qr', arguments: donationInfo)
                               
                               );
-
 
                             },
                             child: const Text("Yes"),

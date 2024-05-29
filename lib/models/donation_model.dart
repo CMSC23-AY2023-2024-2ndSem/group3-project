@@ -11,7 +11,7 @@ class Donation {
   final String weight;
   final List<String>? addresses;
   final String? contactNumber;
-  final String? imageUrl;
+  late String? imageUrl;
   final String donorUname;
   final String organizationUname; 
   late String donationDriveUid;
