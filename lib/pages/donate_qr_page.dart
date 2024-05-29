@@ -105,7 +105,7 @@ class DonateQrPage extends StatelessWidget {
           }
           var donationData = snapshot.data!.data() as Map<String, dynamic>;
           bool isScanned = false;
-          if (donationData['status'] == "Completed"){
+          if (donationData['status'] == "Confirmed"){
             isScanned = true;
           }
 

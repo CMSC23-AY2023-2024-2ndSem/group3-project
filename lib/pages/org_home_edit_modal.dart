@@ -30,10 +30,6 @@ class EditModal extends StatelessWidget {
           child: Text('Scheduled for Pick-up'),
         ),
         DropdownMenuItem(
-          value: 'Completed',
-          child: Text('Completed'),
-        ),
-        DropdownMenuItem(
           value: 'Canceled',
           child: Text('Canceled'),
         ),

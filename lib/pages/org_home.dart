@@ -203,6 +203,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                                     builder: (BuildContext context) => LinkModal(
                                       donationUid: donation.uid,
                                       donationDrives: drivesUidNameMap,
+                                      donationCurrentDrive: donation.donationDriveUid,
                                     ),
                                   );
                                 },

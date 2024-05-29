@@ -6,12 +6,14 @@ import 'package:week9_authentication/providers/donation_provider.dart';
 class LinkModal extends StatelessWidget {
   final String donationUid;
   final Map<String,String> donationDrives;
+  final String donationCurrentDrive;
   final TextEditingController _formFieldController = TextEditingController();
 
-  LinkModal({super.key, required this.donationUid , required this.donationDrives});
+  LinkModal({super.key, required this.donationUid , required this.donationDrives, required this.donationCurrentDrive});
 
   Widget _buildContent(BuildContext context) {
-    return DropdownButtonFormField<String>(
+    if(donationCurrentDrive == ""){
+      return DropdownButtonFormField<String>(
       onChanged: (newValue) {
         _formFieldController.text = newValue!;
       },
@@ -26,6 +28,25 @@ class LinkModal extends StatelessWidget {
         border: OutlineInputBorder(),
       ),
     );
+    } else {
+      return DropdownButtonFormField<String>(
+      value: donationCurrentDrive,
+      onChanged: (newValue) {
+        _formFieldController.text = newValue!;
+      },
+      items: [
+        for (var donationDrive in donationDrives.entries)
+          DropdownMenuItem(
+            value: donationDrive.key,
+            child: Text(donationDrive.value),
+          ),
+      ],
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+      ),
+    );
+    }
+    
   }
 
   @override
@@ -42,7 +63,7 @@ class LinkModal extends StatelessWidget {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text("Please select a Donation Drive"),
+                  content: Text("Please select a valid Donation Drive"),
                   duration: Duration(seconds: 2),
                 ),
               );
