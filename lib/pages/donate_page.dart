@@ -229,8 +229,7 @@ class DonatePageState extends State<DonatePage> {
                     
                     );
                   }else{ 
-
-                    
+                    // drop off
                     showDialog(context: context,
                     builder: 
                     (BuildContext context) {
@@ -248,7 +247,6 @@ class DonatePageState extends State<DonatePage> {
                               {
                                 context.read<DonationDriveProvider>().addDonationToDrive(uuid, widget.donorOrgInfo[3]);
                               }
-
                                var donationInfo = [uuid, widget.donorOrgInfo[2]];
                               Future.delayed(Duration(seconds: 1)
                               , () => Navigator.pushNamed(context, '/donate_qr', arguments: donationInfo)

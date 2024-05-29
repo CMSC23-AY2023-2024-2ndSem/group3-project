@@ -17,7 +17,7 @@ class DonateQrPage extends StatelessWidget {
 
               (BuildContext context) {
                 return AlertDialog(
-                  title: const Text("Are you sure you want to go back?"),
+                  title: const Text("Are you sure you want to go back?\n Make sure to take a screenshot of the QR!"),
                   actions: [
                     TextButton(
                       onPressed: () {
@@ -114,7 +114,7 @@ class DonateQrPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                Text(donorOrgUname, style: const TextStyle(color: Colors.amber, fontSize: 20)), 
-               const Text(" must scan qr code to complete!", style: TextStyle(fontSize: 20),),
+               const Text(" must scan qr code to complete!", style: TextStyle(fontSize: 20)),
                const SizedBox(height: 10),
                 Container(
                     padding: const EdgeInsets.all(16),
@@ -135,11 +135,6 @@ class DonateQrPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  // ElevatedButton(onPressed: () {
-                  //   // download the qr code image
-                    
-                  // },),
-                  
                   ElevatedButton(onPressed: 
                 () {  
                   showDialog(context: context, builder: 
