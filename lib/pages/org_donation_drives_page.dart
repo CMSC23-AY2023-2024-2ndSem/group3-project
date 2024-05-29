@@ -89,7 +89,7 @@ class _OrganizationDonationDrivesPageState
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const AddDonationDrivePage(),
+                                       AddDonationDrivePage(organizationUname: currentUser.username,),
                                   ));
                             },
                           ))),
@@ -146,7 +146,7 @@ class _OrganizationDonationDrivesPageState
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const AddDonationDrivePage(),
+                                            AddDonationDrivePage(organizationUname: currentUser.username,),
                                       ));
                                 },
                               ))),
