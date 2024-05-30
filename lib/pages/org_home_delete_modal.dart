@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/providers/donation_provider.dart';
 
+import '../providers/user_provider.dart';
+
 class DeleteModal extends StatelessWidget {
   final String donationUid;
+  final String donationDonorUname;
+  final String donationOrgUname;
 
-  DeleteModal({Key? key, required this.donationUid});
+  DeleteModal({Key? key, required this.donationUid, required this.donationDonorUname, required this.donationOrgUname})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +21,8 @@ class DeleteModal extends StatelessWidget {
         TextButton(
           onPressed: () {
             context.read<DonationProvider>().deleteDonation(donationUid);
+            context.read<UserProvider>().deleteDonationToUser(donationUid, donationDonorUname);
+            context.read<UserProvider>().deleteDonationToUser(donationUid, donationOrgUname);
             Navigator.of(context).pop();
 
             ScaffoldMessenger.of(context).showSnackBar(

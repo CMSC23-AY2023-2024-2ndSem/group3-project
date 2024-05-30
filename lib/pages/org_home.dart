@@ -234,6 +234,8 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                                   context: context,
                                   builder: (BuildContext context) => DeleteModal(
                                   donationUid: donation.uid,
+                                  donationDonorUname: donation.donorUname,
+                                  donationOrgUname: donation.organizationUname,
                                   ),
                                 );
                                 },
