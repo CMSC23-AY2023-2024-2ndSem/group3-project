@@ -89,7 +89,7 @@ class _CompletionPageState extends State<CompletionPage> {
     }
   }
 
-  void _sendSMS(String message, List<String> recipents) async {
+  Future<void> _sendSMS(String message, List<String> recipents) async {
   String _result = await sendSMS(message: message, recipients: recipents)
           .catchError((onError) {
         print(onError);
@@ -299,7 +299,7 @@ class _CompletionPageState extends State<CompletionPage> {
               }
               List<String> recipents = [donorContactNumber];
 
-              _sendSMS(message, recipents);
+              await _sendSMS(message, recipents);
 
               Navigator.pop(context);
 
@@ -309,8 +309,6 @@ class _CompletionPageState extends State<CompletionPage> {
                   duration: Duration(seconds: 5),
                 ),
               );
-
-
 
             }
           },
