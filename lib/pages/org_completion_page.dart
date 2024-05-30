@@ -290,7 +290,7 @@ class _CompletionPageState extends State<CompletionPage> {
             });
 
             if (imageFile.isNotEmpty) {
-              await   ();
+              await _uploadPhotoToStorage();
 
               await context.read<DonationProvider>().updateStatus(widget.donationUid, "Completed");
 
