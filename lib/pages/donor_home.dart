@@ -114,19 +114,19 @@ class _DonorHomePageState extends State<DonorHomePage> {
                           ListTile(
                             title: Text(
                               organization.name!,
-                              style: const TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20, color: Colors.amber),
                             ),
                             leading: const Icon(
                               Icons.groups_rounded,
                               size: 30,
-                              color: Colors.amber,
+                              color: Colors.cyan,
                             ),
                             subtitle: Text("${organization.orgDescription}"),
                             trailing: organization.openForDonation! ? IconButton(
                               icon: const Icon(
                               Icons.volunteer_activism_rounded,
                               size: 30,
-                              color: Color.fromARGB(255, 187, 134, 252),
+                              color: Colors.cyan,
                               ),
                               onPressed: () {
                               Navigator.pushNamed(context, '/donate',
@@ -163,12 +163,12 @@ class _DonorHomePageState extends State<DonorHomePage> {
                             return ListTile(
                               title: Text(drive.name),
                               subtitle: Text("${drive.description}"),
-                                leading: const Icon(Icons.favorite_border, color: Color.fromARGB(255, 187, 134, 252)),
+                                leading: const Icon(Icons.favorite_border, color: Colors.cyan),
                               trailing: drive.isOpen ? IconButton(
                                 icon: const Icon(
                                   Icons.volunteer_activism_rounded,
                                   size: 30,
-                                  color: Color.fromARGB(255, 187, 134, 252),
+                                  color: Colors.cyan,
                                 ),
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/donate', arguments: driveInfo);
@@ -233,7 +233,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
             ListTile(
               title: const Text('Donate to Organizations'),
               leading: const Icon(Icons.favorite,
-                  color: Color.fromARGB(255, 187, 134, 252)),
+                  color: Colors.cyan),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -241,7 +241,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
             ListTile(
               title: const Text('Pending Donations'),
               leading: const Icon(Icons.pending,
-                  color: Color.fromARGB(255, 187, 134, 252)),
+                  color: Colors.cyan),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -253,7 +253,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
             ListTile(
               title: const Text('User Profile'),
               leading: const Icon(Icons.account_box_rounded,
-                  color: Color.fromARGB(255, 187, 134, 252)),
+                  color: Colors.cyan),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -267,7 +267,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
             ListTile(
               title: const Text('Logout'),
               leading: const Icon(Icons.logout_rounded,
-                  color: Color.fromARGB(255, 187, 134, 252)),
+                  color: Colors.cyan),
               onTap: () {
                 context.read<UserAuthProvider>().signOut();
                 Navigator.pop(context);

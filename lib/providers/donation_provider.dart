@@ -48,5 +48,11 @@ class DonationProvider with ChangeNotifier {
 
   }
 
+  Future<void> deleteDonation(String uuid) async {
+    String response = await firebaseService.deleteDonation(uuid);
+    print(response);
+    notifyListeners();
+  }
+
 
 }

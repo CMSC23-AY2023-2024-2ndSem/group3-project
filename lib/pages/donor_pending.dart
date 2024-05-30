@@ -56,7 +56,12 @@ class _DonorPendingState extends State<DonorPending> {
               itemCount: donations.length,
               itemBuilder: (context, index) {
                 final donation = donations[index];
-                return ListTile(
+                return Card(
+                  color: Colors.grey.shade900,
+                                margin: const EdgeInsets.all(8),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
                   title: Text("Donation to ${donation.organizationUname}"),
                   subtitle: Text("Date: ${donation.date}"),
                   trailing: IconButton(
@@ -87,7 +92,8 @@ class _DonorPendingState extends State<DonorPending> {
                       );
                     },
                   ),
-                );
+                )
+                ));
               },
             );
           } else {

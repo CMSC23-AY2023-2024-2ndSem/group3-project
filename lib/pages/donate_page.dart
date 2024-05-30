@@ -219,13 +219,13 @@ class DonatePageState extends State<DonatePage> {
                                 ),
                               );
                             },
-                            child: const Text("Yes"),
+                            child: const Text("Yes", style: TextStyle(color: Colors.cyan)),
                           ),
                           ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text("No"),
+                            child: const Text("No", style: TextStyle(color: Colors.cyan)),
                           ),
                         ],
                     );}
@@ -287,7 +287,7 @@ class DonatePageState extends State<DonatePage> {
                   }
                 }
               },
-              child: const Text("Submit"),
+              child: const Text("Submit", style: TextStyle(color: Colors.cyan)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -315,7 +315,7 @@ class DonatePageState extends State<DonatePage> {
                   );
                 });
               },
-              child: const Text("Cancel"),
+              child: const Text("Cancel", style: TextStyle(color: Colors.cyan)),
             )
           ],
         ),
@@ -332,7 +332,7 @@ class DonatePageState extends State<DonatePage> {
                 border: OutlineInputBorder(),
                 label: Text("Weight of items (kg)"),
                 hintText: "Weight in kg",
-                icon: Icon(Icons.scale, color: Color.fromARGB(255, 187, 134, 252)),
+                icon: Icon(Icons.scale, color: Colors.cyan),
               ),
               onSaved: (value) => setState(() => weight = value!),
               validator: (value) {
@@ -357,11 +357,11 @@ class DonatePageState extends State<DonatePage> {
         children: [
           ElevatedButton(
             onPressed: _takePhoto,
-            child: const Text("Take Photo"),
+            child: const Text("Take Photo", style: TextStyle(color: Colors.cyan)),
           ),
           ElevatedButton(
             onPressed: _pickImageFromGallery,
-            child: const Text("Choose from Gallery"),
+            child: const Text("Choose from Gallery", style: TextStyle(color: Colors.cyan)),
           ),
         ],
       ));
@@ -385,28 +385,34 @@ class DonatePageState extends State<DonatePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Radio(
-            value: true,
-            groupValue: pickupOrDropOff,
-            onChanged: (value) {
-              setState(() {
+            Row(
+            children: [
+              Radio(
+              value: true,
+              groupValue: pickupOrDropOff,
+              onChanged: (value) {
+                setState(() {
                 pickupOrDropOff = value!;
-              });
-            },
-          ),
-          const Text(
-            "Pickup",
-            style: TextStyle(fontSize: 16),
-          ),
-          Radio(
-            value: false,
-            groupValue: pickupOrDropOff,
-            onChanged: (value) {
-              setState(() {
+                });
+              },
+              activeColor: Colors.cyan,
+              ),
+              const Text(
+              "Pickup",
+              style: TextStyle(fontSize: 16),
+              ),
+              Radio(
+              value: false,
+              groupValue: pickupOrDropOff,
+              onChanged: (value) {
+                setState(() {
                 pickupOrDropOff = value!;
-              });
-            },
-          ),
+                });
+              },
+              activeColor: Colors.cyan,
+              ),
+            ],
+            ),
           const Text(
             "Drop-off",
             style: TextStyle(fontSize: 16),

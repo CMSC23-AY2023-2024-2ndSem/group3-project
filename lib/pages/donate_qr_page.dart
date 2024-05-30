@@ -171,7 +171,7 @@ class DonateQrPage extends StatelessWidget {
                     },
                   
                   );
-                }, child: const Text("Cancel the Donation")),
+                }, child: const Text("Cancel the Donation", style: TextStyle(color: Colors.cyan))),
                 ],),
                 const SizedBox(height: 20),
                 if (isScanned) ...[

@@ -12,6 +12,7 @@ import '../providers/donation_provider.dart';
 import '../providers/user_provider.dart';
 import 'donation_details_page.dart';
 import 'org_details_page.dart';
+import 'org_home_delete_modal.dart';
 import 'org_home_edit_modal.dart';
 import 'org_home_link_modal.dart';
 import 'qr_scanner_page.dart';
@@ -218,6 +219,18 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                                   builder: (BuildContext context) => EditModal(
                                   donationUid: donation.uid,
                                   donationStatus: donation.status,
+                                  ),
+                                );
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.cancel_outlined,
+                                color: Colors.red),
+                                onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => DeleteModal(
+                                  donationUid: donation.uid,
                                   ),
                                 );
                                 },
