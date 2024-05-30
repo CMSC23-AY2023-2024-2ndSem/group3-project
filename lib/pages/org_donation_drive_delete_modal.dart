@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/donationdrive_model.dart';
 import 'package:week9_authentication/providers/donationdrive_provider.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
+import 'package:week9_authentication/providers/donation_provider.dart';
 
 class DonationDriveDeleteModal extends StatelessWidget {
   final DonationDrive donationDrive;
@@ -20,6 +21,7 @@ class DonationDriveDeleteModal extends StatelessWidget {
           onPressed: () {
             context.read<DonationDriveProvider>().deleteDonationDrive(donationDrive.uid);
             context.read<UserProvider>().deleteDonationDriveToUser(donationDrive.uid, username);
+            context.read<DonationProvider>().removeLinktoDonations(donationDrive.uid);
             Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(

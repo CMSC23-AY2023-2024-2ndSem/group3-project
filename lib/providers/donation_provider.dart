@@ -54,5 +54,10 @@ class DonationProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> removeLinktoDonations(String uuidOfDrive) async {
+    return await firebaseService.removeLinktoDonations(uuidOfDrive);
+    
+  }
+
 
 }

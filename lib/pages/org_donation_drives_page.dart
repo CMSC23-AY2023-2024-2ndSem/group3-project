@@ -182,8 +182,9 @@ class _OrganizationDonationDrivesPageState
                                   padding: const EdgeInsets.all(8.0),
                                   child: ListTile(
                                       title: Text(
-                                          "Donation Drive: ${donationDrive.name}"),
-                                      leading: const Icon(Icons.favorite,
+                                          donationDrive.name),
+                                          subtitle: Text(donationDrive.description),
+                                      leading: const Icon(Icons.storage,
                                           color: Colors.orangeAccent, size: 30),
                                       onTap: () {
                                         Navigator.push(
@@ -201,8 +202,13 @@ class _OrganizationDonationDrivesPageState
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           IconButton(
-                                            icon: const Icon(Icons.delete,
+                                            icon: const Icon(Icons.edit,
                                                 color: Colors.orangeAccent),
+                                            onPressed: () {},
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(Icons.delete,
+                                                color: Colors.red),
                                             onPressed: () {
                                               Navigator.push(
                                                   context,
@@ -214,11 +220,6 @@ class _OrganizationDonationDrivesPageState
                                                     ),
                                                   ));
                                             },
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(Icons.edit,
-                                                color: Colors.orangeAccent),
-                                            onPressed: () {},
                                           ),
                                         ],
                                       )),

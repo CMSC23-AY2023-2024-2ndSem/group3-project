@@ -82,11 +82,13 @@ class _DonationDriveDetailsPageState extends State<DonationDriveDetailsPage> {
                       donation.imageUrl!,
                     ];
 
-                return Card(color: Colors.grey.shade900,
+                return Card(
+                  color: Colors.grey.shade900,
                                 margin: const EdgeInsets.all(8),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
+                    leading: Icon(Icons.wallet_giftcard, color: Colors.amber),
                     title: Text("Donation from ${donorName}"),
                     subtitle: Text("Status: ${donation.status}"),
                     trailing: IconButton(

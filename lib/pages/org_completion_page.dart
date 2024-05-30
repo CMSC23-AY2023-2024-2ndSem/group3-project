@@ -80,17 +80,18 @@ class _CompletionPageState extends State<CompletionPage> {
       firebase_storage.UploadTask uploadTask =
           ref.putFile(File(imageFile[i].path));
 
-      uploadTask.whenComplete(() async {
+      var url = uploadTask.whenComplete(() async {
         imageUrl.add(await ref.getDownloadURL());
-        print('Image URL: ${imageUrl[i]}');
       });
 
-      await uploadTask.whenComplete(() => print('Photo uploaded'));
+    await url.whenComplete(() => setState(() {
+        imageUrl = imageUrl;
+      }));
     }
   }
 
   Future<void> _sendSMS(String message, List<String> recipents) async {
-  String _result = await sendSMS(message: message, recipients: recipents)
+  String _result = await sendSMS(message: message, recipients: recipents, sendDirect: true)
           .catchError((onError) {
         print(onError);
       });
@@ -117,7 +118,7 @@ class _CompletionPageState extends State<CompletionPage> {
                       children: [
                         const Text("Upload proof of where the donation ended up to complete donation",
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold)),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
@@ -126,7 +127,7 @@ class _CompletionPageState extends State<CompletionPage> {
                             children: [
                               Text("Sending an SMS to Donor's Contact Number: ${donorContactNumber}",
                                   style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold)),
                             ],
                           ),
@@ -212,7 +213,7 @@ class _CompletionPageState extends State<CompletionPage> {
                       _pickImageFromGallery();
                       Navigator.pop(context);
                     },
-                    child: const Text("Choose from gallery",
+                    child: const Text("From gallery",
                         style: TextStyle(color: Colors.amber))),
               ],
             )
@@ -289,7 +290,7 @@ class _CompletionPageState extends State<CompletionPage> {
             });
 
             if (imageFile.isNotEmpty) {
-              await _uploadPhotoToStorage();
+              await   ();
 
               await context.read<DonationProvider>().updateStatus(widget.donationUid, "Completed");
 

@@ -33,23 +33,27 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<UserProvider>().fetchUsers();
       context.read<DonationProvider>().fetchDonations();
-      _fetchDonationDrives();
     });
+    
+      _setupDonationDrivesListener();
   }
 
-  Future<void> _fetchDonationDrives() async {
+  void _setupDonationDrivesListener() {
     FirebaseFirestore.instance
-            .collection("donationdrives").where("organizationUname", isEqualTo: context.read<UserAuthProvider>().user!.email!)
-            .get()
-            .then((querySnapshot) {
-            querySnapshot.docs.forEach((doc) {
-            String uid = doc.data()['uid'];
-            String name = doc.data()['name'];
-            setState(() {
-              drivesUidNameMap[uid] = name;
-            });
-            });
-          });
+      .collection("donationdrives")
+      .where("organizationUname", isEqualTo: context.read<UserAuthProvider>().user!.email!)
+      .snapshots()
+      .listen((querySnapshot) {
+        Map<String, String> updatedDrivesUidNameMap = {};
+        for (var doc in querySnapshot.docs) {
+          String uid = doc.data()['uid'];
+          String name = doc.data()['name'];
+          updatedDrivesUidNameMap[uid] = name;
+        }
+        setState(() {
+          drivesUidNameMap = updatedDrivesUidNameMap;
+        });
+      });
   }
   
   
@@ -58,6 +62,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> userStream =
         context.watch<UserProvider>().users;
+    
 
     return Scaffold(
       drawer: drawer,
@@ -151,10 +156,8 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                         .map((doc) => Donation.fromDocument(doc))
                         .toList();
 
-
                     Donation donation = donations[index];
                 
-
                     var donationCategories = donation.donationCategories.entries
                         .where((element) => element.value == true)
                         .map((e) => e.key)
@@ -224,7 +227,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                                 },
                               ),
                               IconButton(
-                                icon: const Icon(Icons.cancel_outlined,
+                                icon: const Icon(Icons.delete,
                                 color: Colors.red),
                                 onPressed: () {
                                 showDialog(

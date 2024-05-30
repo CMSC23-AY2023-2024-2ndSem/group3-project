@@ -118,5 +118,19 @@ class FirebaseDonationAPI {
     }
   }
 
+  Future<String> removeLinktoDonations(String uuidOfDrive) async {
+    try {
+      await db.collection("donations").where("donationDriveUid", isEqualTo: uuidOfDrive).get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          db.collection("donations").doc(doc.id).update({"donationDriveUid": ""});
+        });
+      });
+
+      return "Successfully updated!";
+    } on FirebaseException catch (e) {
+      return "Error in ${e.code}: ${e.message}";
+    }
+  }
+
 
 }
