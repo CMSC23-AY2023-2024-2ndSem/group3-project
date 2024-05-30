@@ -35,6 +35,7 @@ class DonationDrive {
       'description': description,
       'organizationUname': organizationUname,
       'donations': donations,
+      'isOpen': isOpen,
     };
   }
 

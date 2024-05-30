@@ -4,9 +4,12 @@ import 'package:uuid/uuid.dart';
 import 'package:week9_authentication/models/donationdrive_model.dart';
 import 'package:week9_authentication/pages/org_donation_drives_page.dart';
 import 'package:week9_authentication/providers/donationdrive_provider.dart';
+import 'package:week9_authentication/providers/user_provider.dart';
 
 class AddDonationDrivePage extends StatefulWidget {
-  const AddDonationDrivePage({super.key});
+  final String organizationUname;
+
+  const AddDonationDrivePage({super.key, required this.organizationUname});
 
   @override
   State<AddDonationDrivePage> createState() => _AddDonationDrivePageState();
@@ -16,7 +19,6 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
   final _formKey = GlobalKey<FormState>();
   String name = "";
   String description = "";
-  String organizationUname = "";
   bool addClicked = false;
 
   @override
@@ -31,7 +33,7 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [heading, nameField, descriptionField, organizationField, addButton],
+                children: [heading, nameField, descriptionField, addButton],
               ),
             )),
       ),
@@ -92,27 +94,6 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
             }),
       );
 
-    Widget get organizationField => Padding(
-        padding: const EdgeInsets.only(bottom: 30.0),
-        child: TextFormField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              label: Text("Organization"),
-              hintText: "Enter an Organization Username",
-              floatingLabelStyle: TextStyle(color: Colors.orangeAccent),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.orangeAccent)
-              )
-            ),
-            onSaved: (value) => setState(() => organizationUname = value!),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Please enter an Organization Username";
-              }
-              return null;
-            }),
-      );
-
 
   Widget get addButton => ElevatedButton(
     onPressed: () {
@@ -124,7 +105,7 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
           uid: uuid, 
           name: name, 
           description: description, 
-          organizationUname: organizationUname, 
+          organizationUname: widget.organizationUname, 
           donations: [], 
           isOpen: false,
         );
@@ -139,7 +120,8 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
                 ElevatedButton(
                   onPressed: () {
                     context.read<DonationDriveProvider>().addDonationDrives(donationDrive);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const OrganizationDonationDrivesPage()));
+                    context.read<UserProvider>().addDonationDriveToUser(uuid, widget.organizationUname);
+                    Navigator.popUntil(context, (route) => route is MaterialPageRoute && route.builder(context) is OrganizationDonationDrivesPage);
                   }, 
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.orangeAccent,

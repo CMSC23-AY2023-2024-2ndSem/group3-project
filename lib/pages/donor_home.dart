@@ -31,8 +31,7 @@ class _DonorHomePageState extends State<DonorHomePage> {
   @override
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> userStream = context.watch<UserProvider>().users;
-    Stream<QuerySnapshot> donationDrivesStream =
-        context.watch<DonationDriveProvider>().donationdrivess;
+    Stream<QuerySnapshot> donationDrivesStream = context.watch<DonationDriveProvider>().donationdrives;
 
     return Scaffold(
       drawer: drawer,

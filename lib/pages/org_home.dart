@@ -196,8 +196,8 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                               IconButton(
-                                icon: Icon(Icons.link, 
-                                color: const Color.fromARGB(255, 187, 134, 252)),
+                                icon: const Icon(Icons.link, 
+                                color: Colors.orangeAccent),
                                 onPressed: () {
                                   showDialog(
                                     context: context,
@@ -211,7 +211,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                               ),
                               IconButton(
                                 icon: const Icon(Icons.edit,
-                                color: Color.fromARGB(255, 187, 134, 252)),
+                                color: Colors.orangeAccent),
                                 onPressed: () {
                                 showDialog(
                                   context: context,

@@ -13,7 +13,7 @@ class DonationDriveProvider with ChangeNotifier {
     fetchDonationDrives();
   }
 
-  Stream<QuerySnapshot> get donationdrivess => _donationdrivesStream;
+  Stream<QuerySnapshot> get donationdrives => _donationdrivesStream;
 
   Future<void> fetchDonationDrives() async {
     _donationdrivesStream = firebaseService.getAllDonationDrives();
