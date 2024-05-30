@@ -60,4 +60,27 @@ class FirebaseDonationDriveAPI {
   }
 }
 
+
+Future<String> updateDonationDrive(String uuid, String driveName, String donationDriveDescription) async {
+  try {
+    final userDocRef = db.collection("donationdrives").where("uuid", isEqualTo: uuid).limit(1);
+    final userDoc = await userDocRef.get();
+    print(userDoc);
+    print(userDoc.docs);
+    print(userDoc.docs.first);
+    final user = userDoc.docs.first;
+    final userRef = db.collection("donationdrives").doc(user.id);
+
+    await userRef.update({
+      "name": driveName,
+      "description": donationDriveDescription
+    });
+
+
+    return "Successfully updated!";
+  } on FirebaseException catch (e) {
+    return "Error in ${e.code}: ${e.message}";
+  }
+}
+
 }

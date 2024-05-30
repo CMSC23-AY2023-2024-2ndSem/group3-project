@@ -11,6 +11,7 @@ import 'package:week9_authentication/pages/org_donation_drive_details_page.dart'
 import 'package:week9_authentication/providers/auth_provider.dart';
 import '../providers/donationdrive_provider.dart';
 import '../providers/user_provider.dart';
+import 'org_donation_drive_edit_modal.dart';
 
 class OrganizationDonationDrivesPage extends StatefulWidget {
   const OrganizationDonationDrivesPage({super.key});
@@ -204,21 +205,32 @@ class _OrganizationDonationDrivesPageState
                                           IconButton(
                                             icon: const Icon(Icons.edit,
                                                 color: Colors.orangeAccent),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) => (
+                                                DonationDriveEditModal(
+                                                  donationDriveUuid: donationDrive.uid,
+                                                  donationDriveName: donationDrive.name,
+                                                  donationDriveDescription: donationDrive.description,
+                                                )
+                                              ),
+                                            );
+                                            },
                                           ),
                                           IconButton(
                                             icon: const Icon(Icons.delete,
                                                 color: Colors.red),
                                             onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DonationDriveDeleteModal(
-                                                          donationDrive: donationDrive, 
-                                                          username: currentUser.username,
-                                                    ),
-                                                  ));
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) => (
+                                                  DonationDriveDeleteModal(
+                                                    donationDrive: donationDrive,
+                                                    username: currentUser.username,
+                                                  )
+                                                ),
+                                              );
                                             },
                                           ),
                                         ],
