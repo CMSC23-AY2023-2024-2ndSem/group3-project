@@ -432,7 +432,7 @@ class _SignUpOrgState extends State<SignUpOrgPage> {
                       _pickImageFromGallery();
                       Navigator.pop(context);
                     },
-                    child: const Text("Choose from gallery",
+                    child: const Text("From gallery",
                         style: TextStyle(color: Colors.purpleAccent))),
               ],
             )

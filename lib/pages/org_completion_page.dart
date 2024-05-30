@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:week9_authentication/providers/donation_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_sms/flutter_sms.dart';
-import 'package:permission_handler/permission_handler.dart';
-
 
 class CompletionPage extends StatefulWidget {
   final String donationUid;
@@ -92,8 +90,8 @@ class _CompletionPageState extends State<CompletionPage> {
     }
   }
 
-  Future<void> _sendSMS(String message, List<String> recipents) async {
-  String _result = await sendSMS(message: message, recipients: recipents, sendDirect: true)
+  void _sendSMS(String message, List<String> recipents) async {
+  String _result = await sendSMS(message: message, recipients: recipents)
           .catchError((onError) {
         print(onError);
       });
@@ -120,7 +118,7 @@ class _CompletionPageState extends State<CompletionPage> {
                       children: [
                         const Text("Upload proof of where the donation ended up to complete donation",
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold)),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
@@ -129,7 +127,7 @@ class _CompletionPageState extends State<CompletionPage> {
                             children: [
                               Text("Sending an SMS to Donor's Contact Number: ${donorContactNumber}",
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold)),
                             ],
                           ),
@@ -215,7 +213,7 @@ class _CompletionPageState extends State<CompletionPage> {
                       _pickImageFromGallery();
                       Navigator.pop(context);
                     },
-                    child: const Text("From gallery",
+                    child: const Text("Choose from gallery",
                         style: TextStyle(color: Colors.amber))),
               ],
             )
@@ -302,31 +300,18 @@ class _CompletionPageState extends State<CompletionPage> {
               }
               List<String> recipents = [donorContactNumber];
 
-              // ask for permission
-              var status = await Permission.sms.status;
-              if (!status.isGranted) {
-                status = await Permission.sms.request();
-              }
+              _sendSMS(message, recipents);
 
-              if (status.isGranted) {
-                await _sendSMS(message, recipents);
+              Navigator.pop(context);
 
-                Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Donation Completed, SMS sent to donor!"),
+                  duration: Duration(seconds: 5),
+                ),
+              );
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Donation Completed, SMS sent to donor!"),
-                    duration: Duration(seconds: 5),
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("SMS permission not granted"),
-                    duration: Duration(seconds: 5),
-                  ),
-                );
-              }
+
 
             }
           },
