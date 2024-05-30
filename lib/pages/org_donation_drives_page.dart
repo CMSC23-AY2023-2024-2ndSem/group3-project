@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/donationdrive_model.dart';
 import 'package:week9_authentication/models/user_model.dart';
 import 'package:week9_authentication/pages/org_add_donation_drive_page.dart';
+import 'package:week9_authentication/pages/org_donation_drive_details_page.dart';
 // import 'package:week9_authentication/pages/org_details_page.dart';
 // import 'package:week9_authentication/pages/org_home.dart';
 import 'package:week9_authentication/providers/auth_provider.dart';
@@ -34,145 +35,190 @@ class _OrganizationDonationDrivesPageState
     Stream<QuerySnapshot> userStream = context.watch<UserProvider>().users;
 
     return Scaffold(
-      // drawer: drawer,
-      appBar: AppBar(
-        title: const Text("Donation Drives",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.orangeAccent,
-      ),
-      body: StreamBuilder(
-        stream: userStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("Error encountered! ${snapshot.error}"),
-            );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (!snapshot.hasData) {
-            return const Center(
-              child: Text("No Donations Found"),
-            );
-          }
+        // drawer: drawer,
+        appBar: AppBar(
+          title: const Text("Donation Drives",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          backgroundColor: Colors.orangeAccent,
+        ),
+        body: StreamBuilder(
+          stream: userStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text("Error encountered! ${snapshot.error}"),
+              );
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (!snapshot.hasData) {
+              return const Center(
+                child: Text("No Donations Found"),
+              );
+            }
 
-          final users =
-              snapshot.data!.docs.map((doc) => User.fromDocument(doc)).toList();
-          User currentUser = users.firstWhere((user) {
-            return user.username ==
-                context.read<UserAuthProvider>().user!.email;
-          }, orElse: () => User(type: "organization", username: ""));
+            final users = snapshot.data!.docs
+                .map((doc) => User.fromDocument(doc))
+                .toList();
+            User currentUser = users.firstWhere((user) {
+              return user.username ==
+                  context.read<UserAuthProvider>().user!.email;
+            }, orElse: () => User(type: "organization", username: ""));
 
-          if (currentUser.donationDrives.isEmpty) {
-            return Center(
-              child: Column(
-                children: [
-                  const Padding(
-                      padding: EdgeInsets.fromLTRB(0, 50, 0, 10),
-                      child: Icon(Icons.no_backpack_rounded,
-                          size: 200, color: Color.fromARGB(50, 255, 255, 255))),
-                  const Text("No Donation Drives Yet",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  Card(
-                      color: Colors.grey.shade900,
-                      margin: const EdgeInsets.all(8),
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            title: const Text("Add a Donation Drive/Charity"),
-                            leading: const Icon(Icons.add,
-                                color: Colors.orangeAccent, size: 30),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                       AddDonationDrivePage(organizationUname: currentUser.username,),
-                                  ));
-                            },
-                          ))),
-                ],
-              ),
-            );
-          }
-
-          return ListView.builder(
-            itemCount: currentUser.donationDrives.length,
-            itemBuilder: (context, index) {
-              Stream<QuerySnapshot> orgDonationDriveStream = FirebaseFirestore
-                  .instance
-                  .collection("donationdrives")
-                  .where("organizationUname", isEqualTo: currentUser.username)
-                  .snapshots();
-              return StreamBuilder(
-                  stream: orgDonationDriveStream,
-                  builder: (context, snapshots) {
-                    if (snapshots.hasError) {
-                      return Center(
-                        child: Text("Error encountered! ${snapshot.error}"),
-                      );
-                    } else if (snapshots.connectionState ==
-                        ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (!snapshots.hasData) {
-                      return const Center(
-                        child: Text("No Donation Drives Found"),
-                      );
-                    }
-
-                    final donationDrives = snapshots.data!.docs
-                        .map((doc) => DonationDrive.fromDocument(doc))
-                        .toList();
-
-                    DonationDrive donationDrive = donationDrives[index];
-
-                    return Column(children: [
-                      Card(
-                          color: Colors.grey.shade900,
-                          margin: const EdgeInsets.all(8),
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                title:
-                                    const Text("Add a Donation Drive/Charity"),
-                                leading: const Icon(Icons.add,
-                                    color: Colors.orangeAccent, size: 30),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            AddDonationDrivePage(organizationUname: currentUser.username,),
-                                      ));
-                                },
-                              ))),
-                      Card(
-                          color: Colors.grey.shade900,
-                          margin: const EdgeInsets.all(8),
-                          child: Padding(
+            if (currentUser.donationDrives.isEmpty) {
+              return Center(
+                child: Column(
+                  children: [
+                    const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 50, 0, 10),
+                        child: Icon(Icons.no_backpack_rounded,
+                            size: 200,
+                            color: Color.fromARGB(50, 255, 255, 255))),
+                    const Text("No Donation Drives Yet",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    Card(
+                        color: Colors.grey.shade900,
+                        margin: const EdgeInsets.all(8),
+                        child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ListTile(
-                              title:
-                                  Text("Donation Drive: ${donationDrive.name}"),
-                              leading: const Icon(Icons.favorite,
+                              title: const Text("Add a Donation Drive/Charity"),
+                              leading: const Icon(Icons.add,
                                   color: Colors.orangeAccent, size: 30),
                               onTap: () {
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donationInfo: donationInfo),));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          AddDonationDrivePage(
+                                        organizationUname: currentUser.username,
+                                      ),
+                                    ));
                               },
-                            ),
-                          )),
-                    ]);
-                  });
-            },
-          );
-        },
-      ),
-    );
+                            ))),
+                  ],
+                ),
+              );
+            }
+
+            return Column(children: [
+              Card(
+                  color: Colors.grey.shade900,
+                  margin: const EdgeInsets.all(8),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: const Text("Add a Donation Drive/Charity"),
+                        leading: const Icon(Icons.add,
+                            color: Colors.orangeAccent, size: 30),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddDonationDrivePage(
+                                  organizationUname: currentUser.username,
+                                ),
+                              ));
+                        },
+                      ))),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: currentUser.donationDrives.length,
+                    itemBuilder: (context, index) {
+                      Stream<QuerySnapshot> orgDonationDriveStream =
+                          FirebaseFirestore.instance
+                              .collection("donationdrives")
+                              .where("organizationUname",
+                                  isEqualTo: currentUser.username)
+                              .snapshots();
+                      return StreamBuilder(
+                          stream: orgDonationDriveStream,
+                          builder: (context, snapshots) {
+                            if (snapshots.hasError) {
+                              return Center(
+                                child: Text(
+                                    "Error encountered! ${snapshot.error}"),
+                              );
+                            } else if (snapshots.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (!snapshots.hasData) {
+                              return const Center(
+                                child: Text("No Donation Drives Found"),
+                              );
+                            }
+
+                            final donationDrives = snapshots.data!.docs
+                                .map((doc) => DonationDrive.fromDocument(doc))
+                                .toList();
+
+                            DonationDrive donationDrive = donationDrives[index];
+
+                            String isOpen = "";
+                            if (donationDrive.isOpen == true) {
+                              isOpen = "Open";
+                            } else {
+                              isOpen = "Closed";
+                            }
+
+                            List donationDriveInfo = [
+                              donationDrive.name,
+                              donationDrive.description,
+                              donationDrive.organizationUname,
+                              isOpen,
+                            ];
+
+                            return Card(
+                                color: Colors.grey.shade900,
+                                margin: const EdgeInsets.all(8),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ListTile(
+                                      title: Text(
+                                          "Donation Drive: ${donationDrive.name}"),
+                                      leading: const Icon(Icons.favorite,
+                                          color: Colors.orangeAccent, size: 30),
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DonationDriveDetailsPage(
+                                                      donationDriveInfo:
+                                                          donationDriveInfo),
+                                            ));
+                                      },
+                                      trailing: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(Icons.delete,
+                                                color: Colors.orangeAccent),
+                                            onPressed: () {},
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(Icons.edit,
+                                                color: Colors.orangeAccent),
+                                            onPressed: () {},
+                                          ),
+                                        ],
+                                      )),
+                                ));
+                          });
+                    }),
+              )
+            ]);
+          },
+        ));
   }
+}
 
 //   Drawer get drawer => Drawer(
 //         child: ListView(
@@ -241,4 +287,4 @@ class _OrganizationDonationDrivesPageState
 //         ),
 //       );
 //
-}
+// }

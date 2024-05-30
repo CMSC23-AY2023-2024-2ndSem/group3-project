@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'package:week9_authentication/models/donationdrive_model.dart';
 import 'package:week9_authentication/pages/org_donation_drives_page.dart';
 import 'package:week9_authentication/providers/donationdrive_provider.dart';
+import 'package:week9_authentication/providers/user_provider.dart';
 
 class AddDonationDrivePage extends StatefulWidget {
   final String organizationUname;
@@ -119,6 +120,7 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
                 ElevatedButton(
                   onPressed: () {
                     context.read<DonationDriveProvider>().addDonationDrives(donationDrive);
+                    context.read<UserProvider>().addDonationDriveToUser(uuid, widget.organizationUname);
                     Navigator.popUntil(context, (route) => route is MaterialPageRoute && route.builder(context) is OrganizationDonationDrivesPage);
                   }, 
                   style: ElevatedButton.styleFrom(
