@@ -13,6 +13,8 @@ class DonationDriveEditModal extends StatelessWidget {
       : super(key: key);
 
   Widget _buildContent(BuildContext context) {
+    _nameController.text = donationDriveName;
+    _descriptionController.text = donationDriveDescription;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -42,7 +44,7 @@ class DonationDriveEditModal extends StatelessWidget {
       content: _buildContent(context),
       actions: <Widget>[
         TextButton(
-          onPressed: () {
+          onPressed: () async {
             final name = _nameController.text;
             final description = _descriptionController.text;
 
@@ -57,7 +59,7 @@ class DonationDriveEditModal extends StatelessWidget {
               return;
             }
 
-            if (name == donationDriveName || description == donationDriveDescription) {
+            if (name == donationDriveName && description == donationDriveDescription) {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -68,7 +70,7 @@ class DonationDriveEditModal extends StatelessWidget {
               return;
             }
 
-            context
+            await context
                 .read<DonationDriveProvider>()
                 .updateDonationDrive(donationDriveUuid, name, description);
             Navigator.of(context).pop();

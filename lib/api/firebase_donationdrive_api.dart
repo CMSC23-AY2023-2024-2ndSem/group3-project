@@ -63,7 +63,7 @@ class FirebaseDonationDriveAPI {
 
 Future<String> updateDonationDrive(String uuid, String driveName, String donationDriveDescription) async {
   try {
-    final userDocRef = db.collection("donationdrives").where("uuid", isEqualTo: uuid).limit(1);
+    final userDocRef = db.collection("donationdrives").where("uid", isEqualTo: uuid).limit(1);
     final userDoc = await userDocRef.get();
     print(userDoc);
     print(userDoc.docs);
