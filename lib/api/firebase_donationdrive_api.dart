@@ -14,6 +14,20 @@ class FirebaseDonationDriveAPI {
     }
   }
 
+  Future<String> deleteDonationDrive(String uuid) async {
+    try {
+      // await db.collection("donationdrives").where('uid', isEqualTo: uuid).delete();
+      final querySnapshot = await db.collection("donationdrives").where('uid', isEqualTo: uuid).get();
+      for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      return "Successfully deleted!";
+    } on FirebaseException catch (e) {
+      return "Error in ${e.code}: ${e.message}";
+    }
+  }
+
   Stream<QuerySnapshot> getAllDonationDrives() {
     return db.collection("donationdrives").snapshots();
   }

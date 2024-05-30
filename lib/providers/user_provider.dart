@@ -61,6 +61,10 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteDonationDriveToUser(String uuid, String username) async {
+    await firebaseService.deleteDonationDriveToUser(uuid, username);
+  }
+
   
 
     

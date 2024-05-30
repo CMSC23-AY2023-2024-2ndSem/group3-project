@@ -93,6 +93,21 @@ class FirebaseUserAPI {
   
   }
 
+  Future<String> deleteDonationDriveToUser(String uuid, String username) async {
+  try {
+    final userDocRef = db.collection("users").where("username", isEqualTo: username).limit(1);
+    final userDoc = await userDocRef.get();
+    final user = userDoc.docs.first;
+    final userRef = db.collection("users").doc(user.id);
 
+    await userRef.update({
+      "donationDrives": FieldValue.arrayRemove([uuid])
+    });
+
+    return "Successfully deleted!";
+  } on FirebaseException catch (e) {
+    return "Error in ${e.code}: ${e.message}";
+  }
+}
 
 }

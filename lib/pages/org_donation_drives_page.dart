@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/donationdrive_model.dart';
 import 'package:week9_authentication/models/user_model.dart';
 import 'package:week9_authentication/pages/org_add_donation_drive_page.dart';
+import 'package:week9_authentication/pages/org_donation_drive_delete_modal.dart';
 import 'package:week9_authentication/pages/org_donation_drive_details_page.dart';
 // import 'package:week9_authentication/pages/org_details_page.dart';
 // import 'package:week9_authentication/pages/org_home.dart';
@@ -202,7 +203,17 @@ class _OrganizationDonationDrivesPageState
                                           IconButton(
                                             icon: const Icon(Icons.delete,
                                                 color: Colors.orangeAccent),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DonationDriveDeleteModal(
+                                                          donationDrive: donationDrive, 
+                                                          username: currentUser.username,
+                                                    ),
+                                                  ));
+                                            },
                                           ),
                                           IconButton(
                                             icon: const Icon(Icons.edit,
