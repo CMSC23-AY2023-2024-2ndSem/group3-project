@@ -181,15 +181,6 @@ class DonateQrPage extends StatelessWidget {
                     style: TextStyle(color: Colors.green, fontSize: 20),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Done"),
-                  ),
                 ]
               ],
             ),
