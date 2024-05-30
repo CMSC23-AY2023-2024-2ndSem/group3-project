@@ -83,4 +83,26 @@ Future<String> updateDonationDrive(String uuid, String driveName, String donatio
   }
 }
 
+
+Future<String> updateDonationDriveStatus(String uuid, bool isOpen) async {
+  try {
+    final userDocRef = db.collection("donationdrives").where("uid", isEqualTo: uuid).limit(1);
+    final userDoc = await userDocRef.get();
+    print(userDoc);
+    print(userDoc.docs);
+    print(userDoc.docs.first);
+    final user = userDoc.docs.first;
+    final userRef = db.collection("donationdrives").doc(user.id);
+
+    await userRef.update({
+      "isOpen": isOpen
+    });
+
+
+    return "Successfully updated!";
+  } on FirebaseException catch (e) {
+    return "Error in ${e.code}: ${e.message}";
+  }
+}
+
 }

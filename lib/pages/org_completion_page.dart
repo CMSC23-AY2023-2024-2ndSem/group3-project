@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:week9_authentication/providers/donation_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 class CompletionPage extends StatefulWidget {
   final String donationUid;
@@ -300,16 +302,31 @@ class _CompletionPageState extends State<CompletionPage> {
               }
               List<String> recipents = [donorContactNumber];
 
-              await _sendSMS(message, recipents);
+              // ask for permission
+              var status = await Permission.sms.status;
+              if (!status.isGranted) {
+                status = await Permission.sms.request();
+              }
 
-              Navigator.pop(context);
+              if (status.isGranted) {
+                await _sendSMS(message, recipents);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Donation Completed, SMS sent to donor!"),
-                  duration: Duration(seconds: 5),
-                ),
-              );
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Donation Completed, SMS sent to donor!"),
+                    duration: Duration(seconds: 5),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("SMS permission not granted"),
+                    duration: Duration(seconds: 5),
+                  ),
+                );
+              }
 
             }
           },

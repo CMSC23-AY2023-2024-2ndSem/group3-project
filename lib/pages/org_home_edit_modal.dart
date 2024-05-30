@@ -33,6 +33,11 @@ class EditModal extends StatelessWidget {
           value: 'Canceled',
           child: Text('Canceled'),
         ),
+        DropdownMenuItem(
+          value: 'Completed',
+          child: Text('Completed'),
+        ),
+
       ],
       decoration: const InputDecoration(
         border: OutlineInputBorder(),

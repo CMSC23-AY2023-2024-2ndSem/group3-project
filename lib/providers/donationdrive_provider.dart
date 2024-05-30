@@ -38,6 +38,12 @@ class DonationDriveProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateDonationDriveStatus(String uuid, bool isOpen) async {
+    String response = await firebaseService.updateDonationDriveStatus(uuid, isOpen);
+    print(response);
+    notifyListeners();
+  }
+
   Future<void> addDonationToDrive(String uuid, String driveName) async {
     await firebaseService.addDonationToDrive(uuid, driveName);
     notifyListeners();
