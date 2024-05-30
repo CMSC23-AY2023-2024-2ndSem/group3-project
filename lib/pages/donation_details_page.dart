@@ -14,6 +14,15 @@ class DonationDetailsPage extends StatefulWidget {
 }
 
 class _DonationDetailsPageState extends State<DonationDetailsPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<DonationProvider>().fetchDonations();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> donationsStream =

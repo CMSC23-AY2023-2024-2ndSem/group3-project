@@ -38,7 +38,7 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
 
   Future<void> _fetchDonationDrives() async {
     FirebaseFirestore.instance
-            .collection("donationdrives")
+            .collection("donationdrives").where("organizationUname", isEqualTo: context.read<UserAuthProvider>().user!.email!)
             .get()
             .then((querySnapshot) {
             querySnapshot.docs.forEach((doc) {

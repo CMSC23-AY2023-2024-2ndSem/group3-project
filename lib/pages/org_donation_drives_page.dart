@@ -156,7 +156,7 @@ class _OrganizationDonationDrivesPageState
                             final donationDrives = snapshots.data!.docs
                                 .map((doc) => DonationDrive.fromDocument(doc))
                                 .toList();
-
+                            
                             DonationDrive donationDrive = donationDrives[index];
 
                             String isOpen = "";
@@ -171,6 +171,7 @@ class _OrganizationDonationDrivesPageState
                               donationDrive.description,
                               donationDrive.organizationUname,
                               isOpen,
+                              donationDrive.uid
                             ];
 
                             return Card(

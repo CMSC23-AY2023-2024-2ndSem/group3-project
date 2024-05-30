@@ -108,15 +108,29 @@ class _CompletionPageState extends State<CompletionPage> {
           ),
           backgroundColor: Colors.amber,
         ),
-      body: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Container(
+      body: Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     child: Column(
                       children: [
+                        const Text("Upload proof of where the donation ended up to complete donation",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Sending an SMS to Donor's Contact Number: ${donorContactNumber}",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
                         uploadImageButton(context),
                         submitButton,
                       ],
@@ -125,7 +139,6 @@ class _CompletionPageState extends State<CompletionPage> {
                 ],
               ),
             )
-      ),
     );
   }
 
@@ -145,7 +158,7 @@ class _CompletionPageState extends State<CompletionPage> {
                         uploadImagePopUp(context);
                       },
                       child: const Text("Upload Proof/s",
-                          style: TextStyle(color: Color.fromARGB(255, 187, 134, 252)))),
+                          style: TextStyle(color: Colors.amber))),
                 if (imageFileUrl.isEmpty && submitClicked)
                   FilledButton(
                       style: const ButtonStyle(
@@ -173,7 +186,7 @@ class _CompletionPageState extends State<CompletionPage> {
                 },
                 child: const Icon(
                   Icons.image_outlined,
-                  color: Color.fromARGB(255, 187, 134, 252),
+                  color: Colors.amber,
                 ))
           ],
         ),
@@ -193,14 +206,14 @@ class _CompletionPageState extends State<CompletionPage> {
                       Navigator.pop(context);
                     },
                     child: const Text("Take a photo",
-                        style: TextStyle(color: Color.fromARGB(255, 187, 134, 252)))),
+                        style: TextStyle(color: Colors.amber))),
                 TextButton(
                     onPressed: () {
                       _pickImageFromGallery();
                       Navigator.pop(context);
                     },
                     child: const Text("Choose from gallery",
-                        style: TextStyle(color: Color.fromARGB(255, 187, 134, 252)))),
+                        style: TextStyle(color: Colors.amber))),
               ],
             )
           ],
@@ -260,7 +273,7 @@ class _CompletionPageState extends State<CompletionPage> {
                 TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: const Text("Confirm",
-                        style: TextStyle(color: Color.fromARGB(255, 187, 134, 252))))
+                        style: TextStyle(color: Colors.amber)))
               ],
             ),
           ));
@@ -269,7 +282,7 @@ class _CompletionPageState extends State<CompletionPage> {
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: FilledButton(
           style: FilledButton.styleFrom(
-              minimumSize: const Size(300, 55), backgroundColor: Color.fromARGB(255, 187, 134, 252)),
+              minimumSize: const Size(300, 55), backgroundColor: Colors.amber),
           onPressed: () async {
             setState(() {
               submitClicked = true;
@@ -303,7 +316,7 @@ class _CompletionPageState extends State<CompletionPage> {
           },
           child: const Text(
             "Complete Donation",
-            style: TextStyle(fontSize: 18, color: Colors.white),
+            style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
           )));
 
   
