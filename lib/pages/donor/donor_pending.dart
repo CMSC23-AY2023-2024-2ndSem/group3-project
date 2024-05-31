@@ -6,6 +6,7 @@ import '../../models/donation_model.dart';
 import '../../providers/donation_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../org/donation_details_page.dart';
 
 class DonorPending extends StatefulWidget {
   const DonorPending({super.key});
@@ -16,6 +17,7 @@ class DonorPending extends StatefulWidget {
 
 class _DonorPendingState extends State<DonorPending> {
   auth.User? authUser;
+  Map<String, String> drivesUidNameMap = {};
 
   @override
   void initState() {
@@ -24,6 +26,25 @@ class _DonorPendingState extends State<DonorPending> {
       context.read<DonationProvider>().fetchDonations();
       context.read<UserProvider>().fetchUsers();
     });
+      _setupDonationDrivesListener();
+  }
+
+  void _setupDonationDrivesListener() {
+    FirebaseFirestore.instance
+      .collection("donationdrives")
+      .where("organizationUname", isEqualTo: context.read<UserAuthProvider>().user!.email!)
+      .snapshots()
+      .listen((querySnapshot) {
+        Map<String, String> updatedDrivesUidNameMap = {};
+        for (var doc in querySnapshot.docs) {
+          String uid = doc.data()['uid'];
+          String name = doc.data()['name'];
+          updatedDrivesUidNameMap[uid] = name;
+        }
+        setState(() {
+          drivesUidNameMap = updatedDrivesUidNameMap;
+        });
+      });
   }
 
   @override
@@ -48,6 +69,7 @@ class _DonorPendingState extends State<DonorPending> {
                 .where((donation) => donation.donorUname == authUser?.email && donation.status == "Pending") 
                 .toList();
             
+            
             if (donations.isEmpty) {
               return const Center(child: Text("No pending donations found."));
             }
@@ -55,7 +77,34 @@ class _DonorPendingState extends State<DonorPending> {
             return ListView.builder(
               itemCount: donations.length,
               itemBuilder: (context, index) {
-                final donation = donations[index];
+
+                Donation donation = donations[index];
+                
+                    var donationCategories = donation.donationCategories.entries
+                        .where((element) => element.value == true)
+                        .map((e) => e.key)
+                        .toList();
+
+                    var date = donation.date.toString().split(" ")[0];
+                    var time = donation.date.toString().split(" ")[1].split(".")[0];
+                    var dateTime = "$date $time";
+
+                    String driveName = drivesUidNameMap[donation.donationDriveUid] ?? "Unassigned";
+
+                    List<String> donationInfo = [
+                      donation.donorUname,
+                      donation.organizationUname,
+                      driveName,
+                      donationCategories.join(", "),
+                      donation.pickupOrDropOff.toString(),
+                      donation.weight,
+                      dateTime,
+                      donation.addresses!.join(" "),
+                      donation.contactNumber.toString(),
+                      donation.status,
+                      donation.imageUrl!,
+                    ];
+
                 return Card(
                   color: Colors.grey.shade900,
                                 margin: const EdgeInsets.all(8),
@@ -88,12 +137,22 @@ class _DonorPendingState extends State<DonorPending> {
                             ],
                           );
                         },
-                      
                       );
                     },
                   ),
+                  onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DonationDetailsPage(donationInfo: donationInfo),
+                    ),
+                  );
+                },
+                ),
+                
                 )
-                ));
+                
+                );
               },
             );
           } else {
