@@ -11,11 +11,15 @@ class EditModal extends StatelessWidget {
   EditModal({super.key, required this.donationUid, required this.donationStatus});
 
   Widget _buildContent(BuildContext context) {
+    bool isCompleted = false;
+    if(donationStatus == "Completed"){
+      isCompleted = true;
+    }
     return DropdownButtonFormField<String>(
       value: donationStatus,
-      onChanged: (newValue) {
+      onChanged: !isCompleted ? (newValue) {
         _formFieldController.text = newValue!;
-      },
+      } : null,
       items: [
         DropdownMenuItem(
           value: 'Pending',
