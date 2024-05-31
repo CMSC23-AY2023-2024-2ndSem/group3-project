@@ -35,7 +35,8 @@ class EditModal extends StatelessWidget {
         ),
         DropdownMenuItem(
           value: 'Completed',
-          child: Text('Completed'),
+          child: Text('Completed', style: TextStyle(color: Colors.grey)),
+          enabled: false,
         ),
 
       ],

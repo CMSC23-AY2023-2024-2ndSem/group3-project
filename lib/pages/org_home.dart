@@ -191,10 +191,8 @@ class _OrganizationHomePageState extends State<OrganizationHomePage> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
-                            title: Text("From: ${donorName}"),
-                            leading: const Icon(Icons.wallet_giftcard,
-                                color: Colors.orangeAccent, size: 30),
-                            subtitle: Text("${dateTime}"),
+                            title: Text("Donor: ${donorName}"),
+                            subtitle: Text("${driveName}\n${donation.status}"),
                             trailing: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               mainAxisSize: MainAxisSize.min,

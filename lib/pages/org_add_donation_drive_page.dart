@@ -107,7 +107,7 @@ class _AddDonationDrivePageState extends State<AddDonationDrivePage> {
           description: description, 
           organizationUname: widget.organizationUname, 
           donations: [], 
-          isOpen: false,
+          isOpen: true,
         );
         
         showDialog(

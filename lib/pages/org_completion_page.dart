@@ -6,16 +6,14 @@ import 'package:provider/provider.dart';
 import 'package:week9_authentication/providers/donation_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 class CompletionPage extends StatefulWidget {
   final String donationUid;
   final String donorUname;
   final String driveUid;
-  const CompletionPage(
-      {super.key,
-      required this.donationUid,
-      required this.donorUname,
-      required this.driveUid});
+  const CompletionPage({super.key, required this.donationUid, required this.donorUname, required this.driveUid});
 
   @override
   State<CompletionPage> createState() => _CompletionPageState();
@@ -40,13 +38,14 @@ class _CompletionPageState extends State<CompletionPage> {
         .where('username', isEqualTo: widget.donorUname)
         .get()
         .then((QuerySnapshot querySnapshot) {
-      for (var doc in querySnapshot.docs) {
+      querySnapshot.docs.forEach((doc) {
         setState(() {
           donorContactNumber = doc['contactNumber'];
         });
-      }
+      });
     });
   }
+
 
   Future<void> _takePhoto() async {
     final ImagePicker picker = ImagePicker();
@@ -78,7 +77,8 @@ class _CompletionPageState extends State<CompletionPage> {
     for (int i = 0; i < imageFile.length; i++) {
       firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
           .ref()
-          .child('sent_proof/${widget.donationUid}_${i}_${DateTime.now()}.jpg');
+          .child(
+              'sent_proof/${widget.donationUid}_${i}_${DateTime.now()}.jpg');
       firebase_storage.UploadTask uploadTask =
           ref.putFile(File(imageFile[i].path));
 
@@ -86,65 +86,66 @@ class _CompletionPageState extends State<CompletionPage> {
         imageUrl.add(await ref.getDownloadURL());
       });
 
-      await url.whenComplete(() => setState(() {
-            imageUrl = imageUrl;
-          }));
+    await url.whenComplete(() => setState(() {
+        imageUrl = imageUrl;
+      }));
     }
   }
 
-  void _sendSMS(String message, List<String> recipents) async {
-    String result = await sendSMS(message: message, recipients: recipents)
-        .catchError((onError) {
-      print(onError);
-    });
-    print(result);
+  Future<void> _sendSMS(String message, List<String> recipents) async {
+  String _result = await sendSMS(message: message, recipients: recipents, sendDirect: true)
+          .catchError((onError) {
+          return "Error: ${onError.toString()}";
+      });
+  print(_result);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
           title: const Row(
             children: [
-              Text("Completing Donation",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
-            ],
+              Text("Completing Donation", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+               ],
           ),
           backgroundColor: Colors.amber,
         ),
-        body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                        "Upload proof of where the donation ended up to complete donation",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Recepient: $donorContactNumber",
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
-                        ],
-                      ),
+      body: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Column(
+                      
+                      children: [
+                        const Text("Upload proof of where the donation ended up to complete donation",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Sending an SMS to\nDonor's Contact Number: ${donorContactNumber}",
+                              textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                        uploadImageButton(context),
+                        submitButton,
+                      ],
                     ),
-                    uploadImageButton(context),
-                    submitButton,
-                  ],
-                ),
-              )
-            ],
-          ),
-        ));
+                  )
+                ],
+              ),
+            )
+    );
   }
 
   Widget uploadImageButton(context) => Padding(
@@ -296,32 +297,46 @@ class _CompletionPageState extends State<CompletionPage> {
             if (imageFile.isNotEmpty) {
               await _uploadPhotoToStorage();
 
-              await context
-                  .read<DonationProvider>()
-                  .updateStatus(widget.donationUid, "Completed");
+              await context.read<DonationProvider>().updateStatus(widget.donationUid, "Completed");
 
-              String message =
-                  "Your donation has been fully completed.\nThank you for your donation!\nYou can see where your donations ended up here:\n";
+              String message = "Your donation has been fully completed.\nThank you for your donation!\nYou can see where your donations ended up here:\n";
               for (int i = 0; i < imageUrl.length; i++) {
-                message += "${imageUrl[i]}\n";
+              message += "${imageUrl[i]}\n";
               }
               List<String> recipents = [donorContactNumber];
 
-              _sendSMS(message, recipents);
+              // ask for permission
+              var status = await Permission.sms.status;
+              if (!status.isGranted) {
+                status = await Permission.sms.request();
+              }
 
-              Navigator.pop(context);
+              if (status.isGranted) {
+                await _sendSMS(message, recipents);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Donation Completed, SMS sent to donor!"),
-                  duration: Duration(seconds: 5),
-                ),
-              );
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Donation Completed, SMS sent to donor!"),
+                    duration: Duration(seconds: 5),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("SMS permission not granted"),
+                    duration: Duration(seconds: 5),
+                  ),
+                );
+              }
+
             }
           },
           child: const Text(
             "Complete Donation",
-            style: TextStyle(
-                fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
           )));
+
+  
 }

@@ -10,14 +10,14 @@ class DateTimePicker extends StatefulWidget {
 }
 
 class DateTimePickerState extends State<DateTimePicker> {
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
+  DateTime selectedDate =DateTime.now().add(Duration(days: 1));
+  TimeOfDay selectedTime = TimeOfDay(hour: 0, minute: 0);
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime.now(),
+      firstDate: DateTime.now().add(Duration(days: 1)), // Exclude today
       lastDate: DateTime(2100),
     );
     if (pickedDate != null && pickedDate != selectedDate) {

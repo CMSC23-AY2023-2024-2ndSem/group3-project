@@ -6,7 +6,7 @@ class DonationDrive {
   final String description;
   final String organizationUname;
   final List<String> donations;
-  final bool isOpen; 
+  late final bool isOpen; 
 
   DonationDrive({
     required this.uid,

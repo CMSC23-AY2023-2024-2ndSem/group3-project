@@ -129,6 +129,7 @@ class _DonationDetailsPageState extends State<DonationDetailsPage> {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Column(
         children: [
+          if (widget.donationInfo[10].isNotEmpty)
           const Row(
             children: [
               Text(
@@ -153,7 +154,9 @@ class _DonationDetailsPageState extends State<DonationDetailsPage> {
                   padding: const EdgeInsets.all(15),
                   child: Image.network(
                     widget.donationInfo[10],
-                    height: 250,
+                    fit: BoxFit.contain,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    width: MediaQuery.of(context).size.width * 0.8,
                   ),
                 ),
               ],

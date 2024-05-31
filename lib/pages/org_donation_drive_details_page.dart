@@ -5,6 +5,7 @@ import 'package:week9_authentication/providers/donation_provider.dart';
 import '../models/donation_model.dart';
 import 'donation_details_page.dart';
 import 'org_completion_page.dart';
+import 'org_home_edit_modal.dart';
 
 class DonationDriveDetailsPage extends StatefulWidget {
   final List donationDriveInfo;
@@ -22,7 +23,7 @@ class _DonationDriveDetailsPageState extends State<DonationDriveDetailsPage> {
     
     return Scaffold(
       appBar: AppBar( 
-        title: Text("Donations in ${widget.donationDriveInfo[0]} Drive"),
+        title: Text("${widget.donationDriveInfo[0]}"),
         backgroundColor: Colors.orangeAccent,
       ),
       body: StreamBuilder(
@@ -49,9 +50,22 @@ class _DonationDriveDetailsPageState extends State<DonationDriveDetailsPage> {
               List donationsForDrive = donations.where((donation) => donation.donationDriveUid == widget.donationDriveInfo[4]).toList();
 
              if(donationsForDrive.isEmpty){
-               return const Center(
-                 child: Text("No Donations Found, Start Linking Donations in your Home Page."),
-               );
+                 return Center(
+                 child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  children: [const Text(
+                   "No Donations Found!\n\nStart Linking Donations in your Home Page.",
+                   textAlign: TextAlign.center,
+                 ),
+                  const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Go to Home Page'),
+                )],)
+                 );
              }else{
               return ListView.builder(
               itemCount: donationsForDrive.length,
@@ -88,14 +102,31 @@ class _DonationDriveDetailsPageState extends State<DonationDriveDetailsPage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    leading: Icon(Icons.wallet_giftcard, color: Colors.amber),
                     title: Text("Donation from ${donorName}"),
                     subtitle: Text("Status: ${donation.status}"),
-                    trailing: IconButton(
+                    trailing: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                                icon: const Icon(Icons.edit,
+                                color: Colors.orangeAccent),
+                                onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => EditModal(
+                                  donationUid: donation.uid,
+                                  donationStatus: donation.status,
+                                  ),
+                                );
+                                },
+                              ),
+                        IconButton(
                                 icon: const Icon(Icons.check,
                                 color: Colors.amber),
                                 onPressed: () {
-                                  Navigator.push(
+                                  if(donation.status != "Completed"){
+                                    Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CompletionPage(
@@ -105,8 +136,28 @@ class _DonationDriveDetailsPageState extends State<DonationDriveDetailsPage> {
                                       ),
                                     ),
                                   );
+                                  }else if(donation.status == "Completed"){
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Donation already completed"),
+                                      ),
+                                    );
+                                  }else if(donation.status == "Cancelled"){
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Donation already cancelled"),
+                                      ),
+                                    );
+                                  }else if(donation.status == "Pending"){
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Donation is still pending"),
+                                      ),
+                                    );
+                                  } 
                                 },
                               ),
+                              ],),
                     onTap:() {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => DonationDetailsPage(donationInfo: donationInfo),));
                             },

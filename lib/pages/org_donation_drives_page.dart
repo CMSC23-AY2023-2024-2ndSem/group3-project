@@ -185,8 +185,6 @@ class _OrganizationDonationDrivesPageState
                                       title: Text(
                                           donationDrive.name),
                                           subtitle: Text(donationDrive.description),
-                                      leading: const Icon(Icons.storage,
-                                          color: Colors.orangeAccent, size: 30),
                                       onTap: () {
                                         Navigator.push(
                                             context,
@@ -202,6 +200,15 @@ class _OrganizationDonationDrivesPageState
                                             MainAxisAlignment.end,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
+                                            Switch(
+                                              value: donationDrive.isOpen,
+                                              onChanged: (value) {
+                                                context.read<DonationDriveProvider>().updateDonationDriveStatus(
+                                                  donationDrive.uid, value);
+                                              },
+                                              activeColor: Colors.amber,
+                                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            ),
                                           IconButton(
                                             icon: const Icon(Icons.edit,
                                                 color: Colors.orangeAccent),
