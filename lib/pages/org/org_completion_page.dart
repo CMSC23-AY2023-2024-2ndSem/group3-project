@@ -13,7 +13,8 @@ class CompletionPage extends StatefulWidget {
   final String donationUid;
   final String donorUname;
   final String driveUid;
-  const CompletionPage({super.key, required this.donationUid, required this.donorUname, required this.driveUid});
+  final String driveName;
+  const CompletionPage({super.key, required this.donationUid, required this.donorUname, required this.driveUid, required this.driveName});
 
   @override
   State<CompletionPage> createState() => _CompletionPageState();
@@ -295,17 +296,25 @@ class _CompletionPageState extends State<CompletionPage> {
             });
 
             if (imageFile.isNotEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Completing donation... Please wait."),
+                  duration: Duration(seconds: 6),
+                ),
+              );
+
+
               await _uploadPhotoToStorage();
 
-              await context.read<DonationProvider>().updateStatus(widget.donationUid, "Completed");
 
-              String message = "Your donation has been fully completed.\nThank you for your donation!\nYou can see where your donations ended up here:\n";
+              String message = "Your donation has been fully completed.\nYour donation has been sent to ${widget.driveName}\nThank you for your donation!\nYou can see where your donations ended up here:\n";
               for (int i = 0; i < imageUrl.length; i++) {
               message += "${imageUrl[i]}\n";
               }
               List<String> recipents = [donorContactNumber];
 
-              // ask for permission
+              
+
               var status = await Permission.sms.status;
               if (!status.isGranted) {
                 status = await Permission.sms.request();
@@ -313,6 +322,8 @@ class _CompletionPageState extends State<CompletionPage> {
 
               if (status.isGranted) {
                 await _sendSMS(message, recipents);
+                
+                await context.read<DonationProvider>().updateStatus(widget.donationUid, "Completed");
 
                 Navigator.pop(context);
 

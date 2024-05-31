@@ -133,6 +133,7 @@ class _DonationDriveDetailsPageState extends State<DonationDriveDetailsPage> {
                                         donationUid: donation.uid,
                                         donorUname: donation.donorUname,
                                         driveUid: widget.donationDriveInfo[4], 
+                                        driveName: widget.donationDriveInfo[0],
                                       ),
                                     ),
                                   );

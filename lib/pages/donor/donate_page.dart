@@ -437,7 +437,7 @@ class DonatePageState extends State<DonatePage> {
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 label: Text("Contact Number"),
-                hintText: "Enter your contact number",
+                hintText: "09XXXXXXXXX",
               ),
               onSaved: (value) => setState(() => contactNumber = value!),
               validator: (value) {
@@ -449,6 +449,9 @@ class DonatePageState extends State<DonatePage> {
                 }
                 if (int.tryParse(value) == null) {
                   return "Please enter a valid number";
+                }
+                if (!value.startsWith("09")) {
+                  return "Number must start with 09";
                 }
 
                 return null;

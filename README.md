@@ -14,7 +14,7 @@ ElGives is a donation system application built using Flutter. This app serves as
 
 <b> Installation Instructions: </b>
 
-To run the app, either fork the repository or download the zip file of the code and store it in your preferred directory. Afterwards, run your terminal in the directory of the project "group3-project". Then, enter "flutter pub get" to download all dependencies of the app. Finally, enter "flutter run" and enjoy the app.
+To run the app, either fork the repository or download the zip file of the code and store it in your preferred directory. Afterwards, run your terminal in the directory of the project "group3-project". Run your emulator or connect your device. Then, enter "flutter pub get" to download all dependencies of the app. Finally, enter "flutter run" and enjoy the app.
 
 
 <b> How to use: </b>
