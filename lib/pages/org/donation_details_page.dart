@@ -156,7 +156,7 @@ class _DonationDetailsPageState extends State<DonationDetailsPage> {
                     widget.donationInfo[10],
                     fit: BoxFit.contain,
                     height: MediaQuery.of(context).size.height * 0.3,
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.75,
                   ),
                 ),
               ],
