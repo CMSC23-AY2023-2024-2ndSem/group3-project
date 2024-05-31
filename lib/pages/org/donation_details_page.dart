@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import '../providers/donation_provider.dart';
+import '../../providers/donation_provider.dart';
 
 class DonationDetailsPage extends StatefulWidget {
   final List<String> donationInfo;

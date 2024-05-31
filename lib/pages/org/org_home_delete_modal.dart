@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/providers/donation_provider.dart';
 
-import '../providers/user_provider.dart';
+import '../../providers/user_provider.dart';
 
 class DeleteModal extends StatelessWidget {
   final String donationUid;

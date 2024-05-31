@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:week9_authentication/pages/signup_page.dart';
-import 'package:week9_authentication/pages/signuporg_page.dart';
+import 'package:week9_authentication/pages/account/signup_page.dart';
+import 'package:week9_authentication/pages/account/signuporg_page.dart';
 
 class SignUpOptionPage extends StatefulWidget {
   const SignUpOptionPage({super.key});

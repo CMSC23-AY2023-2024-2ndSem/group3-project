@@ -7,8 +7,8 @@ import 'providers/auth_provider.dart';
 import 'providers/donationdrive_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/donation_provider.dart';
-import 'pages/donate_page.dart';
-import 'pages/donate_qr_page.dart';
+import 'pages/donor/donate_page.dart';
+import 'pages/donor/donate_qr_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

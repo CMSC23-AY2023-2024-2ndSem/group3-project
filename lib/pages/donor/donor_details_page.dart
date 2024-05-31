@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import '../models/user_model.dart' as user;
-import '../providers/user_provider.dart';
-import '../providers/auth_provider.dart';
+import '../../models/user_model.dart' as user;
+import '../../providers/user_provider.dart';
+import '../../providers/auth_provider.dart';
 
 class DonorDetailsPage extends StatefulWidget {
   const DonorDetailsPage({super.key});

@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 // import '../pages/org_donation_drives_page.dart';
 // import '../pages/org_home.dart';
-import '../models/user_model.dart' as user;
-import '../providers/user_provider.dart';
-import '../providers/auth_provider.dart';
+import '../../models/user_model.dart' as user;
+import '../../providers/user_provider.dart';
+import '../../providers/auth_provider.dart';
 
 class OrganizationDetailsPage extends StatefulWidget {
   const OrganizationDetailsPage({super.key});

@@ -5,13 +5,13 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:uuid/uuid.dart';
-import '../providers/user_provider.dart';
-import '../widgets/donation_checkbox.dart';
-import '../widgets/datetime_picker.dart';
-import '../widgets/address_input.dart';
-import '../providers/donation_provider.dart';
-import '../providers/donationdrive_provider.dart';
-import '../models/donation_model.dart';
+import '../../providers/user_provider.dart';
+import '../../widgets/donation_checkbox.dart';
+import '../../widgets/datetime_picker.dart';
+import '../../widgets/address_input.dart';
+import '../../providers/donation_provider.dart';
+import '../../providers/donationdrive_provider.dart';
+import '../../models/donation_model.dart';
 
 class DonatePage extends StatefulWidget {
   final List<String> donorOrgInfo;

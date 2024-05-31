@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
-import 'package:week9_authentication/pages/admin_donors_page.dart';
-import 'package:week9_authentication/pages/admin_organizations_page.dart';
+import 'package:week9_authentication/pages/admin/admin_donors_page.dart';
+import 'package:week9_authentication/pages/admin/admin_organizations_page.dart';
 import 'package:week9_authentication/providers/auth_provider.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 

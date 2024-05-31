@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 import 'package:week9_authentication/widgets/muladdress_signup_input.dart';
-import '../providers/auth_provider.dart';
+import '../../providers/auth_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class SignUpOrgPage extends StatefulWidget {

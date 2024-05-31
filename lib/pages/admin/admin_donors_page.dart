@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/models/user_model.dart';
-import 'package:week9_authentication/pages/admin_donor_details_page.dart';
+import 'package:week9_authentication/pages/admin/admin_donor_details_page.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 
 class AdminDonorsPage extends StatefulWidget {

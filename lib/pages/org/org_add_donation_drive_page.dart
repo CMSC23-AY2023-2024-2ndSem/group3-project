@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:week9_authentication/models/donationdrive_model.dart';
-import 'package:week9_authentication/pages/org_donation_drives_page.dart';
+import 'package:week9_authentication/pages/org/org_donation_drives_page.dart';
 import 'package:week9_authentication/providers/donationdrive_provider.dart';
 import 'package:week9_authentication/providers/user_provider.dart';
 

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week9_authentication/providers/donation_provider.dart';
-import '../models/donation_model.dart';
+import '../../models/donation_model.dart';
 import 'donation_details_page.dart';
 import 'org_completion_page.dart';
 import 'org_home_edit_modal.dart';

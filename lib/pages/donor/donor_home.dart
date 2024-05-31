@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'donor_pending.dart';
-import '../models/user_model.dart';
-import '../models/donationdrive_model.dart';
-import '../providers/auth_provider.dart';
-import '../providers/user_provider.dart';
-import '../providers/donationdrive_provider.dart';
+import '../../models/user_model.dart';
+import '../../models/donationdrive_model.dart';
+import '../../providers/auth_provider.dart';
+import '../../providers/user_provider.dart';
+import '../../providers/donationdrive_provider.dart';
 import 'donor_details_page.dart';
 
 class DonorHomePage extends StatefulWidget {

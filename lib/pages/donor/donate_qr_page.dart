@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../providers/donation_provider.dart';
+import '../../providers/donation_provider.dart';
 
 
 class DonateQrPage extends StatelessWidget {

@@ -1,19 +1,13 @@
-/*
-  Created by: Claizel Coubeili Cepe
-  Date: updated April 26, 2023
-  Description: Sample todo app with Firebase 
-*/
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:week9_authentication/pages/admin_home.dart';
-import 'package:week9_authentication/pages/org_home.dart';
+import 'package:week9_authentication/pages/admin/admin_home.dart';
+import 'package:week9_authentication/pages/org/org_home.dart';
 import '../providers/user_provider.dart';
-import 'donor_home.dart';
+import 'donor/donor_home.dart';
 import '../providers/auth_provider.dart';
-import 'signin_page.dart';
+import 'account/signin_page.dart';
 import 'package:week9_authentication/models/user_model.dart' as user;
 
 class HomePage extends StatefulWidget {
