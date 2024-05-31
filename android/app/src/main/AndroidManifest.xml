@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<<<<<<< HEAD
 <uses-permission android:name="android.permission.SEND_SMS"/>
+=======
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+>>>>>>> de06c2fb5ef23b2c18205352319bd1cd02032187
     <application
         android:label="week9_authentication"
         android:name="${applicationName}"
